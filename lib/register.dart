@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, body_might_complete_normally_nullable, unrelated_type_equality_checks, empty_statements
 
 import 'package:flutter/material.dart';
 import 'package:projectb2b/login.dart';
@@ -18,6 +18,8 @@ class _RegisterState extends State<Register> {
   bool _regpass = true;
   bool _conpass = true;
   final formKey = GlobalKey<FormState>();
+  final _pasreg = TextEditingController();
+  final _pascon = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -75,6 +77,11 @@ class _RegisterState extends State<Register> {
             regname = value;
           });
         },
+        validator: (value) {
+          if(value!.isEmpty){
+            return "Please enter your name";
+          }
+        },
       ),
     );
 
@@ -108,6 +115,13 @@ class _RegisterState extends State<Register> {
             regemail = value;
           });
         },
+        validator: (value) {
+          if(value!.isEmpty){
+            return "Please enter your email";
+          }else if(!value.contains('@')){
+            return "Please enter a valid email";
+          }
+        },
       ),
     );
 
@@ -115,6 +129,7 @@ class _RegisterState extends State<Register> {
       padding: EdgeInsets.fromLTRB(20, 0, 20, 10),
       child: TextFormField(
         cursorColor: Colors.white,
+        controller: _pasreg,
         obscureText: _regpass,
         style: TextStyle(color: Colors.white),
         decoration: InputDecoration(
@@ -147,12 +162,20 @@ class _RegisterState extends State<Register> {
             regpas = value;
           });
         },
+        validator :(value) {
+          if(value!.isEmpty){
+            return "PLease Enter Your Password";
+          }else if(value.length < 8){
+            return "Password must be 8 character or more";
+          }
+        },
       ),
     );
 
     Widget confirmPassword = Container(
       padding: EdgeInsets.fromLTRB(20, 0, 20, 10),
       child: TextFormField(
+        controller: _pascon,
         cursorColor: Colors.white,
         obscureText: _conpass,
         style: TextStyle(color: Colors.white),
@@ -181,6 +204,13 @@ class _RegisterState extends State<Register> {
           //   child: Icon(Icons.),
           // )
         ),
+        validator: (value) {
+          if(value!.isEmpty){
+            return "Please confirm your password";
+          }else if(value != _pasreg){
+            return "Password not match";
+          }
+        },
       ),
     );
     
@@ -189,7 +219,9 @@ class _RegisterState extends State<Register> {
       child: Center(
       child: ElevatedButton(
           style: ElevatedButton.styleFrom(primary: Color.fromARGB(255, 217, 217, 217),shape: StadiumBorder()),
-          onPressed: () {},
+          onPressed: () {
+            if(formKey.currentState!.validate());
+          },
           child: Padding(
             padding: EdgeInsets.fromLTRB(40, 0, 40, 0),
             child: Text('Sign Up',
@@ -245,16 +277,23 @@ class _RegisterState extends State<Register> {
       backgroundColor: const Color.fromARGB(255, 23, 22, 29),
       body: Form(
         key: formKey,
-        child: ListView(
-          children: [
-            welcomeRegister,
-            inputName,
-            regEmail,
-            regPassword,
-            confirmPassword,
-            regButton,
-            loginButton
-          ],
+        child: ScrollConfiguration(
+          behavior: ScrollBehavior(),
+          child: GlowingOverscrollIndicator(
+            axisDirection: AxisDirection.down,
+            color: Colors.white,
+            child: ListView(
+              children: [
+                welcomeRegister,
+                inputName,
+                regEmail,
+                regPassword,
+                confirmPassword,
+                regButton,
+                loginButton
+              ],
+            ),
+          ),
         ),
       ),
     );

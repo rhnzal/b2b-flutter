@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_literals_to_create_immutables, duplicate_ignore, prefer_const_constructors, prefer_final_fields
+// ignore_for_file: prefer_const_literals_to_create_immutables, duplicate_ignore, prefer_const_constructors, prefer_final_fields, body_might_complete_normally_nullable
 import 'package:flutter/material.dart';
 import 'package:projectb2b/register.dart';
 
@@ -239,15 +239,22 @@ class _LoginState extends State<Login> {
       // ignore: prefer_const_literals_to_create_immutables
       body: Form(
         key: formKey,
-        child: ListView(
-          children: [
-            welcomeText,
-            inputEmail,
-            inputPassword,
-            forgorPassword,
-            loginButton,
-            registerButton
-          ],
+        child: ScrollConfiguration(
+          behavior: ScrollBehavior(),
+          child: GlowingOverscrollIndicator(
+            axisDirection: AxisDirection.down,
+            color: Colors.white,
+            child: ListView(
+              children: [
+                welcomeText,
+                inputEmail,
+                inputPassword,
+                forgorPassword,
+                loginButton,
+                registerButton
+              ],
+            ),
+          ),
         ),
       ),
     );

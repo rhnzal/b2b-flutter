@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_literals_to_create_immutables, duplicate_ignore, prefer_const_constructors, prefer_final_fields, body_might_complete_normally_nullable
 import 'package:flutter/material.dart';
 import 'package:projectb2b/register.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Login extends StatefulWidget {
   const Login({Key? key}) : super(key: key);
@@ -17,6 +18,7 @@ class _LoginState extends State<Login> {
 
   @override
   Widget build(BuildContext context) {
+    
     // ignore: unused_local_variable, avoid_unnecessary_containers
     Widget welcomeText = Row(
       mainAxisAlignment: MainAxisAlignment.start,
@@ -176,7 +178,9 @@ class _LoginState extends State<Login> {
                   shape: StadiumBorder()),
               onPressed: () {
                 // ignore: empty_statements
-                if(formKey.currentState!.validate());
+                if(formKey.currentState!.validate()){
+
+                }
                 //buat login
               },
               child: Padding(

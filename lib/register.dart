@@ -252,7 +252,7 @@ class _RegisterState extends State<Register> {
                   shape: StadiumBorder()),
               onPressed: () async{
                 if (formKey.currentState!.validate()) {
-                  var response = await http.post(Uri.parse("http://192.168.102.195:3000/api/users"),
+                  var response = await http.post(Uri.parse("http://192.168.102.195:3000/api/users/register"),
                       headers: {
                         HttpHeaders.contentTypeHeader: 'application/json'
                       },
@@ -260,14 +260,14 @@ class _RegisterState extends State<Register> {
                         "fullName": regname,
                         "email": regemail,
                         "password": regpas,
-                        "address": '' //cuma sementara addressnya masih not null
+                        // "address": '' //cuma sementara addressnya masih not null
                       }));
                   print(response.body);
                   print(json.encode({
                         "fullName": regname,
                         "email": regemail,
                         "password": regpas,
-                        "address": '' //cuma sementara addressnya masih not null
+                        // "address": '' //cuma sementara addressnya masih not null
                       }));
                 }
               },

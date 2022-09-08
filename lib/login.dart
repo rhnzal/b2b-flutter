@@ -1,7 +1,11 @@
 // ignore_for_file: prefer_const_literals_to_create_immutables, duplicate_ignore, prefer_const_constructors, prefer_final_fields, body_might_complete_normally_nullable
+import 'dart:io';
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:projectb2b/register.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart' as http;
 
 class Login extends StatefulWidget {
   const Login({Key? key}) : super(key: key);
@@ -176,10 +180,18 @@ class _LoginState extends State<Login> {
               style: ElevatedButton.styleFrom(
                   primary: Color.fromARGB(255, 217, 217, 217),
                   shape: StadiumBorder()),
-              onPressed: () {
+              onPressed: () async{
                 // ignore: empty_statements
                 if(formKey.currentState!.validate()){
-
+                  var response = await http.post(Uri.parse("http://192.168.102.195:3000/api/auth/login"),
+                  headers: {HttpHeaders.contentTypeHeader: 'application/json'},
+                  body: json.encode({
+                    "email" : email,
+                    "password" : password
+                  })
+                  );
+                    
+                  print(response.body);
                 }
                 //buat login
               },
@@ -220,7 +232,7 @@ class _LoginState extends State<Login> {
             // ),
             onPressed: () {
               Navigator.pushReplacement(context,
-                  MaterialPageRoute(builder: (context) {
+                  MaterialPageRoute(builder: (context) {  //api/users/login
                 return Register();
               }));
             },

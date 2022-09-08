@@ -250,17 +250,24 @@ class _RegisterState extends State<Register> {
               style: ElevatedButton.styleFrom(
                   primary: Color.fromARGB(255, 217, 217, 217),
                   shape: StadiumBorder()),
-              onPressed: () {
+              onPressed: () async{
                 if (formKey.currentState!.validate()) {
-                  http.post(Uri.parse("http://192.168.18.37:3000/users"),
+                  var response = await http.post(Uri.parse("http://192.168.102.195:3000/api/users"),
                       headers: {
                         HttpHeaders.contentTypeHeader: 'application/json'
                       },
                       body: json.encode({
-                        "fullname": regname,
+                        "fullName": regname,
                         "email": regemail,
                         "password": regpas,
-                        "address": 'jalan mengeugeu' //cuma sementara addressnya masih not null
+                        "address": '' //cuma sementara addressnya masih not null
+                      }));
+                  print(response.body);
+                  print(json.encode({
+                        "fullName": regname,
+                        "email": regemail,
+                        "password": regpas,
+                        "address": '' //cuma sementara addressnya masih not null
                       }));
                 }
               },

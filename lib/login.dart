@@ -3,6 +3,7 @@ import 'dart:io';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:projectb2b/home.dart';
 import 'package:projectb2b/register.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
@@ -19,10 +20,24 @@ class _LoginState extends State<Login> {
   String password = '';
   bool _isObscure = true;
   final formKey = GlobalKey<FormState>();
+  var loginStat = '';
+  late bool isSuccess;
+  late SharedPreferences prefs;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    initpreference();
+  }
+
+  Future<void> initpreference() async {
+    prefs = await SharedPreferences.getInstance();
+    setState(() {});
+  }
 
   @override
   Widget build(BuildContext context) {
-    
     // ignore: unused_local_variable, avoid_unnecessary_containers
     Widget welcomeText = Row(
       mainAxisAlignment: MainAxisAlignment.start,
@@ -80,9 +95,9 @@ class _LoginState extends State<Login> {
           });
         },
         validator: (value) {
-          if(value!.isEmpty){
+          if (value!.isEmpty) {
             return "Please enter your email";
-          } else if(!value.contains('@')){
+          } else if (!value.contains('@')) {
             return "Please enter a valid email";
           }
         },
@@ -133,10 +148,10 @@ class _LoginState extends State<Login> {
             password = value;
           });
         },
-        validator :(value) {
-          if(value!.isEmpty){
+        validator: (value) {
+          if (value!.isEmpty) {
             return "PLease Enter Your Password";
-          }else if(value.length < 8){
+          } else if (value.length < 8) {
             return "Password must be 8 character or more";
           }
         },
@@ -180,18 +195,73 @@ class _LoginState extends State<Login> {
               style: ElevatedButton.styleFrom(
                   primary: Color.fromARGB(255, 217, 217, 217),
                   shape: StadiumBorder()),
-              onPressed: () async{
+              onPressed: () async {
                 // ignore: empty_statements
-                if(formKey.currentState!.validate()){
-                  var response = await http.post(Uri.parse("http://192.168.102.195:3000/api/auth/login"),
-                  headers: {HttpHeaders.contentTypeHeader: 'application/json'},
-                  body: json.encode({
-                    "email" : email,
-                    "password" : password
-                  })
-                  );
-                    
+                if (formKey.currentState!.validate()) {
+                  var response = await http.post(
+                      Uri.parse("http://192.168.102.195:3000/api/auth/login"),
+                      headers: {
+                        HttpHeaders.contentTypeHeader: 'application/json'
+                      },
+                      body:
+                          json.encode({"email": email, "password": password}));
+                  isSuccess = json.decode(response.body)['isSuccess'];
+                  if (isSuccess) {
+                    var token = json.decode(response.body)['data']['token'];
+                    prefs.setString('token', token);
+                    // ignore: use_build_context_synchronously
+                    Navigator.pushReplacement(context,
+                        MaterialPageRoute(builder: ((context) {
+                      return Home();
+                    })));
+                  } else {
+                    var error = json.decode(response.body)['message'];
+                    print(error);
+                    showDialog(
+                        context: context,
+                        builder: ((context) => AlertDialog(
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10)),
+                              backgroundColor: Color.fromARGB(255, 23, 22, 29),
+                              title: Text('Error'),
+                              titleTextStyle: TextStyle(
+                                  color: Colors.white,
+                                  fontFamily: 'Inter',
+                                  fontWeight: FontWeight.w600),
+                              content: Text(
+                                  '$error'),
+                              contentTextStyle: TextStyle(color: Colors.white),
+                              actions: [
+                                TextButton(
+                                    style: ButtonStyle(
+                                        overlayColor: MaterialStateProperty.all(
+                                            Colors.transparent),
+                                        minimumSize: MaterialStateProperty.all(
+                                            Size.zero),
+                                        tapTargetSize:
+                                            MaterialTapTargetSize.shrinkWrap,
+                                        padding: MaterialStateProperty.all(
+                                            EdgeInsets.fromLTRB(0, 0, 10, 10))),
+                                    onPressed: () {
+                                      Navigator.pushReplacement(context,
+                                          MaterialPageRoute(
+                                              builder: ((context) {
+                                        return Login();
+                                      })));
+                                    },
+                                    child: Text(
+                                      'OK',
+                                      style: TextStyle(color: Colors.white),
+                                    )),
+                              ],
+                            )));
+                  }
                   print(response.body);
+                  print(isSuccess);
+
+                  // print(mengege);
+                  // print(loginStat);
+                  // // print(loginStat);
                 }
                 //buat login
               },
@@ -232,7 +302,8 @@ class _LoginState extends State<Login> {
             // ),
             onPressed: () {
               Navigator.pushReplacement(context,
-                  MaterialPageRoute(builder: (context) {  //api/users/login
+                  MaterialPageRoute(builder: (context) {
+                //api/users/login
                 return Register();
               }));
             },

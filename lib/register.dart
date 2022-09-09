@@ -250,9 +250,11 @@ class _RegisterState extends State<Register> {
               style: ElevatedButton.styleFrom(
                   primary: Color.fromARGB(255, 217, 217, 217),
                   shape: StadiumBorder()),
-              onPressed: () async{
+              onPressed: () async {
                 if (formKey.currentState!.validate()) {
-                  var response = await http.post(Uri.parse("http://192.168.102.195:3000/api/users/register"),
+                  var response = await http.post(
+                      Uri.parse(
+                          "http://192.168.102.195:3000/api/users/register"),
                       headers: {
                         HttpHeaders.contentTypeHeader: 'application/json'
                       },
@@ -263,12 +265,127 @@ class _RegisterState extends State<Register> {
                         // "address": '' //cuma sementara addressnya masih not null
                       }));
                   print(response.body);
-                  print(json.encode({
-                        "fullName": regname,
-                        "email": regemail,
-                        "password": regpas,
-                        // "address": '' //cuma sementara addressnya masih not null
-                      }));
+                  showDialog(
+                        context: context,
+                        builder: ((context) => AlertDialog(
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10)),
+                              backgroundColor: Color.fromARGB(255, 23, 22, 29),
+                              title: Text('Registration Success!'),
+                              titleTextStyle: TextStyle(
+                                  color: Colors.white,
+                                  fontFamily: 'Inter',
+                                  fontWeight: FontWeight.w600),
+                              content: Text(
+                                  'Check your email to verify your account'),
+                              contentTextStyle: TextStyle(color: Colors.white),
+                              actions: [
+                                TextButton(
+                                    style: ButtonStyle(
+                                        overlayColor: MaterialStateProperty.all(
+                                            Colors.transparent),
+                                        minimumSize: MaterialStateProperty.all(
+                                            Size.zero),
+                                        tapTargetSize:
+                                            MaterialTapTargetSize.shrinkWrap,
+                                        padding: MaterialStateProperty.all(
+                                            EdgeInsets.fromLTRB(0, 0, 10, 10))),
+                                    onPressed: () {
+                                      Navigator.pushReplacement(context,
+                                          MaterialPageRoute(
+                                              builder: ((context) {
+                                        return Login();
+                                      })));
+                                    },
+                                    child: Text(
+                                      'OK',
+                                      style: TextStyle(color: Colors.white),
+                                    )),
+                              ],
+                            )));
+                  // print(json.encode({
+                  //   "fullName": regname,
+                  //   "email": regemail,
+                  //   "password": regpas,
+                  //   // "address": '' //cuma sementara addressnya masih not null
+                  // }));
+                  // var isSuccess = json.decode(response.body)['isSuccess'];
+                  // if (isSuccess) {
+                    // showDialog(
+                    //     context: context,
+                    //     builder: ((context) => AlertDialog(
+                    //           shape: RoundedRectangleBorder(
+                    //               borderRadius: BorderRadius.circular(10)),
+                    //           backgroundColor: Color.fromARGB(255, 23, 22, 29),
+                    //           title: Text('Registration Success!'),
+                    //           titleTextStyle: TextStyle(
+                    //               color: Colors.white,
+                    //               fontFamily: 'Inter',
+                    //               fontWeight: FontWeight.w600),
+                    //           content: Text(
+                    //               'Check your email to verify your account'),
+                    //           contentTextStyle: TextStyle(color: Colors.white),
+                    //           actions: [
+                    //             TextButton(
+                    //                 style: ButtonStyle(
+                    //                     overlayColor: MaterialStateProperty.all(
+                    //                         Colors.transparent),
+                    //                     minimumSize: MaterialStateProperty.all(
+                    //                         Size.zero),
+                    //                     tapTargetSize:
+                    //                         MaterialTapTargetSize.shrinkWrap,
+                    //                     padding: MaterialStateProperty.all(
+                    //                         EdgeInsets.fromLTRB(0, 0, 10, 10))),
+                    //                 onPressed: () {
+                    //                   Navigator.pushReplacement(context,
+                    //                       MaterialPageRoute(
+                    //                           builder: ((context) {
+                    //                     return Login();
+                    //                   })));
+                    //                 },
+                    //                 child: Text(
+                    //                   'OK',
+                    //                   style: TextStyle(color: Colors.white),
+                    //                 )),
+                    //           ],
+                    //         )));
+                  // } else {
+                  //   var error = json.decode(response.body)['error'];
+                  //   showDialog(
+                  //       context: context,
+                  //       builder: ((context) => AlertDialog(
+                  //             shape: RoundedRectangleBorder(
+                  //                 borderRadius: BorderRadius.circular(10)),
+                  //             backgroundColor: Color.fromARGB(255, 23, 22, 29),
+                  //             title: Text('Error!'),
+                  //             titleTextStyle: TextStyle(
+                  //                 color: Colors.white,
+                  //                 fontFamily: 'Inter',
+                  //                 fontWeight: FontWeight.w600),
+                  //             content: Text(
+                  //                 '$error'),
+                  //             contentTextStyle: TextStyle(color: Colors.white),
+                  //             actions: [
+                  //               TextButton(
+                  //                   style: ButtonStyle(
+                  //                       overlayColor: MaterialStateProperty.all(
+                  //                           Colors.transparent),
+                  //                       minimumSize: MaterialStateProperty.all(
+                  //                           Size.zero),
+                  //                       tapTargetSize:
+                  //                           MaterialTapTargetSize.shrinkWrap,
+                  //                       padding: MaterialStateProperty.all(
+                  //                           EdgeInsets.fromLTRB(0, 0, 10, 10))),
+                  //                   onPressed: () {
+                                      
+                  //                   },
+                  //                   child: Text(
+                  //                     'OK',
+                  //                     style: TextStyle(color: Colors.white),
+                  //                   )),
+                  //             ],
+                  //           )));
+                  // }
                 }
               },
               child: Padding(

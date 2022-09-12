@@ -16,29 +16,41 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  late SharedPreferences prefs;
+  late SharedPreferences prefs ;
+  var activity ;
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     initpreference();
+
   }
 
   Future<void> initpreference() async {
     prefs = await SharedPreferences.getInstance();
+    getActivity();
     setState(() {});
   }
+  Future<void> getActivity() async{
+    var token = prefs.getString('token');
+    final response = await http.get(Uri.parse("http://192.168.102.195:3000/api/document"),
+      headers: {HttpHeaders.authorizationHeader: 'Bearer $token'}
+    );
+    // print(response.body);
+    activity = json.decode(response.body)["data"];
+    print(activity);
+  }
+
 
   @override
   Widget build(BuildContext context) {
     String url = '';
-
     Widget welcomeUser = Container(
       margin: EdgeInsets.fromLTRB(20, 40, 10, 20),
       child: Row(
         children: [
           CircleAvatar(
-            backgroundColor: Colors.amber,
+            backgroundColor: Colors.white,
             backgroundImage: AssetImage('images/user.png'),
             radius: 20,
           ),
@@ -78,7 +90,11 @@ class _HomeState extends State<Home> {
             width: 240,
             child: TextFormField(
               cursorColor: Colors.black,
-              style: TextStyle(color: Colors.black, fontFamily: 'Inter', fontWeight: FontWeight.w500, fontSize: 14),
+              style: TextStyle(
+                  color: Colors.black,
+                  fontFamily: 'Inter',
+                  fontWeight: FontWeight.w500,
+                  fontSize: 14),
               decoration: InputDecoration(
                 // prefixIcon: Image.asset('icons/email.png',height: 4 ),
                 filled: true,
@@ -133,17 +149,65 @@ class _HomeState extends State<Home> {
       ),
     );
 
-    // Widget recentActivity = Container(
+    Widget recentActivity = Container(
+      margin: EdgeInsets.fromLTRB(20, 10, 10, 10),
+      child: Row(
+        children: [
+          Icon(Icons.list_rounded),
+          SizedBox(
+            width: 5,
+          ),
+          Text(
+            'Recent Activity',
+            style: TextStyle(
+                fontFamily: 'Inter', fontWeight: FontWeight.w800, fontSize: 12),
+          )
+        ],
+      ),
+    );
 
+    // Widget listActivity = Container(
+    //   margin: EdgeInsets.fromLTRB(20, 0, 20, 0),
+    //     child: ListView.builder(
+    //       itemCount: activity,
+    //       itemBuilder: ((context, index) => Container(
+    //         child: Column(
+    //           children: [
+                
+    //           ],
+    //         ),
+    //       )),
+
+    //     ),
     // );
-
-    // Widget navbar = BottomNavigationBar(items: items)
 
     return Scaffold(
       backgroundColor: Color.fromARGB(255, 224, 232, 235),
       body: Column(
-        children: [welcomeUser, inputURL],
+        children: [welcomeUser, inputURL, recentActivity],
       ),
+      bottomNavigationBar: BottomNavigationBar(
+        type: BottomNavigationBarType.fixed,
+        showSelectedLabels: false,
+        showUnselectedLabels: false,
+        iconSize: 30,
+        selectedItemColor: Color.fromARGB(255, 26, 25, 32),
+        unselectedItemColor: Colors.white,
+        backgroundColor: Color.fromARGB(255, 23, 22, 29),
+        items: [
+        BottomNavigationBarItem(
+          icon: Icon(Icons.home_rounded), 
+          label: 'Home'),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.history_rounded), 
+          label: 'History'),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.favorite_rounded), 
+          label: 'Wishlist'),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.person_rounded), 
+          label: 'Profile'),
+      ]),
     );
   }
 }

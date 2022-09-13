@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:projectb2b/login.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
@@ -17,7 +18,7 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   late SharedPreferences prefs ;
-  var activity ;
+  var activity = [];
   @override
   void initState() {
     // TODO: implement initState
@@ -39,6 +40,7 @@ class _HomeState extends State<Home> {
     // print(response.body);
     activity = json.decode(response.body)["data"];
     print(activity);
+    setState(() {});
   }
 
 
@@ -79,7 +81,7 @@ class _HomeState extends State<Home> {
     );
 
     Widget inputURL = Container(
-      height: 80,
+      height: 70,
       color: Color.fromARGB(255, 23, 22, 29),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -124,6 +126,7 @@ class _HomeState extends State<Home> {
                 style: ElevatedButton.styleFrom(
                   primary: Color.fromARGB(255, 217, 217, 217),
                   shape: StadiumBorder(),
+                  elevation: 10
                 ),
                 onPressed: () async {
                   var token = prefs.getString('token');
@@ -150,9 +153,9 @@ class _HomeState extends State<Home> {
     );
 
     Widget recentActivity = Container(
-      margin: EdgeInsets.fromLTRB(20, 10, 10, 10),
+      margin: EdgeInsets.fromLTRB(20, 15, 10, 0),
       child: Row(
-        children: [
+        children: const [
           Icon(Icons.list_rounded),
           SizedBox(
             width: 5,
@@ -166,25 +169,37 @@ class _HomeState extends State<Home> {
       ),
     );
 
-    // Widget listActivity = Container(
-    //   margin: EdgeInsets.fromLTRB(20, 0, 20, 0),
-    //     child: ListView.builder(
-    //       itemCount: activity,
-    //       itemBuilder: ((context, index) => Container(
-    //         child: Column(
-    //           children: [
-                
-    //           ],
-    //         ),
-    //       )),
-
-    //     ),
-    // );
+    Widget listActivity = Expanded(
+      child: ListView.builder(
+      itemCount: activity.length,
+      itemBuilder: (context, index) => Padding(
+        padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
+        child: Card(
+          elevation: 10,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(15)
+          ),
+          margin: EdgeInsets.only(bottom: 20),
+          child: Padding(
+            padding: EdgeInsets.fromLTRB(15, 20, 15, 20),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(activity[index]["url"], style: TextStyle(fontFamily: 'Inter', fontWeight: FontWeight.w700, fontSize: 18),),
+                Text(DateFormat.yMMMd().format(DateTime.parse(activity[index]["createdAt"])), style: TextStyle(fontFamily: 'Inter', fontWeight: FontWeight.w400, fontSize: 10)),
+                // Text(activity[index]["createdAt"])
+              ],
+            ),
+          )
+        ),
+      )),
+    );
+    
 
     return Scaffold(
       backgroundColor: Color.fromARGB(255, 224, 232, 235),
       body: Column(
-        children: [welcomeUser, inputURL, recentActivity],
+        children: [welcomeUser, inputURL, recentActivity, listActivity],
       ),
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,

@@ -8,7 +8,9 @@ Future<void> main() async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   var token = prefs.getString('token');
 
-  runApp(MyApp(token: token,));
+  runApp(MyApp(
+    token: token,
+  ));
 }
 
 class MyApp extends StatefulWidget {

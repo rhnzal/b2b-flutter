@@ -207,6 +207,9 @@ class _LoginState extends State<Login> {
                           json.encode({"email": email, "password": password}));
                   isSuccess = json.decode(response.body)['isSuccess'];
                   if (isSuccess) {
+                    // var username = json.decode(response.body)['data']['fullName'];
+                    // prefs.setString('username', username);
+                    // print(username);
                     var token = json.decode(response.body)['data']['token'];
                     prefs.setString('token', token);
                     // ignore: use_build_context_synchronously
@@ -228,8 +231,7 @@ class _LoginState extends State<Login> {
                                   color: Colors.white,
                                   fontFamily: 'Inter',
                                   fontWeight: FontWeight.w600),
-                              content: Text(
-                                  '$error'),
+                              content: Text('$error'),
                               contentTextStyle: TextStyle(color: Colors.white),
                               actions: [
                                 TextButton(
@@ -243,11 +245,7 @@ class _LoginState extends State<Login> {
                                         padding: MaterialStateProperty.all(
                                             EdgeInsets.fromLTRB(0, 0, 10, 10))),
                                     onPressed: () {
-                                      Navigator.pushReplacement(context,
-                                          MaterialPageRoute(
-                                              builder: ((context) {
-                                        return Login();
-                                      })));
+                                      Navigator.pop(context);
                                     },
                                     child: Text(
                                       'OK',

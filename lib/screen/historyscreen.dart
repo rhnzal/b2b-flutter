@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:intl/intl.dart';
+import 'package:projectb2b/screen/previewscreen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -17,6 +18,7 @@ class HistoryScreen extends StatefulWidget {
 class _HistoryScreenState extends State<HistoryScreen> {
   late SharedPreferences prefs;
   var activity = [];
+  String result = '';
   @override
   void initState() {
     // TODO: implement initState
@@ -99,33 +101,41 @@ class _HistoryScreenState extends State<HistoryScreen> {
           itemBuilder: (context, index) => Padding(
                 padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
                 child: Card(
-                    elevation: 10,
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(15)),
-                    margin: EdgeInsets.only(bottom: 20),
-                    child: Padding(
-                      padding: EdgeInsets.fromLTRB(15, 20, 15, 20),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            activity[index]["url"],
-                            style: TextStyle(
-                                fontFamily: 'Inter',
-                                fontWeight: FontWeight.w700,
-                                fontSize: 18),
-                          ),
-                          Text(
-                              DateFormat.yMMMd().format(
-                                  DateTime.parse(activity[index]["createdAt"])),
+                  elevation: 10,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(15)),
+                  margin: EdgeInsets.only(bottom: 20),
+                  child: InkWell(
+                      onTap: (() {
+                        Navigator.push(context,
+                            MaterialPageRoute(builder: (context) {
+                          return PreviewScreen(url: activity[index]['result']);
+                        }));
+                      }),
+                      child: Padding(
+                        padding: EdgeInsets.fromLTRB(15, 20, 15, 20),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              activity[index]["url"],
                               style: TextStyle(
                                   fontFamily: 'Inter',
-                                  fontWeight: FontWeight.w400,
-                                  fontSize: 10)),
-                          // Text(activity[index]["createdAt"])
-                        ],
-                      ),
-                    )),
+                                  fontWeight: FontWeight.w700,
+                                  fontSize: 18),
+                            ),
+                            Text(
+                                DateFormat.yMMMd().format(DateTime.parse(
+                                    activity[index]["createdAt"])),
+                                style: TextStyle(
+                                    fontFamily: 'Inter',
+                                    fontWeight: FontWeight.w400,
+                                    fontSize: 10)),
+                            // Text(activity[index]["createdAt"])
+                          ],
+                        ),
+                      )),
+                ),
               )),
     );
 

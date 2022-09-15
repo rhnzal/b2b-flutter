@@ -39,7 +39,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
         headers: {HttpHeaders.authorizationHeader: 'Bearer $token'});
     // print(response.body);
     activity = json.decode(response.body)["data"];
-    print(activity);
     setState(() {});
   }
 
@@ -128,44 +127,39 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     // ignore: prefer_const_literals_to_create_immutables
                     children: [
                       Text("Display Name",
-                      style: TextStyle(
-                        fontFamily: 'Inter',
-                        fontWeight: FontWeight.w500,
-                        fontSize: 12,
-                        color: Color.fromARGB(255, 224, 232, 235)
-                      )
-                      ),
-                      SizedBox(
-                        height: 10
-                      ),
-                      Text("User",
-                      style: TextStyle(
-                        fontFamily: 'Inter',
-                        fontWeight: FontWeight.w700,
-                        fontSize: 16,
-                        color: Color.fromARGB(255, 224, 232, 235)
-                        
-                      ),
+                          style: TextStyle(
+                              fontFamily: 'Inter',
+                              fontWeight: FontWeight.w500,
+                              fontSize: 12,
+                              color: Color.fromARGB(255, 224, 232, 235))),
+                      SizedBox(height: 10),
+                      Text(
+                        "User",
+                        style: TextStyle(
+                            fontFamily: 'Inter',
+                            fontWeight: FontWeight.w700,
+                            fontSize: 16,
+                            color: Color.fromARGB(255, 224, 232, 235)),
                       )
                     ],
                   ),
-                  Container(
+                  SizedBox(
                     height: 20,
                     width: 60,
                     child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                          primary: Colors.white,
-                          shape: StadiumBorder(),
-                          elevation: 10),
-                      onPressed: (){}, 
-                      child: Text('Edit', 
-                      style: TextStyle(
-                        fontFamily: 'Inter',
-                        fontWeight: FontWeight.w500,
-                        fontSize: 12,
-                        color: Color.fromARGB(255, 26, 25, 32)
-                      ),
-                      )),
+                        style: ElevatedButton.styleFrom(
+                            primary: Colors.white,
+                            shape: StadiumBorder(),
+                            elevation: 10),
+                        onPressed: () {},
+                        child: Text(
+                          'Edit',
+                          style: TextStyle(
+                              fontFamily: 'Inter',
+                              fontWeight: FontWeight.w500,
+                              fontSize: 12,
+                              color: Color.fromARGB(255, 26, 25, 32)),
+                        )),
                   )
                 ],
               ),
@@ -182,50 +176,45 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     // ignore: prefer_const_literals_to_create_immutables
                     children: [
                       Text("Email",
-                      style: TextStyle(
-                        fontFamily: 'Inter',
-                        fontWeight: FontWeight.w500,
-                        fontSize: 12,
-                        color: Color.fromARGB(255, 224, 232, 235)
-                      )
-                      ),
-                      SizedBox(
-                        height: 10
-                      ),
-                      Text("something@mail.com",
-                      style: TextStyle(
-                        fontFamily: 'Inter',
-                        fontWeight: FontWeight.w700,
-                        fontSize: 16,
-                        color: Color.fromARGB(255, 224, 232, 235)
-                        
-                      ),
+                          style: TextStyle(
+                              fontFamily: 'Inter',
+                              fontWeight: FontWeight.w500,
+                              fontSize: 12,
+                              color: Color.fromARGB(255, 224, 232, 235))),
+                      SizedBox(height: 10),
+                      Text(
+                        "something@mail.com",
+                        style: TextStyle(
+                            fontFamily: 'Inter',
+                            fontWeight: FontWeight.w700,
+                            fontSize: 16,
+                            color: Color.fromARGB(255, 224, 232, 235)),
                       )
                     ],
                   ),
-                  Container(
+                  SizedBox(
                     height: 20,
                     width: 60,
                     child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                          primary: Colors.white,
-                          shape: StadiumBorder(),
-                          elevation: 10),
-                      onPressed: (){}, 
-                      child: Text('Edit', 
-                      style: TextStyle(
-                        fontFamily: 'Inter',
-                        fontWeight: FontWeight.w500,
-                        fontSize: 12,
-                        color: Color.fromARGB(255, 26, 25, 32)
-                      ),
-                      )),
+                        style: ElevatedButton.styleFrom(
+                            primary: Colors.white,
+                            shape: StadiumBorder(),
+                            elevation: 10),
+                        onPressed: () {},
+                        child: Text(
+                          'Edit',
+                          style: TextStyle(
+                              fontFamily: 'Inter',
+                              fontWeight: FontWeight.w500,
+                              fontSize: 12,
+                              color: Color.fromARGB(255, 26, 25, 32)),
+                        )),
                   )
                 ],
               ),
             ),
             // password
-           Padding(
+            Padding(
               padding: const EdgeInsets.all(10),
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.end,
@@ -236,44 +225,39 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     // ignore: prefer_const_literals_to_create_immutables
                     children: [
                       Text("Password",
-                      style: TextStyle(
-                        fontFamily: 'Inter',
-                        fontWeight: FontWeight.w500,
-                        fontSize: 12,
-                        color: Color.fromARGB(255, 224, 232, 235)
-                      )
-                      ),
-                      SizedBox(
-                        height: 10
-                      ),
-                      Text("",
-                      style: TextStyle(
-                        fontFamily: 'Inter',
-                        fontWeight: FontWeight.w700,
-                        fontSize: 16,
-                        color: Color.fromARGB(255, 224, 232, 235)
-                        
-                      ),
+                          style: TextStyle(
+                              fontFamily: 'Inter',
+                              fontWeight: FontWeight.w500,
+                              fontSize: 12,
+                              color: Color.fromARGB(255, 224, 232, 235))),
+                      SizedBox(height: 10),
+                      Text(
+                        "",
+                        style: TextStyle(
+                            fontFamily: 'Inter',
+                            fontWeight: FontWeight.w700,
+                            fontSize: 16,
+                            color: Color.fromARGB(255, 224, 232, 235)),
                       )
                     ],
                   ),
-                  Container(
+                  SizedBox(
                     height: 20,
                     width: 60,
                     child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                          primary: Colors.white,
-                          shape: StadiumBorder(),
-                          elevation: 10),
-                      onPressed: (){}, 
-                      child: Text('Edit', 
-                      style: TextStyle(
-                        fontFamily: 'Inter',
-                        fontWeight: FontWeight.w500,
-                        fontSize: 12,
-                        color: Color.fromARGB(255, 26, 25, 32)
-                      ),
-                      )),
+                        style: ElevatedButton.styleFrom(
+                            primary: Colors.white,
+                            shape: StadiumBorder(),
+                            elevation: 10),
+                        onPressed: () {},
+                        child: Text(
+                          'Edit',
+                          style: TextStyle(
+                              fontFamily: 'Inter',
+                              fontWeight: FontWeight.w500,
+                              fontSize: 12,
+                              color: Color.fromARGB(255, 26, 25, 32)),
+                        )),
                   )
                 ],
               ),
@@ -300,6 +284,5 @@ class _ProfileScreenState extends State<ProfileScreen> {
         ),
       ),
     );
-    
   }
 }

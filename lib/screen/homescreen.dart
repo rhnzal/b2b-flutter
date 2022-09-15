@@ -6,6 +6,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:projectb2b/login.dart';
+import 'package:projectb2b/screen/previewscreen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
@@ -122,7 +123,7 @@ class _HomeScreenState extends State<HomeScreen> {
               }),
             ),
           ),
-          Container(
+          SizedBox(
             height: 30,
             child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
@@ -141,6 +142,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         'url': url,
                       }));
                   print(response.body);
+                  await getActivity();
                 },
                 child: Text('Open',
                     style: TextStyle(
@@ -180,27 +182,35 @@ class _HomeScreenState extends State<HomeScreen> {
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(15)),
                     margin: EdgeInsets.only(bottom: 20),
-                    child: Padding(
-                      padding: EdgeInsets.fromLTRB(15, 20, 15, 20),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            activity[index]["url"],
-                            style: TextStyle(
-                                fontFamily: 'Inter',
-                                fontWeight: FontWeight.w700,
-                                fontSize: 18),
-                          ),
-                          Text(
-                              DateFormat.yMMMd().format(
-                                  DateTime.parse(activity[index]["createdAt"])),
+                    child: InkWell(
+                      onTap: (() {
+                        Navigator.push(context, MaterialPageRoute(builder: ((context) {
+                          return PreviewScreen(url: activity[index]["result"]);
+                        }))
+                      );
+                      }),
+                      child: Padding(
+                        padding: EdgeInsets.fromLTRB(15, 20, 15, 20),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              activity[index]["url"],
                               style: TextStyle(
                                   fontFamily: 'Inter',
-                                  fontWeight: FontWeight.w400,
-                                  fontSize: 10)),
-                          // Text(activity[index]["createdAt"])
-                        ],
+                                  fontWeight: FontWeight.w700,
+                                  fontSize: 18),
+                            ),
+                            Text(
+                                DateFormat.yMMMd().format(
+                                    DateTime.parse(activity[index]["createdAt"])),
+                                style: TextStyle(
+                                    fontFamily: 'Inter',
+                                    fontWeight: FontWeight.w400,
+                                    fontSize: 10)),
+                            // Text(activity[index]["createdAt"])
+                          ],
+                        ),
                       ),
                     )),
               )),

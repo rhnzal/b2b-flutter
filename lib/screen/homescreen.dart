@@ -18,7 +18,12 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  // final formKey = GlobalKey<FormState>();
+  TextEditingController urlCon = TextEditingController();
+  String url = '';
   late SharedPreferences prefs;
+  bool isActive = false;
+  bool isload = true;
   var activity = [];
   // String? username = '';
   @override
@@ -42,13 +47,14 @@ class _HomeScreenState extends State<HomeScreen> {
     // print(response.body);
     activity = json.decode(response.body)["data"];
     print(activity);
-    setState(() {});
+    setState(() {
+      isload = false;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     // var username = prefs.getString('username');
-    String url = '';
     Widget welcomeUser = Container(
       margin: EdgeInsets.fromLTRB(20, 40, 10, 20),
       child: Row(
@@ -94,6 +100,7 @@ class _HomeScreenState extends State<HomeScreen> {
             height: 37,
             width: 240,
             child: TextFormField(
+              controller: urlCon,
               cursorColor: Colors.black,
               style: TextStyle(
                   color: Colors.black,
@@ -119,7 +126,12 @@ class _HomeScreenState extends State<HomeScreen> {
                 // )
               ),
               onChanged: ((value) {
-                url = value;
+                  url = value;  
+                setState(() {
+                  isActive =
+                      value.contains('http://') || value.contains('https://')? true : false;
+                      print(url);
+                });
               }),
             ),
           ),
@@ -127,23 +139,71 @@ class _HomeScreenState extends State<HomeScreen> {
             height: 30,
             child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
+                    onSurface: Color.fromARGB(255, 255, 255, 255),
                     primary: Color.fromARGB(255, 217, 217, 217),
                     shape: StadiumBorder(),
                     elevation: 10),
-                onPressed: () async {
-                  var token = prefs.getString('token');
-                  var response = await http.post(
-                      Uri.parse('http://192.168.102.195:3000/api/document/url'),
-                      headers: {
-                        HttpHeaders.contentTypeHeader: 'application/json',
-                        HttpHeaders.authorizationHeader: 'Bearer $token'
-                      },
-                      body: json.encode({
-                        'url': url,
-                      }));
-                  print(response.body);
-                  await getActivity();
-                },
+                onPressed: isActive ? () async {
+                        showDialog(
+                          context: context, 
+                          builder: ((context) => AlertDialog(
+                            shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10)),
+                              backgroundColor: Color.fromARGB(255, 23, 22, 29),
+                            title: Text('Confirmation'),
+                            titleTextStyle: TextStyle(
+                                  color: Colors.white,
+                                  fontFamily: 'Inter',
+                                  fontWeight: FontWeight.w600),
+                            content: Text('Are You Sure ?'),
+                            contentTextStyle: TextStyle(color: Colors.white),
+                            actions: [
+                              TextButton(
+                                style: ButtonStyle(
+                                        overlayColor: MaterialStateProperty.all(
+                                            Colors.transparent),
+                                        minimumSize: MaterialStateProperty.all(
+                                            Size.zero),
+                                        tapTargetSize:
+                                            MaterialTapTargetSize.shrinkWrap,
+                                        padding: MaterialStateProperty.all(
+                                            EdgeInsets.fromLTRB(0, 0, 10, 10))),
+                                onPressed: (){
+                                  Navigator.pop(context);
+                                }, 
+                                child: Text('No', style: TextStyle(color: Colors.white))),
+                              TextButton(
+                                style: ButtonStyle(
+                                        overlayColor: MaterialStateProperty.all(
+                                            Colors.transparent),
+                                        minimumSize: MaterialStateProperty.all(
+                                            Size.zero),
+                                        tapTargetSize:
+                                            MaterialTapTargetSize.shrinkWrap,
+                                        padding: MaterialStateProperty.all(
+                                            EdgeInsets.fromLTRB(0, 0, 10, 10))),
+                                onPressed: () async{
+                                  Navigator.pop(context);
+                                  var token = prefs.getString('token');
+                                  var response = await http.post(
+                                  Uri.parse(
+                                  'http://192.168.102.195:3000/api/document/url'),
+                                  headers: {
+                                    HttpHeaders.contentTypeHeader: 'application/json',
+                                    HttpHeaders.authorizationHeader: 'Bearer $token'
+                                  },
+                                  body: json.encode({
+                                    'url': url,
+                                  }));
+                                  print(response.body);
+                                  await getActivity();
+                                  urlCon.clear();
+                                      },
+                                child: Text('Yes', style: TextStyle(color: Colors.white)))
+                            ],
+                          )));
+                      }
+                    : null,
                 child: Text('Open',
                     style: TextStyle(
                         fontFamily: 'Inter',
@@ -172,49 +232,61 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
     );
 
-    Widget listActivity = Expanded(
-      child: ListView.builder(
-          itemCount: activity.length,
-          itemBuilder: (context, index) => Padding(
-                padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
-                child: Card(
-                    elevation: 10,
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(15)),
-                    margin: EdgeInsets.only(bottom: 20),
-                    child: InkWell(
-                      onTap: (() {
-                        Navigator.push(context, MaterialPageRoute(builder: ((context) {
-                          return PreviewScreen(url: activity[index]["result"]);
-                        }))
-                      );
-                      }),
-                      child: Padding(
-                        padding: EdgeInsets.fromLTRB(15, 20, 15, 20),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              activity[index]["url"],
-                              style: TextStyle(
-                                  fontFamily: 'Inter',
-                                  fontWeight: FontWeight.w700,
-                                  fontSize: 18),
-                            ),
-                            Text(
-                                DateFormat.yMMMd().format(
-                                    DateTime.parse(activity[index]["createdAt"])),
-                                style: TextStyle(
-                                    fontFamily: 'Inter',
-                                    fontWeight: FontWeight.w400,
-                                    fontSize: 10)),
-                            // Text(activity[index]["createdAt"])
-                          ],
-                        ),
-                      ),
-                    )),
-              )),
-    );
+    Widget listActivity = isload
+        ? CircularProgressIndicator(
+            color: Color.fromARGB(255, 23, 22, 29),
+          )
+        : Expanded(
+            child: ScrollConfiguration(
+              behavior: ScrollBehavior(),
+              child: GlowingOverscrollIndicator(
+                axisDirection: AxisDirection.down,
+                color: Colors.white,
+                child: ListView.builder(
+                    itemCount: activity.length,
+                    itemBuilder: (context, index) => Padding(
+                          padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
+                          child: Card(
+                              elevation: 10,
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(15)),
+                              margin: EdgeInsets.only(bottom: 20),
+                              child: InkWell(
+                                onTap: (() {
+                                  Navigator.push(context,
+                                      MaterialPageRoute(builder: ((context) {
+                                    return PreviewScreen(
+                                        url: activity[index]["result"]);
+                                  })));
+                                }),
+                                child: Padding(
+                                  padding: EdgeInsets.fromLTRB(15, 20, 15, 20),
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        activity[index]["url"],
+                                        style: TextStyle(
+                                            fontFamily: 'Inter',
+                                            fontWeight: FontWeight.w700,
+                                            fontSize: 18),
+                                      ),
+                                      Text(
+                                          DateFormat.yMMMd().format(DateTime.parse(
+                                              activity[index]["createdAt"])),
+                                          style: TextStyle(
+                                              fontFamily: 'Inter',
+                                              fontWeight: FontWeight.w400,
+                                              fontSize: 10)),
+                                      // Text(activity[index]["createdAt"])
+                                    ],
+                                  ),
+                                ),
+                              )),
+                        )),
+              ),
+            ),
+          );
 
     return Scaffold(
       backgroundColor: Color.fromARGB(255, 224, 232, 235),

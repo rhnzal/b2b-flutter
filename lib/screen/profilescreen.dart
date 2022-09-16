@@ -278,9 +278,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
     return Scaffold(
       backgroundColor: Color.fromARGB(255, 224, 232, 235),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [profilePreview, editProfile, quota],
+      body: ScrollConfiguration(
+        behavior: ScrollBehavior(),
+        child: GlowingOverscrollIndicator(
+          axisDirection: AxisDirection.down,
+          color : Colors.white,
+          child: SingleChildScrollView(
+            child: Column(
+              children: [profilePreview, editProfile, quota],
+            ),
+          ),
         ),
       ),
     );

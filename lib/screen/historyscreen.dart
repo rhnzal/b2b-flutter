@@ -17,6 +17,7 @@ class HistoryScreen extends StatefulWidget {
 
 class _HistoryScreenState extends State<HistoryScreen> {
   late SharedPreferences prefs;
+  bool isload = true;
   var activity = [];
   String result = '';
   @override
@@ -40,7 +41,9 @@ class _HistoryScreenState extends State<HistoryScreen> {
     // print(response.body);
     activity = json.decode(response.body)["data"];
     print(activity);
-    setState(() {});
+    setState(() {
+      isload = false;
+    });
   }
 
   @override
@@ -96,52 +99,67 @@ class _HistoryScreenState extends State<HistoryScreen> {
     );
 
     Widget listHistory = Expanded(
-      child: ListView.builder(
-          itemCount: activity.length,
-          itemBuilder: (context, index) => Padding(
-                padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
-                child: Card(
-                  elevation: 10,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(15)),
-                  margin: EdgeInsets.only(bottom: 20),
-                  child: InkWell(
-                      onTap: (() {
-                        Navigator.push(context,
-                            MaterialPageRoute(builder: (context) {
-                          return PreviewScreen(url: activity[index]['result']);
-                        }));
-                      }),
-                      child: Padding(
-                        padding: EdgeInsets.fromLTRB(15, 20, 15, 20),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              activity[index]["url"],
-                              style: TextStyle(
-                                  fontFamily: 'Inter',
-                                  fontWeight: FontWeight.w700,
-                                  fontSize: 18),
+      child: ScrollConfiguration(
+        behavior: ScrollBehavior(),
+        child: GlowingOverscrollIndicator(
+          axisDirection: AxisDirection.down,
+          color: Colors.white,
+          child: ListView.builder(
+              itemCount: activity.length,
+              itemBuilder: (context, index) => Padding(
+                    padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
+                    child: Card(
+                      elevation: 10,
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(15)),
+                      margin: EdgeInsets.only(bottom: 20),
+                      child: InkWell(
+                          onTap: (() {
+                            Navigator.push(context,
+                                MaterialPageRoute(builder: (context) {
+                              return PreviewScreen(url: activity[index]['result']);
+                            }));
+                          }),
+                          child: Padding(
+                            padding: EdgeInsets.fromLTRB(15, 20, 15, 20),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  activity[index]["url"],
+                                  style: TextStyle(
+                                      fontFamily: 'Inter',
+                                      fontWeight: FontWeight.w700,
+                                      fontSize: 18),
+                                ),
+                                Text(
+                                    DateFormat.yMMMd().format(DateTime.parse(
+                                        activity[index]["createdAt"])),
+                                    style: TextStyle(
+                                        fontFamily: 'Inter',
+                                        fontWeight: FontWeight.w400,
+                                        fontSize: 10)),
+                                // Text(activity[index]["createdAt"])
+                              ],
                             ),
-                            Text(
-                                DateFormat.yMMMd().format(DateTime.parse(
-                                    activity[index]["createdAt"])),
-                                style: TextStyle(
-                                    fontFamily: 'Inter',
-                                    fontWeight: FontWeight.w400,
-                                    fontSize: 10)),
-                            // Text(activity[index]["createdAt"])
-                          ],
-                        ),
-                      )),
-                ),
-              )),
+                          )),
+                    ),
+                  )),
+        ),
+      ),
     );
 
     return Scaffold(
       backgroundColor: Color.fromARGB(255, 224, 232, 235),
-      body: Column(children: [welcomeUser, history, listHistory]),
+      body: Column(children: [
+        welcomeUser,
+        history,
+        isload
+            ? CircularProgressIndicator(
+                color: Color.fromARGB(255, 23, 22, 29),
+              )
+            : listHistory
+      ]),
     );
   }
 }

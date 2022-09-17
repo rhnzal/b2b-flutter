@@ -71,11 +71,68 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   width: 109,
                   child: ElevatedButton(
                     onPressed: () {
-                      prefs.remove('token');
-                      Navigator.pushReplacement(context,
-                          MaterialPageRoute(builder: (context) {
-                        return Login();
-                      }));
+                      showDialog(
+                          context: context,
+                          builder: ((context) => AlertDialog(
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10)),
+                                backgroundColor:
+                                    Color.fromARGB(255, 23, 22, 29),
+                                title: Text('Confirmation'),
+                                titleTextStyle: TextStyle(
+                                    color: Colors.white,
+                                    fontFamily: 'Inter',
+                                    fontWeight: FontWeight.w600),
+                                content:
+                                    Text('Are you sure want to Sign Out ?'),
+                                contentTextStyle:
+                                    TextStyle(color: Colors.white),
+                                actions: [
+                                  TextButton(
+                                      style: ButtonStyle(
+                                          overlayColor:
+                                              MaterialStateProperty.all(
+                                                  Colors.transparent),
+                                          minimumSize:
+                                              MaterialStateProperty.all(
+                                                  Size.zero),
+                                          tapTargetSize:
+                                              MaterialTapTargetSize.shrinkWrap,
+                                          padding: MaterialStateProperty.all(
+                                              EdgeInsets.fromLTRB(
+                                                  0, 0, 10, 10))),
+                                      onPressed: () {
+                                        Navigator.pop(context);
+                                      },
+                                      child: Text('No',
+                                          style:
+                                              TextStyle(color: Colors.white))),
+                                  TextButton(
+                                      style: ButtonStyle(
+                                          overlayColor:
+                                              MaterialStateProperty.all(
+                                                  Colors.transparent),
+                                          minimumSize:
+                                              MaterialStateProperty.all(
+                                                  Size.zero),
+                                          tapTargetSize:
+                                              MaterialTapTargetSize.shrinkWrap,
+                                          padding: MaterialStateProperty.all(
+                                              EdgeInsets.fromLTRB(
+                                                  0, 0, 10, 10))),
+                                      onPressed: () {
+                                        prefs.remove('token');
+                                        Navigator.pushReplacement(context,
+                                            MaterialPageRoute(
+                                                builder: (context) {
+                                          return Login();
+                                        }));
+                                      },
+                                      child: Text('Yes',
+                                          style:
+                                              TextStyle(color: Colors.white)))
+                                ],
+                              )));
                     },
                     child: Wrap(children: [
                       Icon(
@@ -282,7 +339,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         behavior: ScrollBehavior(),
         child: GlowingOverscrollIndicator(
           axisDirection: AxisDirection.down,
-          color : Colors.white,
+          color: Colors.white,
           child: SingleChildScrollView(
             child: Column(
               children: [profilePreview, editProfile, quota],

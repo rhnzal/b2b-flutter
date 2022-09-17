@@ -20,6 +20,7 @@ class _RegisterState extends State<Register> {
   String regpas = '';
   bool _regpass = true;
   bool _conpass = true;
+  late bool isSuccess ;
   final formKey = GlobalKey<FormState>();
   final _pasreg = TextEditingController();
   final _pascon = TextEditingController();
@@ -262,9 +263,10 @@ class _RegisterState extends State<Register> {
                         "fullName": regname,
                         "email": regemail,
                         "password": regpas,
-                        // "address": '' //cuma sementara addressnya masih not null
                       }));
                   print(response.body);
+                  isSuccess = json.decode(response.body)['isSuccess'];
+                  if(isSuccess){
                   showDialog(
                         context: context,
                         builder: ((context) => AlertDialog(
@@ -278,7 +280,7 @@ class _RegisterState extends State<Register> {
                                   fontWeight: FontWeight.w600),
                               content: Text(
                                   'Check your email to verify your account'),
-                              contentTextStyle: TextStyle(color: Colors.white),
+                              contentTextStyle: TextStyle(fontFamily: 'Inter',color: Colors.white),
                               actions: [
                                 TextButton(
                                     style: ButtonStyle(
@@ -303,6 +305,41 @@ class _RegisterState extends State<Register> {
                                     )),
                               ],
                             )));
+                  } else {
+                    var error = json.decode(response.body)['message'];
+                    showDialog(context: context, builder: ((context) => AlertDialog(
+                      shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10)),
+                              backgroundColor: Color.fromARGB(255, 23, 22, 29),
+                      title: Text('Registration failed'),
+                      titleTextStyle: TextStyle(
+                                  color: Colors.white,
+                                  fontFamily: 'Inter',
+                                  fontWeight: FontWeight.w600),
+                      content: Text('$error'),
+                      contentTextStyle: TextStyle(fontFamily: 'Inter',color: Colors.white),
+                      actions: [
+                                TextButton(
+                                    style: ButtonStyle(
+                                        overlayColor: MaterialStateProperty.all(
+                                            Colors.transparent),
+                                        minimumSize: MaterialStateProperty.all(
+                                            Size.zero),
+                                        tapTargetSize:
+                                            MaterialTapTargetSize.shrinkWrap,
+                                        padding: MaterialStateProperty.all(
+                                            EdgeInsets.fromLTRB(0, 0, 10, 10))),
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                    },
+                                    child: Text(
+                                      'OK',
+                                      style: TextStyle(color: Colors.white),
+                                    ))
+                  ])));
+                  _pasreg.clear();
+                  _pascon.clear();
+                  }
                   // print(json.encode({
                   //   "fullName": regname,
                   //   "email": regemail,

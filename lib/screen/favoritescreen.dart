@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class FavoriteScreen extends StatefulWidget {
   const FavoriteScreen({Key? key}) : super(key: key);
@@ -10,8 +11,25 @@ class FavoriteScreen extends StatefulWidget {
 }
 
 class _FavoriteScreenState extends State<FavoriteScreen> {
-  Widget welcomeUser = Container(
-    margin: EdgeInsets.fromLTRB(20, 40, 10, 5),
+  late SharedPreferences prefs;
+  String? displayName = '';
+
+  @override
+  void initState(){
+    super.initState();
+    initpreference();
+  }
+
+  Future<void> initpreference() async {
+    prefs = await SharedPreferences.getInstance();
+    displayName = prefs.getString('name');
+    setState(() {});
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    Widget welcomeUser = Container(
+    margin: const EdgeInsets.fromLTRB(20, 40, 10, 5),
     child: Row(
       children: [
         CircleAvatar(
@@ -30,7 +48,7 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
                       fontWeight: FontWeight.w300,
                       fontSize: 10)),
               Text(
-                'User',
+                '$displayName',
                 style: TextStyle(
                     fontFamily: 'Inter',
                     fontWeight: FontWeight.w500,
@@ -43,8 +61,6 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
     ),
   );
 
-  @override
-  Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Color.fromARGB(255, 224, 232, 235),
       body: Column(

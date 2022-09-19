@@ -211,6 +211,8 @@ class _LoginState extends State<Login> {
                     // prefs.setString('username', username);
                     // print(username);
                     var token = json.decode(response.body)['data']['token'];
+                    var displayName = json.decode(response.body)['data']['fullName'];
+                    prefs.setString('name', displayName);
                     prefs.setString('token', token);
                     // ignore: use_build_context_synchronously
                     Navigator.pushReplacement(context,

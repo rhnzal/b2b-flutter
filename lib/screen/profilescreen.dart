@@ -17,6 +17,7 @@ class ProfileScreen extends StatefulWidget {
 
 class _ProfileScreenState extends State<ProfileScreen> {
   late SharedPreferences prefs;
+  String? displayName = '';
   var activity = [];
   @override
   void initState() {
@@ -28,6 +29,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   Future<void> initpreference() async {
     prefs = await SharedPreferences.getInstance();
+    displayName = prefs.getString('name');
     getActivity();
     setState(() {});
   }
@@ -58,7 +60,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('User',
+                Text('$displayName',
                     style: TextStyle(
                         fontFamily: 'Inter',
                         fontWeight: FontWeight.w700,
@@ -191,7 +193,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               color: Color.fromARGB(255, 224, 232, 235))),
                       SizedBox(height: 10),
                       Text(
-                        "User",
+                        "$displayName",
                         style: TextStyle(
                             fontFamily: 'Inter',
                             fontWeight: FontWeight.w700,

@@ -20,6 +20,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
   bool isload = true;
   var activity = [];
   String result = '';
+  String? displayName = '';
   @override
   void initState() {
     // TODO: implement initState
@@ -29,6 +30,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
 
   Future<void> initpreference() async {
     prefs = await SharedPreferences.getInstance();
+    displayName = prefs.getString('name');
     getActivity();
     setState(() {});
   }
@@ -62,14 +64,14 @@ class _HistoryScreenState extends State<HistoryScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('Welcome,',
+                const Text('Welcome,',
                     style: TextStyle(
                         fontFamily: 'Inter',
                         fontWeight: FontWeight.w300,
                         fontSize: 10)),
                 Text(
-                  'User',
-                  style: TextStyle(
+                  '$displayName',
+                  style: const TextStyle(
                       fontFamily: 'Inter',
                       fontWeight: FontWeight.w500,
                       fontSize: 12),
@@ -82,7 +84,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
     );
 
     Widget history = Container(
-      margin: EdgeInsets.fromLTRB(20, 15, 10, 0),
+      margin: const EdgeInsets.fromLTRB(20, 15, 10, 0),
       child: Row(
         children: const [
           Icon(Icons.list_rounded),
@@ -100,7 +102,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
 
     Widget listHistory = Expanded(
       child: ScrollConfiguration(
-        behavior: ScrollBehavior(),
+        behavior: const ScrollBehavior(),
         child: GlowingOverscrollIndicator(
           axisDirection: AxisDirection.down,
           color: Colors.white,

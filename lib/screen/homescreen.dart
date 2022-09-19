@@ -25,6 +25,7 @@ class _HomeScreenState extends State<HomeScreen> {
   bool isActive = false;
   bool isload = true;
   var activity = [];
+  String? displayName = '';
   // String? username = '';
   @override
   void initState() {
@@ -35,6 +36,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Future<void> initpreference() async {
     prefs = await SharedPreferences.getInstance();
+    displayName = prefs.getString('name');
     getActivity();
     setState(() {});
   }
@@ -76,7 +78,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         fontSize: 10)),
                 Text(
                   // '$username',
-                  'user',
+                  '$displayName',
                   style: TextStyle(
                       fontFamily: 'Inter',
                       fontWeight: FontWeight.w500,

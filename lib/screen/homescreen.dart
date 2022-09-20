@@ -1,11 +1,9 @@
-// ignore_for_file: prefer_const_constructors
 
 import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:projectb2b/login.dart';
 import 'package:projectb2b/screen/previewscreen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
@@ -48,7 +46,7 @@ class _HomeScreenState extends State<HomeScreen> {
         headers: {HttpHeaders.authorizationHeader: 'Bearer $token'});
     // print(response.body);
     activity = json.decode(response.body)["data"];
-    print(activity);
+    // print(activity);
     setState(() {
       isload = false;
     });
@@ -71,7 +69,7 @@ class _HomeScreenState extends State<HomeScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('Welcome,',
+                const Text('Welcome,',
                     style: TextStyle(
                         fontFamily: 'Inter',
                         fontWeight: FontWeight.w300,
@@ -79,7 +77,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 Text(
                   // '$username',
                   '$displayName',
-                  style: TextStyle(
+                  style: const TextStyle(
                       fontFamily: 'Inter',
                       fontWeight: FontWeight.w500,
                       fontSize: 12),
@@ -93,18 +91,18 @@ class _HomeScreenState extends State<HomeScreen> {
 
     Widget inputURL = Container(
       height: 70,
-      color: Color.fromARGB(255, 23, 22, 29),
+      color: const Color.fromARGB(255, 23, 22, 29),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Container(
-            margin: EdgeInsets.only(right: 20),
+            margin: const EdgeInsets.only(right: 20),
             height: 37,
             width: 240,
             child: TextFormField(
               controller: urlCon,
               cursorColor: Colors.black,
-              style: TextStyle(
+              style: const TextStyle(
                   color: Colors.black,
                   fontFamily: 'Inter',
                   fontWeight: FontWeight.w500,
@@ -112,10 +110,10 @@ class _HomeScreenState extends State<HomeScreen> {
               decoration: InputDecoration(
                 // prefixIcon: Image.asset('icons/email.png',height: 4 ),
                 filled: true,
-                fillColor: Color.fromARGB(255, 255, 255, 255),
-                contentPadding: EdgeInsets.fromLTRB(20, 10, 20, 10),
+                fillColor: const Color.fromARGB(255, 255, 255, 255),
+                contentPadding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
                 hintText: 'Input URL',
-                hintStyle: TextStyle(
+                hintStyle: const TextStyle(
                     fontFamily: 'Inter',
                     fontWeight: FontWeight.w500,
                     color: Color.fromARGB(100, 0, 0, 0),
@@ -141,9 +139,9 @@ class _HomeScreenState extends State<HomeScreen> {
             height: 30,
             child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                    onSurface: Color.fromARGB(255, 255, 255, 255),
-                    primary: Color.fromARGB(255, 217, 217, 217),
-                    shape: StadiumBorder(),
+                    onSurface: const Color.fromARGB(255, 255, 255, 255),
+                    primary: const Color.fromARGB(255, 217, 217, 217),
+                    shape: const StadiumBorder(),
                     elevation: 10),
                 onPressed: isActive ? () async {
                         showDialog(
@@ -151,14 +149,14 @@ class _HomeScreenState extends State<HomeScreen> {
                           builder: ((context) => AlertDialog(
                             shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(10)),
-                              backgroundColor: Color.fromARGB(255, 23, 22, 29),
-                            title: Text('Confirmation'),
-                            titleTextStyle: TextStyle(
+                              backgroundColor:const  Color.fromARGB(255, 23, 22, 29),
+                            title: const Text('Confirmation'),
+                            titleTextStyle: const TextStyle(
                                   color: Colors.white,
                                   fontFamily: 'Inter',
                                   fontWeight: FontWeight.w600),
-                            content: Text('Are You Sure ?'),
-                            contentTextStyle: TextStyle(color: Colors.white),
+                            content: const Text('Are You Sure ?'),
+                            contentTextStyle: const TextStyle(color: Colors.white),
                             actions: [
                               TextButton(
                                 style: ButtonStyle(
@@ -169,7 +167,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                         tapTargetSize:
                                             MaterialTapTargetSize.shrinkWrap,
                                         padding: MaterialStateProperty.all(
-                                            EdgeInsets.fromLTRB(0, 0, 10, 10))),
+                                             const EdgeInsets.fromLTRB(0, 0, 10, 10))),
                                 onPressed: (){
                                   Navigator.pop(context);
                                 }, 
@@ -183,7 +181,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                         tapTargetSize:
                                             MaterialTapTargetSize.shrinkWrap,
                                         padding: MaterialStateProperty.all(
-                                            EdgeInsets.fromLTRB(0, 0, 10, 10))),
+                                            const EdgeInsets.fromLTRB(0, 0, 10, 10))),
                                 onPressed: () async{
                                   Navigator.pop(context);
                                   var token = prefs.getString('token');
@@ -201,12 +199,12 @@ class _HomeScreenState extends State<HomeScreen> {
                                   await getActivity();
                                   urlCon.clear();
                                       },
-                                child: Text('Yes', style: TextStyle(color: Colors.white)))
+                                child: const Text('Yes', style: TextStyle(color: Colors.white)))
                             ],
                           )));
                       }
                     : null,
-                child: Text('Open',
+                child: const Text('Open',
                     style: TextStyle(
                         fontFamily: 'Inter',
                         fontWeight: FontWeight.w500,
@@ -218,7 +216,7 @@ class _HomeScreenState extends State<HomeScreen> {
     );
 
     Widget recentActivity = Container(
-      margin: EdgeInsets.fromLTRB(20, 15, 10, 0),
+      margin: const EdgeInsets.fromLTRB(20, 15, 10, 0),
       child: Row(
         children: const [
           Icon(Icons.list_rounded),
@@ -235,24 +233,24 @@ class _HomeScreenState extends State<HomeScreen> {
     );
 
     Widget listActivity = isload
-        ? CircularProgressIndicator(
+        ? const CircularProgressIndicator(
             color: Color.fromARGB(255, 23, 22, 29),
           )
         : Expanded(
             child: ScrollConfiguration(
-              behavior: ScrollBehavior(),
+              behavior: const ScrollBehavior(),
               child: GlowingOverscrollIndicator(
                 axisDirection: AxisDirection.down,
                 color: Colors.white,
                 child: ListView.builder(
                     itemCount: activity.length,
                     itemBuilder: (context, index) => Padding(
-                          padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
+                          padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
                           child: Card(
                               elevation: 10,
                               shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(15)),
-                              margin: EdgeInsets.only(bottom: 20),
+                              margin: const EdgeInsets.only(bottom: 20),
                               child: InkWell(
                                 onTap: (() {
                                   Navigator.push(context,
@@ -262,21 +260,23 @@ class _HomeScreenState extends State<HomeScreen> {
                                   })));
                                 }),
                                 child: Padding(
-                                  padding: EdgeInsets.fromLTRB(15, 20, 15, 20),
+                                  padding: const EdgeInsets.fromLTRB(15, 20, 15, 20),
                                   child: Column(
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
                                       Text(
                                         activity[index]["url"],
-                                        style: TextStyle(
+                                        style: const TextStyle(
                                             fontFamily: 'Inter',
                                             fontWeight: FontWeight.w700,
                                             fontSize: 18),
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
                                       ),
                                       Text(
                                           DateFormat.yMMMd().format(DateTime.parse(
                                               activity[index]["createdAt"])),
-                                          style: TextStyle(
+                                          style: const TextStyle(
                                               fontFamily: 'Inter',
                                               fontWeight: FontWeight.w400,
                                               fontSize: 10)),
@@ -291,7 +291,7 @@ class _HomeScreenState extends State<HomeScreen> {
           );
 
     return Scaffold(
-      backgroundColor: Color.fromARGB(255, 224, 232, 235),
+      backgroundColor: const Color.fromARGB(255, 224, 232, 235),
       body: Column(
         children: [welcomeUser, inputURL, recentActivity, listActivity],
       ),

@@ -5,6 +5,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:projectb2b/login.dart';
+import 'package:projectb2b/screen/paymentscreen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
@@ -47,7 +48,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
     Widget profilePreview = Container(
-      margin: EdgeInsets.fromLTRB(40, 60, 40, 10),
+      margin: EdgeInsets.fromLTRB(40, 50, 40, 0),
       child: Row(
         children: [
           CircleAvatar(
@@ -124,11 +125,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                   0, 0, 10, 10))),
                                       onPressed: () {
                                         prefs.remove('token');
-                                        Navigator.pushReplacement(context,
+                                        Navigator.pushAndRemoveUntil(context,
                                             MaterialPageRoute(
                                                 builder: (context) {
                                           return Login();
-                                        }));
+                                        }), (Route<dynamic> route) => false);
                                       },
                                       child: Text('Yes',
                                           style:
@@ -328,10 +329,95 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
     Widget quota = Container(
       margin: EdgeInsets.fromLTRB(20, 0, 20, 20),
-      height: 100,
+      height: 120,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(15),
         color: Color.fromARGB(255, 23, 22, 29),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
+        child: Column(
+          children: [
+            // name
+            Padding(
+              padding: const EdgeInsets.all(10),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 30),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      // ignore: prefer_const_literals_to_create_immutables
+                      children: [
+                        Text("Remaining Quota",
+                            style: TextStyle(
+                                fontFamily: 'Inter',
+                                fontWeight: FontWeight.w500,
+                                fontSize: 12,
+                                color: Color.fromARGB(255, 224, 232, 235))),
+                        SizedBox(height: 10),
+                        Text(
+                          "You can open : ",
+                          style: TextStyle(
+                              fontFamily: 'Inter',
+                              fontWeight: FontWeight.w700,
+                              fontSize: 16,
+                              color: Color.fromARGB(255, 224, 232, 235)),
+                        )
+                      ],
+                    ),
+                  ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      SizedBox(
+                        height: 20,
+                        width: 60,
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Text('100 URL Left',
+                          style: TextStyle(
+                              fontFamily: 'Inter',
+                              fontWeight: FontWeight.w700,
+                              fontSize: 16,
+                              color: Color.fromARGB(255, 224, 232, 235))),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      SizedBox(
+                        height: 20,
+                        width: 70,
+                        child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                                primary: Colors.white,
+                                shape: StadiumBorder(),
+                                elevation: 10),
+                            onPressed: () {
+                              Navigator.push(context,
+                                  MaterialPageRoute(builder: ((context) {
+                                return PaymentScreen();
+                              })));
+                            },
+                            child: Text(
+                              'More',
+                              style: TextStyle(
+                                  fontFamily: 'Inter',
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: 12,
+                                  color: Color.fromARGB(255, 26, 25, 32)),
+                            )),
+                      ),
+                    ],
+                  )
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
 

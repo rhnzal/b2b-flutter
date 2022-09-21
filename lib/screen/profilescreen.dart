@@ -80,16 +80,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(10)),
                                 backgroundColor:
-                                    Color.fromARGB(255, 23, 22, 29),
+                                    Color.fromARGB(255, 224, 232, 235),
                                 title: Text('Confirmation'),
                                 titleTextStyle: TextStyle(
-                                    color: Colors.white,
+                                    color: Color.fromARGB(255, 23, 22, 29),
                                     fontFamily: 'Inter',
                                     fontWeight: FontWeight.w600),
                                 content:
                                     Text('Are you sure want to Sign Out ?'),
                                 contentTextStyle:
-                                    TextStyle(color: Colors.white),
+                                    TextStyle(color: Color.fromARGB(255, 23, 22, 29)),
                                 actions: [
                                   TextButton(
                                       style: ButtonStyle(
@@ -109,7 +109,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                       },
                                       child: Text('No',
                                           style:
-                                              TextStyle(color: Colors.white))),
+                                              TextStyle(color: Color.fromARGB(255, 23, 22, 29)))),
                                   TextButton(
                                       style: ButtonStyle(
                                           overlayColor:
@@ -133,7 +133,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                       },
                                       child: Text('Yes',
                                           style:
-                                              TextStyle(color: Colors.white)))
+                                              TextStyle(color: Color.fromARGB(255, 23, 22, 29))))
                                 ],
                               )));
                     },

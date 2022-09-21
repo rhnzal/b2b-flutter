@@ -1,7 +1,7 @@
-
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:projectb2b/screen/previewscreen.dart';
@@ -41,8 +41,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Future<void> getActivity() async {
     var token = prefs.getString('token');
-    final response = await http.get(
-        Uri.parse("http://192.168.102.195:3000/api/document"),
+    final response = await http.get(Uri.parse("http://192.168.102.195:3000/api/document"),
         headers: {HttpHeaders.authorizationHeader: 'Bearer $token'});
     // print(response.body);
     activity = json.decode(response.body)["data"];
@@ -56,9 +55,10 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     // var username = prefs.getString('username');
     Widget welcomeUser = Container(
-      margin: EdgeInsets.fromLTRB(20, 40, 10, 20),
+      margin: const EdgeInsets.fromLTRB(20, 40, 10, 20),
       child: Row(
         children: [
+          // ignore: prefer_const_constructors
           CircleAvatar(
             backgroundColor: Colors.white,
             backgroundImage: AssetImage('images/user.png'),
@@ -126,11 +126,10 @@ class _HomeScreenState extends State<HomeScreen> {
                 // )
               ),
               onChanged: ((value) {
-                  url = value;  
+                url = value;
                 setState(() {
-                  isActive =
-                      value.contains('http://') || value.contains('https://')? true : false;
-                      print(url);
+                  isActive = value.contains('http://') || value.contains('https://') ? true : false;
+                  // print(url);
                 });
               }),
             ),
@@ -145,65 +144,63 @@ class _HomeScreenState extends State<HomeScreen> {
                     elevation: 10),
                 onPressed: isActive ? () async {
                         showDialog(
-                          context: context, 
-                          builder: ((context) => AlertDialog(
-                            shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10)),
-                              backgroundColor:const  Color.fromARGB(255, 23, 22, 29),
-                            title: const Text('Confirmation'),
-                            titleTextStyle: const TextStyle(
-                                  color: Colors.white,
-                                  fontFamily: 'Inter',
-                                  fontWeight: FontWeight.w600),
-                            content: const Text('Are You Sure ?'),
-                            contentTextStyle: const TextStyle(color: Colors.white),
-                            actions: [
-                              TextButton(
-                                style: ButtonStyle(
-                                        overlayColor: MaterialStateProperty.all(
-                                            Colors.transparent),
-                                        minimumSize: MaterialStateProperty.all(
-                                            Size.zero),
-                                        tapTargetSize:
-                                            MaterialTapTargetSize.shrinkWrap,
-                                        padding: MaterialStateProperty.all(
-                                             const EdgeInsets.fromLTRB(0, 0, 10, 10))),
-                                onPressed: (){
-                                  Navigator.pop(context);
-                                }, 
-                                child: Text('No', style: TextStyle(color: Colors.white))),
-                              TextButton(
-                                style: ButtonStyle(
-                                        overlayColor: MaterialStateProperty.all(
-                                            Colors.transparent),
-                                        minimumSize: MaterialStateProperty.all(
-                                            Size.zero),
-                                        tapTargetSize:
-                                            MaterialTapTargetSize.shrinkWrap,
-                                        padding: MaterialStateProperty.all(
-                                            const EdgeInsets.fromLTRB(0, 0, 10, 10))),
-                                onPressed: () async{
-                                  Navigator.pop(context);
-                                  var token = prefs.getString('token');
-                                  var response = await http.post(
-                                  Uri.parse(
-                                  'http://192.168.102.195:3000/api/document/url'),
-                                  headers: {
-                                    HttpHeaders.contentTypeHeader: 'application/json',
-                                    HttpHeaders.authorizationHeader: 'Bearer $token'
-                                  },
-                                  body: json.encode({
-                                    'url': url,
-                                  }));
-                                  print(response.body);
-                                  await getActivity();
-                                  urlCon.clear();
-                                      },
-                                child: const Text('Yes', style: TextStyle(color: Colors.white)))
-                            ],
-                          )));
-                      }
-                    : null,
+                            context: context,
+                            builder: ((context) => AlertDialog(
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(10)),
+                                  backgroundColor:const Color.fromARGB(255, 224, 232, 235),
+                                  title: const Text('Confirmation'),
+                                  titleTextStyle: const TextStyle(
+                                      color: Color.fromARGB(255, 23, 22, 29),
+                                      fontFamily: 'Inter',
+                                      fontWeight: FontWeight.w600),
+                                  content: const Text('Are You Sure ?'),
+                                  contentTextStyle: const TextStyle(
+                                      color: Color.fromARGB(255, 23, 22, 29)),
+                                  actions: [
+                                    TextButton(
+                                        style: ButtonStyle(
+                                            overlayColor: MaterialStateProperty.all(Colors.transparent),
+                                            minimumSize: MaterialStateProperty.all(Size.zero),
+                                            tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                                            padding: MaterialStateProperty.all(const EdgeInsets.fromLTRB(0, 0, 10, 10))),
+                                        onPressed: () {
+                                          Navigator.pop(context);
+                                        },
+                                        child: const Text('No',
+                                            style: TextStyle(
+                                                color: Color.fromARGB(255, 23, 22, 29)))),
+                                    TextButton(
+                                        style: ButtonStyle(
+                                            overlayColor: MaterialStateProperty.all(Colors.transparent),
+                                            minimumSize: MaterialStateProperty.all(Size.zero),
+                                            tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                                            padding: MaterialStateProperty.all(const EdgeInsets.fromLTRB(0, 0, 10, 10))),
+                                        onPressed: () async {
+                                          Navigator.pop(context);
+                                          var token = prefs.getString('token');
+                                          var response = await http.post(Uri.parse('http://192.168.102.195:3000/api/document/url'),
+                                              headers: {
+                                                HttpHeaders.contentTypeHeader:'application/json',
+                                                HttpHeaders.authorizationHeader:'Bearer $token'
+                                              },
+                                              body: json.encode({
+                                                'url': url,
+                                              }));
+                                          // print(response.body);
+                                          await getActivity();
+                                          urlCon.clear();
+                                        },
+                                        child: const Text('Yes',
+                                            style: TextStyle(color: Color.fromARGB(255, 23, 22, 29)
+                                            )
+                                          )
+                                        )
+                                  ],
+                                )
+                              )
+                            );
+                      }: null,
                 child: const Text('Open',
                     style: TextStyle(
                         fontFamily: 'Inter',
@@ -220,22 +217,18 @@ class _HomeScreenState extends State<HomeScreen> {
       child: Row(
         children: const [
           Icon(Icons.list_rounded),
-          SizedBox(
-            width: 5,
-          ),
-          Text(
-            'Recent Activity',
+          SizedBox(width: 5),
+          Text('Recent Activity',
             style: TextStyle(
-                fontFamily: 'Inter', fontWeight: FontWeight.w800, fontSize: 12),
+                fontFamily: 'Inter', 
+                fontWeight: FontWeight.w800, 
+                fontSize: 12),
           )
         ],
       ),
     );
 
-    Widget listActivity = isload
-        ? const CircularProgressIndicator(
-            color: Color.fromARGB(255, 23, 22, 29),
-          )
+    Widget listActivity = isload ? const CircularProgressIndicator(color: Color.fromARGB(255, 23, 22, 29))
         : Expanded(
             child: ScrollConfiguration(
               behavior: const ScrollBehavior(),
@@ -253,39 +246,96 @@ class _HomeScreenState extends State<HomeScreen> {
                               margin: const EdgeInsets.only(bottom: 20),
                               child: InkWell(
                                 onTap: (() {
-                                  Navigator.push(context,
-                                      MaterialPageRoute(builder: ((context) {
-                                    return PreviewScreen(
-                                        url: activity[index]["result"]);
-                                  })));
+                                  if (activity[index]['status'] == "SUCCESS") {
+                                    Navigator.push(context,
+                                        MaterialPageRoute(builder: ((context) {
+                                      return PreviewScreen(
+                                          url: activity[index]["result"]);
+                                    }
+                                  )
+                                )
+                              );
+                                  } else {
+                                    // loading
+                                    showDialog(
+                                        context: context,
+                                        builder: ((context) => AlertDialog(
+                                              shape: RoundedRectangleBorder(
+                                                  borderRadius:BorderRadius.circular(10)),
+                                              backgroundColor: const Color.fromARGB(255, 224, 232, 235),
+                                              title: activity[index]['status'] =="LOADING" ? Text('Your request is in queue')
+                                                  : const Text('URL Invalid'),
+                                              content: activity[index]['status'] == "LOADING" ? Text('Please Wait')
+                                                  : const Text('Try using another URL'),
+                                              actions: [
+                                                TextButton(
+                                                    onPressed: () {
+                                                      Navigator.pop(context);
+                                                    },
+                                                    child: const Text('Ok',
+                                                      style: TextStyle(
+                                                          color: Color.fromARGB(255, 23, 22, 29)),
+                                                    ))
+                                              ],
+                                            )));
+                                  }
                                 }),
                                 child: Padding(
-                                  padding: const EdgeInsets.fromLTRB(15, 20, 15, 20),
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                  padding:const EdgeInsets.fromLTRB(15, 20, 15, 20),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: [
-                                      Text(
-                                        activity[index]["url"],
-                                        style: const TextStyle(
-                                            fontFamily: 'Inter',
-                                            fontWeight: FontWeight.w700,
-                                            fontSize: 18),
-                                        maxLines: 1,
-                                        overflow: TextOverflow.ellipsis,
+                                      Expanded(
+                                        child: Column(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              activity[index]["url"],
+                                              style: const TextStyle(
+                                                  fontFamily: 'Inter',
+                                                  fontWeight: FontWeight.w700,
+                                                  fontSize: 18),
+                                              maxLines: 1,
+                                              overflow: TextOverflow.ellipsis,
+                                            ),
+                                            Text(DateFormat.yMMMd().format(DateTime.parse(activity[index]["createdAt"])),
+                                                style: const TextStyle(
+                                                    fontFamily: 'Inter',
+                                                    fontWeight: FontWeight.w400,
+                                                    fontSize: 10)),
+                                            // Text(activity[index]["createdAt"])
+                                          ],
+                                        ),
                                       ),
-                                      Text(
-                                          DateFormat.yMMMd().format(DateTime.parse(
-                                              activity[index]["createdAt"])),
-                                          style: const TextStyle(
-                                              fontFamily: 'Inter',
-                                              fontWeight: FontWeight.w400,
-                                              fontSize: 10)),
-                                      // Text(activity[index]["createdAt"])
+                                      Column(
+                                        children: [
+                                          const Text("Status",
+                                            style: TextStyle(
+                                                fontFamily: 'Inter',
+                                                fontWeight: FontWeight.w600),
+                                          ),
+                                          const SizedBox(height: 5),
+                                          // if(activity[index]['status'] == "SUCCESS"){
+                                          //   Icon(Icons.done)
+                                          // }
+                                          if (activity[index]['status'] == "SUCCESS") ...[
+                                            const Icon(Icons.done, color: Colors.green,)
+                                          ] else if (activity[index]['status'] == "LOADING") ...[
+                                            // const Icon(Icons.pending_outlined)
+                                            const CupertinoActivityIndicator()
+                                            // CircularProgressIndicator()
+                                          ] else ...[
+                                            const Icon(Icons.clear,color: Colors.red)
+                                          ]
+                                        ],
+                                      )
                                     ],
                                   ),
                                 ),
-                              )),
-                        )),
+                              )
+                            ),
+                         )
+                      ),
               ),
             ),
           );

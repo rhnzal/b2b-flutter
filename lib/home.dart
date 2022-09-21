@@ -50,7 +50,7 @@ class _HomeState extends State<Home> {
                   label: 'Home',
                   activeIcon: Container(
                     decoration: BoxDecoration(
-                        color: Color.fromARGB(255, 224, 219, 254),
+                        color: Color.fromARGB(255, 224, 232, 235),
                         shape: BoxShape.circle),
                     child: Padding(
                       padding: EdgeInsets.all(8),
@@ -65,7 +65,7 @@ class _HomeState extends State<Home> {
                   label: 'History',
                   activeIcon: Container(
                     decoration: BoxDecoration(
-                        color: Color.fromARGB(255, 224, 219, 254),
+                        color: Color.fromARGB(255, 224, 232, 235),
                         shape: BoxShape.circle),
                     child: Padding(
                       padding: EdgeInsets.all(8),
@@ -80,7 +80,7 @@ class _HomeState extends State<Home> {
                   label: 'Wishlist',
                   activeIcon: Container(
                     decoration: BoxDecoration(
-                        color: Color.fromARGB(255, 224, 219, 254),
+                        color: Color.fromARGB(255, 224, 232, 235),
                         shape: BoxShape.circle),
                     child: Padding(
                       padding: EdgeInsets.all(8),
@@ -95,7 +95,7 @@ class _HomeState extends State<Home> {
                   label: 'Profile',
                   activeIcon: Container(
                     decoration: BoxDecoration(
-                        color: Color.fromARGB(255, 224, 219, 254),
+                        color: Color.fromARGB(255, 224, 232, 235),
                         shape: BoxShape.circle),
                     child: Padding(
                       padding: EdgeInsets.all(8),

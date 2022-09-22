@@ -17,6 +17,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   // final formKey = GlobalKey<FormState>();
+  // String trimmed = '';
   TextEditingController urlCon = TextEditingController();
   String url = '';
   late SharedPreferences prefs;
@@ -51,6 +52,16 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
+  trimUrl(String trim){
+    // for( var i = 0 ; i < activity.length; i++){
+    //   var trim = activity[i]['url'];
+    // }
+    if (trim.contains('https://')){
+    return trim.toString().substring(8);
+    }else if(trim.contains('http://')){
+    return trim.toString().substring(7);
+    }
+  }
   @override
   Widget build(BuildContext context) {
     // var username = prefs.getString('username');
@@ -290,7 +301,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                           crossAxisAlignment: CrossAxisAlignment.start,
                                           children: [
                                             Text(
-                                              activity[index]["url"],
+                                              // getUrl().toString(),
+                                              trimUrl(activity[index]['url']).toString(),
                                               style: const TextStyle(
                                                   fontFamily: 'Inter',
                                                   fontWeight: FontWeight.w700,

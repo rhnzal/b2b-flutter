@@ -9,6 +9,8 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:webview_flutter/webview_flutter.dart';
+
 class HistoryScreen extends StatefulWidget {
   const HistoryScreen({Key? key}) : super(key: key);
 
@@ -49,6 +51,16 @@ class _HistoryScreenState extends State<HistoryScreen> {
     });
   }
 
+  trimUrl(String trim){
+    // for( var i = 0 ; i < activity.length; i++){
+    //   var trim = activity[i]['url'];
+    // }
+    if (trim.contains('https://')){
+    return trim.toString().substring(8);
+    }else if(trim.contains('http://')){
+    return trim.toString().substring(7);
+    }
+  }
   @override
   Widget build(BuildContext context) {
     Widget welcomeUser = Container(
@@ -151,53 +163,69 @@ class _HistoryScreenState extends State<HistoryScreen> {
                                 }),
                                 child: Padding(
                                   padding:const EdgeInsets.fromLTRB(15, 20, 15, 20),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  child: Column(
                                     children: [
-                                      Expanded(
-                                        child: Column(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                          children: [
-                                            Text(
-                                              activity[index]["url"],
-                                              style: const TextStyle(
-                                                  fontFamily: 'Inter',
-                                                  fontWeight: FontWeight.w700,
-                                                  fontSize: 18),
-                                              maxLines: 2,
-                                              overflow: TextOverflow.ellipsis,
-                                            ),
-                                            Text(DateFormat.yMMMd().format(DateTime.parse(activity[index]["createdAt"])),
-                                                style: const TextStyle(
-                                                    fontFamily: 'Inter',
-                                                    fontWeight: FontWeight.w400,
-                                                    fontSize: 10)),
-                                            // Text(activity[index]["createdAt"])
-                                          ],
-                                        ),
-                                      ),
-                                      Column(
+                                      Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                         children: [
-                                          const Text("Status",
-                                            style: TextStyle(
-                                                fontFamily: 'Inter',
-                                                fontWeight: FontWeight.w600),
+                                          Expanded(
+                                            child: Column(
+                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              children: [
+                                                Text(
+                                                  trimUrl(activity[index]["url"]),
+                                                  style: const TextStyle(
+                                                      fontFamily: 'Inter',
+                                                      fontWeight: FontWeight.w700,
+                                                      fontSize: 18),
+                                                  maxLines: 2,
+                                                  overflow: TextOverflow.ellipsis,
+                                                ),
+                                                Text(DateFormat.yMMMd().format(DateTime.parse(activity[index]["createdAt"])),
+                                                    style: const TextStyle(
+                                                        fontFamily: 'Inter',
+                                                        fontWeight: FontWeight.w400,
+                                                        fontSize: 10)),
+                                                // Text(activity[index]["createdAt"])
+                                              ],
+                                            ),
                                           ),
-                                          const SizedBox(height: 5),
-                                          // if(activity[index]['status'] == "SUCCESS"){
-                                          //   Icon(Icons.done)
-                                          // }
-                                          if (activity[index]['status'] == "SUCCESS") ...[
-                                            const Icon(Icons.done, color: Colors.green,)
-                                          ] else if (activity[index]['status'] == "LOADING") ...[
-                                            // const Icon(Icons.pending_outlined)
-                                            const CupertinoActivityIndicator()
-                                            // CircularProgressIndicator()
-                                          ] else ...[
-                                            const Icon(Icons.clear,color: Colors.red)
-                                          ]
+                                          Column(
+                                            children: [
+                                              const Text("Status",
+                                                style: TextStyle(
+                                                    fontFamily: 'Inter',
+                                                    fontWeight: FontWeight.w600),
+                                              ),
+                                              const SizedBox(height: 5),
+                                              // if(activity[index]['status'] == "SUCCESS"){
+                                              //   Icon(Icons.done)
+                                              // }
+                                              if (activity[index]['status'] == "SUCCESS") ...[
+                                                const Icon(Icons.done, color: Colors.green,)
+                                              ] else if (activity[index]['status'] == "LOADING") ...[
+                                                // const Icon(Icons.pending_outlined)
+                                                const CupertinoActivityIndicator()
+                                                // CircularProgressIndicator()
+                                              ] else ...[
+                                                const Icon(Icons.clear,color: Colors.red)
+                                              ]
+                                            ],
+                                          )
                                         ],
-                                      )
+                                      ),
+                                      if(activity[index]['url'].toString().contains('tradewheel') ||activity[index]['url'].toString().contains('go4worldbusiness') )...[
+                                        const SizedBox(
+                                          height: 10,
+                                        ),
+                                        SizedBox(
+                                          height: 200,
+                                          child: WebView(
+                                            initialUrl: activity[index]['url'],
+                                            
+                                          ),
+                                        )
+                                      ]
                                     ],
                                   ),
                                 ),

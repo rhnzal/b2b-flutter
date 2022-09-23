@@ -11,6 +11,7 @@ class PreviewScreen extends StatefulWidget {
 }
 
 class _PreviewScreenState extends State<PreviewScreen> {
+  late WebViewController controller ;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -19,9 +20,32 @@ class _PreviewScreenState extends State<PreviewScreen> {
         title: const Text('Preview'),
       ),
       // body: Center(child: Text('Tes')),
-      body: WebView(
-        javascriptMode: JavascriptMode.unrestricted,
-        initialUrl: widget.url,
+      body: AbsorbPointer(
+        child: WebView(
+          javascriptMode: JavascriptMode.unrestricted,
+          initialUrl: widget.url,
+          onWebViewCreated: (WebViewController controller){
+            this.controller = controller;
+          },
+          onPageFinished: (url) {
+              controller.runJavascript(
+              "javascript:(function() { " +
+              "var head = document.getElementsByTagName('header')[0];" +
+              "head.parentNode.removeChild(head);" +
+              "var footer = document.getElementsByTagName('footer')[0];" +
+              "footer.parentNode.removeChild(footer);" +
+              "var register = document.getElementsByClassName('top-signup-bar-mobile hidden-lg hidden-md hidden-sm')[0];" +
+              "register.parentNode.removeChild(register);" +
+              "var wbg = document.getElementsByClassName('wbg')[0];" +
+              "wbg.parentNode.removeChild(wbg);" +
+              "var contact = document.getElementsByClassName('my_contact_us')[0];" +
+              "contact.parentNode.removeChild(contact);" +
+              "var breadcrumb = document.getElementsByClassName('breadcrumb')[0];" +
+              "breadcrumb.parentNode.removeChild(breadcrumb);" +
+              "})()"
+            );
+          },
+        ),
       ),
     );
   }

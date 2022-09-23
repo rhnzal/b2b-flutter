@@ -19,6 +19,7 @@ class HistoryScreen extends StatefulWidget {
 }
 
 class _HistoryScreenState extends State<HistoryScreen> {
+  late WebViewController controller;
   late SharedPreferences prefs;
   bool isload = true;
   var activity = [];
@@ -214,18 +215,45 @@ class _HistoryScreenState extends State<HistoryScreen> {
                                           )
                                         ],
                                       ),
-                                      if(activity[index]['url'].toString().contains('tradewheel') ||activity[index]['url'].toString().contains('go4worldbusiness') )...[
-                                        const SizedBox(
-                                          height: 10,
-                                        ),
-                                        SizedBox(
-                                          height: 200,
-                                          child: WebView(
-                                            initialUrl: activity[index]['url'],
-                                            
+                                      if (activity[index]['status'] == 'SUCCESS')...[
+                                        if(activity[index]['url'].toString().contains('tradewheel') ||activity[index]['url'].toString().contains('go4worldbusiness') )...[
+                                          const SizedBox(
+                                            height: 10,
                                           ),
-                                        )
-                                      ]
+                                          SizedBox(
+                                            height: 200,
+                                            child: AbsorbPointer(
+                                              child: WebView(
+                                                javascriptMode: JavascriptMode.unrestricted,
+                                                initialUrl: activity[index]['url'],
+                                                onWebViewCreated: (controller){
+                                                  this.controller = controller;
+                                                },
+                                                onPageFinished: (url) {
+                                                  controller.runJavascript(
+                                                    "javascript:(function() { " +
+                                                      "var head = document.getElementsByTagName('header')[0];" +
+                                                      "head.parentNode.removeChild(head);" +
+                                                      "var footer = document.getElementsByTagName('footer')[0];" +
+                                                      "footer.parentNode.removeChild(footer);" +
+                                                      "var register = document.getElementsByClassName('top-signup-bar-mobile hidden-lg hidden-md hidden-sm')[0];" +
+                                                      "register.parentNode.removeChild(register);" +
+                                                      "var wbg = document.getElementsByClassName('wbg')[0];" +
+                                                      "wbg.parentNode.removeChild(wbg);" +
+                                                      "var contact = document.getElementsByClassName('my_contact_us')[0];" +
+                                                      "contact.parentNode.removeChild(contact);" +
+                                                      "var breadcrumb = document.getElementsByClassName('breadcrumb')[0];" +
+                                                      "breadcrumb.parentNode.removeChild(breadcrumb);" +
+                                                      "})()"
+                                                  );
+                                                },
+                                                
+                                              ),
+                                            ),
+                                          )
+                                        ]
+
+                                    ]
                                     ],
                                   ),
                                 ),

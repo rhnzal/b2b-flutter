@@ -1,5 +1,10 @@
+import 'dart:io';
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart' as http;
 
 class PaymentScreen extends StatefulWidget {
   const PaymentScreen({Key? key}) : super(key: key);
@@ -9,14 +14,11 @@ class PaymentScreen extends StatefulWidget {
 }
 
 class _PaymentScreenState extends State<PaymentScreen> {
+  int selectedIndex = -1;
+  bool selected = false;
   late SharedPreferences prefs;
   String? displayName = '';
-  List grid = [
-    {'name': 'Diamond', 'desc': 'Open 500 URL', 'price': 'Rp 899.000'},
-    {'name': 'Gold', 'desc': 'Open 200 URL', 'price': 'Rp 599.000'},
-    {'name': 'Silver', 'desc': 'Open 100 URL', 'price': 'Rp 249.000'},
-    {'name': 'Bronze', 'desc': 'Open 50 URL', 'price': 'Rp 115.000'}
-  ];
+  var grid = [];
 
   @override
   void initState() {
@@ -29,7 +31,22 @@ class _PaymentScreenState extends State<PaymentScreen> {
   Future<void> initpreference() async {
     prefs = await SharedPreferences.getInstance();
     displayName = prefs.getString('name');
+    getProduct();
     setState(() {});
+  }
+
+  Future<void> getProduct() async{
+    var token = prefs.getString('token');
+    var response = await http.get(Uri.parse('http://192.168.102.195:3000/api/product'),
+    headers: {
+      HttpHeaders.authorizationHeader: 'Bearer $token'
+    }
+    );
+    print(response.body);
+    grid = json.decode(response.body)['data'];
+    setState(() {
+      
+    });
   }
 
   @override
@@ -87,46 +104,59 @@ class _PaymentScreenState extends State<PaymentScreen> {
             itemBuilder: ((context, index) {
               return Container(
                 padding: const EdgeInsets.all(5),
-                child: Card(
-                  elevation: 10,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12)),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(left: 5),
-                        child: Text(
-                          grid[index]['name'],
-                          style: const TextStyle(
-                              fontFamily: 'Inter',
-                              fontWeight: FontWeight.w700,
-                              fontSize: 18),
+                child: InkWell(
+                  onTap: (){
+                    setState(() {
+                      selectedIndex = index;
+                      selected = true;
+                    });
+                  },
+                  child: Card(
+                    elevation: 5,
+                    shape:(selectedIndex == index)? 
+                    RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                        side: const BorderSide(color:  Color.fromARGB(255, 23, 22, 29), width: 2)
+                        )
+                      : RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12)),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(left: 5),
+                          child: Text(
+                            grid[index]['title'],
+                            style: const TextStyle(
+                                fontFamily: 'Inter',
+                                fontWeight: FontWeight.w700,
+                                fontSize: 18),
+                          ),
                         ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 5),
-                        child: Text(
-                          grid[index]['desc'],
-                          style: const TextStyle(
-                              fontFamily: 'Inter',
-                              fontWeight: FontWeight.w400,
-                              fontSize: 10),
+                        Padding(
+                          padding: const EdgeInsets.only(left: 5),
+                          child: Text(
+                            'Open ${grid[index]['quota'].toString()} URL',
+                            style: const TextStyle(
+                                fontFamily: 'Inter',
+                                fontWeight: FontWeight.w400,
+                                fontSize: 10),
+                          ),
                         ),
-                      ),
-                      const SizedBox(height: 50),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 10),
-                        child: Text(
-                          grid[index]['price'],
-                          style: const TextStyle(
-                              fontFamily: 'Inter',
-                              fontWeight: FontWeight.w600,
-                              fontSize: 20),
-                        ),
-                      )
-                    ],
+                        const SizedBox(height: 50),
+                        Padding(
+                          padding: const EdgeInsets.only(left: 10),
+                          child: Text(
+                            NumberFormat.simpleCurrency(locale:'in').format(grid[index]['price']),
+                            style: const TextStyle(
+                                fontFamily: 'Inter',
+                                fontWeight: FontWeight.w600,
+                                fontSize: 18),
+                          ),
+                        )
+                      ],
+                    ),
                   ),
                 ),
               );
@@ -137,7 +167,9 @@ class _PaymentScreenState extends State<PaymentScreen> {
       child: ElevatedButton(
           style: ElevatedButton.styleFrom(
               primary: const Color.fromARGB(255, 23, 22, 29), shape: StadiumBorder()),
-          onPressed: () {},
+          onPressed: selected ? () {
+
+          }:null,
           child: const SizedBox(
               width: 100,
               child: Text(

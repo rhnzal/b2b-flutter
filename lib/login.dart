@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:projectb2b/home.dart';
 import 'package:projectb2b/register.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:rounded_loading_button/rounded_loading_button.dart';
 import 'package:http/http.dart' as http;
 
 class Login extends StatefulWidget {
@@ -215,6 +216,7 @@ class _LoginState extends State<Login> {
                     prefs.setString('name', displayName);
                     prefs.setString('token', token);
                     // ignore: use_build_context_synchronously
+                    //circular progress indicator
                     Navigator.pushReplacement(context,
                         MaterialPageRoute(builder: ((context) {
                       return Home();

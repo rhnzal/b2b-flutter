@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 import 'dart:convert';
 
@@ -14,6 +15,7 @@ class PaymentScreen extends StatefulWidget {
 }
 
 class _PaymentScreenState extends State<PaymentScreen> {
+  bool isLoad = true;
   int selectedIndex = -1;
   bool selected = false;
   late SharedPreferences prefs;
@@ -45,7 +47,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
     print(response.body);
     grid = json.decode(response.body)['data'];
     setState(() {
-      
+      isLoad = false;
     });
   }
 
@@ -95,7 +97,8 @@ class _PaymentScreenState extends State<PaymentScreen> {
                   fontSize: 20)),
         ));
 
-    Widget quotaList = Expanded(
+    Widget quotaList = 
+      Expanded(
         child: GridView.builder(
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2),
@@ -163,12 +166,24 @@ class _PaymentScreenState extends State<PaymentScreen> {
             })));
 
     Widget paymentButton = Container(
-      margin: const EdgeInsets.all(20),
+      // alignment: Alignment.bottomCenter,
+      margin: const EdgeInsets.only(bottom: 20),
       child: ElevatedButton(
           style: ElevatedButton.styleFrom(
-              primary: const Color.fromARGB(255, 23, 22, 29), shape: StadiumBorder()),
-          onPressed: selected ? () {
-
+              primary: const Color.fromARGB(255, 23, 22, 29), shape: const StadiumBorder()),
+          onPressed: selected ? () async {
+              var token = prefs.getString('token');
+              var response = await http.post(Uri.parse('http://192.168.102.195:3000/api/transaction/buy'),
+              headers: {
+                HttpHeaders.contentTypeHeader: 'application/json',
+                HttpHeaders.authorizationHeader: 'Bearer $token'
+              },
+              body: json.encode({
+                'product' : grid[selectedIndex]['id']
+              })
+              );
+              // print(response.body);
+              // print(grid[selectedIndex]['id']);
           }:null,
           child: const SizedBox(
               width: 100,
@@ -185,7 +200,14 @@ class _PaymentScreenState extends State<PaymentScreen> {
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 224, 232, 235),
       body: Column(
-        children: [welcomeUser, title, quotaList, paymentButton],
+        children: [
+          welcomeUser, 
+          title, 
+          if (!isLoad) ...[quotaList, paymentButton] else Container(
+          padding: const EdgeInsets.only(top: 100),
+          child: const CircularProgressIndicator(color: Color.fromARGB(255, 23, 22, 29)),
+          ) 
+          ],
       ),
     );
   }

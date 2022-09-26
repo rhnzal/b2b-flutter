@@ -21,7 +21,7 @@ class HistoryScreen extends StatefulWidget {
 class _HistoryScreenState extends State<HistoryScreen> {
   late WebViewController controller;
   late SharedPreferences prefs;
-  bool isload = true;
+  bool isLoad = true;
   var activity = [];
   String result = '';
   String? displayName = '';
@@ -48,7 +48,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
     activity = json.decode(response.body)["data"];
     // print(activity);
     setState(() {
-      isload = false;
+      isLoad = false;
     });
   }
 
@@ -111,7 +111,14 @@ class _HistoryScreenState extends State<HistoryScreen> {
       ),
     );
 
-    Widget listHistory = Expanded(
+    Widget listHistory = isLoad ? Container(
+          padding: const EdgeInsets.only(top: 150),
+          child:const CircularProgressIndicator(color: Color.fromARGB(255, 23, 22, 29),)) 
+        : activity.isEmpty ? Container(
+          padding: const EdgeInsets.only(top: 150),
+          child: const Icon(Icons.folder_off_outlined, size: 60, color: Color.fromARGB(255, 26, 25, 32),),
+        )
+        : Expanded(
             child: ScrollConfiguration(
               behavior: const ScrollBehavior(),
               child: GlowingOverscrollIndicator(
@@ -270,7 +277,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
       body: Column(children: [
         welcomeUser,
         history,
-        isload ? const CircularProgressIndicator(color: Color.fromARGB(255, 23, 22, 29),) : listHistory
+        listHistory
       ]),
     );
   }

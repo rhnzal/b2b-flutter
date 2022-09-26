@@ -22,7 +22,7 @@ class _HomeScreenState extends State<HomeScreen> {
   String url = '';
   late SharedPreferences prefs;
   bool isActive = false;
-  bool isload = true;
+  bool isLoad = true;
   var activity = [];
   String? displayName = '';
   // String? username = '';
@@ -48,7 +48,7 @@ class _HomeScreenState extends State<HomeScreen> {
     activity = json.decode(response.body)["data"];
     // print(activity);
     setState(() {
-      isload = false;
+      isLoad = false;
     });
   }
 
@@ -239,7 +239,14 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
     );
 
-    Widget listActivity = isload ? const CircularProgressIndicator(color: Color.fromARGB(255, 23, 22, 29))
+    Widget listActivity = isLoad ? Container(
+          padding: EdgeInsets.only(top: 100),
+          child: const CircularProgressIndicator(color: Color.fromARGB(255, 23, 22, 29))
+          )
+        : activity.isEmpty ? Container(
+          padding:const  EdgeInsets.only(top: 100),
+          child: const Icon(Icons.folder_off_outlined, size: 60, color: Color.fromARGB(255, 26, 25, 32),),
+        )
         : Expanded(
             child: ScrollConfiguration(
               behavior: const ScrollBehavior(),

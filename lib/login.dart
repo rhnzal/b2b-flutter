@@ -1,4 +1,5 @@
 // ignore_for_file: prefer_const_literals_to_create_immutables, duplicate_ignore, prefer_const_constructors, prefer_final_fields, body_might_complete_normally_nullable
+import 'dart:async';
 import 'dart:io';
 import 'dart:convert';
 
@@ -24,6 +25,7 @@ class _LoginState extends State<Login> {
   var loginStat = '';
   late bool isSuccess;
   late SharedPreferences prefs;
+  final RoundedLoadingButtonController _buttonController = RoundedLoadingButtonController();
 
   @override
   void initState() {
@@ -35,6 +37,84 @@ class _LoginState extends State<Login> {
   Future<void> initpreference() async {
     prefs = await SharedPreferences.getInstance();
     setState(() {});
+  }
+
+  void login (RoundedLoadingButtonController controller) async{
+                // ignore: empty_statements
+                if (formKey.currentState!.validate()) {
+                  var response = await http.post(
+                      Uri.parse("http://192.168.102.195:3000/api/auth/login"),
+                      headers: {
+                        HttpHeaders.contentTypeHeader: 'application/json'
+                      },
+                      body:
+                          json.encode({"email": email, "password": password}));
+                  isSuccess = json.decode(response.body)['isSuccess'];
+                  if (isSuccess) {
+                    // var username = json.decode(response.body)['data']['fullName'];
+                    // prefs.setString('username', username);
+                    // print(username);
+                    var token = json.decode(response.body)['data']['token'];
+                    var displayName = json.decode(response.body)['data']['fullName'];
+                    prefs.setString('name', displayName);
+                    prefs.setString('token', token);
+                    controller.success();
+                    Timer(Duration(seconds: 1), (){
+                    Navigator.pushReplacement(context,
+                        MaterialPageRoute(builder: ((context) {
+                      return Home();
+                    })));
+                    });
+                    // ignore: use_build_context_synchronously
+                    //circular progress indicator
+                  } else {
+                    _buttonController.reset();
+                    var error = json.decode(response.body)['message'];
+                    print(error);
+                    showDialog(
+                        
+                        context: context,
+                        builder: ((context) => AlertDialog(
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10)),
+                              backgroundColor: Color.fromARGB(255, 23, 22, 29),
+                              title: Text('Error'),
+                              titleTextStyle: TextStyle(
+                                  color: Colors.white,
+                                  fontFamily: 'Inter',
+                                  fontWeight: FontWeight.w600),
+                              content: Text('$error'),
+                              contentTextStyle: TextStyle(color: Colors.white),
+                              actions: [
+                                TextButton(
+                                    style: ButtonStyle(
+                                        overlayColor: MaterialStateProperty.all(
+                                            Colors.transparent),
+                                        minimumSize: MaterialStateProperty.all(
+                                            Size.zero),
+                                        tapTargetSize:
+                                            MaterialTapTargetSize.shrinkWrap,
+                                        padding: MaterialStateProperty.all(
+                                            EdgeInsets.fromLTRB(0, 0, 10, 10))),
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                    },
+                                    child: Text(
+                                      'OK',
+                                      style: TextStyle(color: Colors.white),
+                                    )),
+                              ],
+                            )));
+                  }
+                  print(response.body);
+                  print(isSuccess);
+
+                  // print(mengege);
+                  // print(loginStat);
+                  // // print(loginStat);
+                }
+                //buat login
+              
   }
 
   @override
@@ -97,8 +177,10 @@ class _LoginState extends State<Login> {
         },
         validator: (value) {
           if (value!.isEmpty) {
+            _buttonController.reset();
             return "Please enter your email";
           } else if (!value.contains('@')) {
+            _buttonController.reset();
             return "Please enter a valid email";
           }
         },
@@ -151,8 +233,10 @@ class _LoginState extends State<Login> {
         },
         validator: (value) {
           if (value!.isEmpty) {
+            _buttonController.reset();
             return "PLease Enter Your Password";
           } else if (value.length < 8) {
+            _buttonController.reset();
             return "Password must be 8 character or more";
           }
         },
@@ -188,94 +272,111 @@ class _LoginState extends State<Login> {
         ),
       ],
     );
+    // ElevatedButton(
+    //           style: ElevatedButton.styleFrom(
+    //               primary: Color.fromARGB(255, 217, 217, 217),
+    //               shape: StadiumBorder()),
+    //           onPressed: () async {
+    //             // ignore: empty_statements
+    //             if (formKey.currentState!.validate()) {
+    //               var response = await http.post(
+    //                   Uri.parse("http://192.168.102.195:3000/api/auth/login"),
+    //                   headers: {
+    //                     HttpHeaders.contentTypeHeader: 'application/json'
+    //                   },
+    //                   body:
+    //                       json.encode({"email": email, "password": password}));
+    //               isSuccess = json.decode(response.body)['isSuccess'];
+    //               if (isSuccess) {
+    //                 // var username = json.decode(response.body)['data']['fullName'];
+    //                 // prefs.setString('username', username);
+    //                 // print(username);
+    //                 var token = json.decode(response.body)['data']['token'];
+    //                 var displayName = json.decode(response.body)['data']['fullName'];
+    //                 prefs.setString('name', displayName);
+    //                 prefs.setString('token', token);
+    //                 // ignore: use_build_context_synchronously
+    //                 //circular progress indicator
+    //                 Navigator.pushReplacement(context,
+    //                     MaterialPageRoute(builder: ((context) {
+    //                   return Home();
+    //                 })));
+    //               } else {
+    //                 var error = json.decode(response.body)['message'];
+    //                 print(error);
+    //                 showDialog(
+    //                     context: context,
+    //                     builder: ((context) => AlertDialog(
+    //                           shape: RoundedRectangleBorder(
+    //                               borderRadius: BorderRadius.circular(10)),
+    //                           backgroundColor: Color.fromARGB(255, 23, 22, 29),
+    //                           title: Text('Error'),
+    //                           titleTextStyle: TextStyle(
+    //                               color: Colors.white,
+    //                               fontFamily: 'Inter',
+    //                               fontWeight: FontWeight.w600),
+    //                           content: Text('$error'),
+    //                           contentTextStyle: TextStyle(color: Colors.white),
+    //                           actions: [
+    //                             TextButton(
+    //                                 style: ButtonStyle(
+    //                                     overlayColor: MaterialStateProperty.all(
+    //                                         Colors.transparent),
+    //                                     minimumSize: MaterialStateProperty.all(
+    //                                         Size.zero),
+    //                                     tapTargetSize:
+    //                                         MaterialTapTargetSize.shrinkWrap,
+    //                                     padding: MaterialStateProperty.all(
+    //                                         EdgeInsets.fromLTRB(0, 0, 10, 10))),
+    //                                 onPressed: () {
+    //                                   Navigator.pop(context);
+    //                                 },
+    //                                 child: Text(
+    //                                   'OK',
+    //                                   style: TextStyle(color: Colors.white),
+    //                                 )),
+    //                           ],
+    //                         )));
+    //               }
+    //               print(response.body);
+    //               print(isSuccess);
+
+    //               // print(mengege);
+    //               // print(loginStat);
+    //               // // print(loginStat);
+    //             }
+    //             //buat login
+    //           },
+    //           child: Padding(
+    //             padding: EdgeInsets.fromLTRB(40, 0, 40, 0),
+    //             child: Text('Sign In',
+    //                 style: TextStyle(
+    //                     fontFamily: 'Inter',
+    //                     fontWeight: FontWeight.w700,
+    //                     color: Color.fromARGB(255, 27, 26, 32),
+    //                     fontSize: 14)),
+    //           )),
 
     Widget loginButton = Container(
         margin: EdgeInsets.only(top: 40),
-        child: Center(
-          child: ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                  primary: Color.fromARGB(255, 217, 217, 217),
-                  shape: StadiumBorder()),
-              onPressed: () async {
-                // ignore: empty_statements
-                if (formKey.currentState!.validate()) {
-                  var response = await http.post(
-                      Uri.parse("http://192.168.102.195:3000/api/auth/login"),
-                      headers: {
-                        HttpHeaders.contentTypeHeader: 'application/json'
-                      },
-                      body:
-                          json.encode({"email": email, "password": password}));
-                  isSuccess = json.decode(response.body)['isSuccess'];
-                  if (isSuccess) {
-                    // var username = json.decode(response.body)['data']['fullName'];
-                    // prefs.setString('username', username);
-                    // print(username);
-                    var token = json.decode(response.body)['data']['token'];
-                    var displayName = json.decode(response.body)['data']['fullName'];
-                    prefs.setString('name', displayName);
-                    prefs.setString('token', token);
-                    // ignore: use_build_context_synchronously
-                    //circular progress indicator
-                    Navigator.pushReplacement(context,
-                        MaterialPageRoute(builder: ((context) {
-                      return Home();
-                    })));
-                  } else {
-                    var error = json.decode(response.body)['message'];
-                    print(error);
-                    showDialog(
-                        context: context,
-                        builder: ((context) => AlertDialog(
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10)),
-                              backgroundColor: Color.fromARGB(255, 23, 22, 29),
-                              title: Text('Error'),
-                              titleTextStyle: TextStyle(
-                                  color: Colors.white,
-                                  fontFamily: 'Inter',
-                                  fontWeight: FontWeight.w600),
-                              content: Text('$error'),
-                              contentTextStyle: TextStyle(color: Colors.white),
-                              actions: [
-                                TextButton(
-                                    style: ButtonStyle(
-                                        overlayColor: MaterialStateProperty.all(
-                                            Colors.transparent),
-                                        minimumSize: MaterialStateProperty.all(
-                                            Size.zero),
-                                        tapTargetSize:
-                                            MaterialTapTargetSize.shrinkWrap,
-                                        padding: MaterialStateProperty.all(
-                                            EdgeInsets.fromLTRB(0, 0, 10, 10))),
-                                    onPressed: () {
-                                      Navigator.pop(context);
-                                    },
-                                    child: Text(
-                                      'OK',
-                                      style: TextStyle(color: Colors.white),
-                                    )),
-                              ],
-                            )));
-                  }
-                  print(response.body);
-                  print(isSuccess);
-
-                  // print(mengege);
-                  // print(loginStat);
-                  // // print(loginStat);
-                }
-                //buat login
-              },
-              child: Padding(
-                padding: EdgeInsets.fromLTRB(40, 0, 40, 0),
-                child: Text('Sign In',
-                    style: TextStyle(
-                        fontFamily: 'Inter',
-                        fontWeight: FontWeight.w700,
-                        color: Color.fromARGB(255, 27, 26, 32),
-                        fontSize: 14)),
-              )),
+        child: RoundedLoadingButton(
+          height: 35,
+          width: 150,
+          loaderSize: 20,
+          color: Color.fromARGB(255, 217, 217, 217),
+          successColor: Color.fromARGB(255, 217, 217, 217),
+          valueColor: Color.fromARGB(255, 27, 26, 32),
+          controller: _buttonController,
+          onPressed: () => login(_buttonController),
+          child: Padding(
+              padding: EdgeInsets.fromLTRB(40, 0, 40, 0),
+              child: Text('Sign In',
+                  style: TextStyle(
+                      fontFamily: 'Inter',
+                      fontWeight: FontWeight.w700,
+                      color: Color.fromARGB(255, 27, 26, 32),
+                      fontSize: 14)),
+        ),
         ));
 
     Widget registerButton = Container(

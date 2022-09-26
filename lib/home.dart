@@ -46,7 +46,7 @@ class _HomeState extends State<Home> {
             onTap: (index) => setState(() => currentIndex = index),
             items: [
               BottomNavigationBarItem(
-                  icon: Icon(Icons.home_rounded),
+                  icon: Icon(Icons.home_outlined),
                   label: 'Home',
                   activeIcon: Container(
                     decoration: BoxDecoration(
@@ -55,13 +55,13 @@ class _HomeState extends State<Home> {
                     child: Padding(
                       padding: EdgeInsets.all(8),
                       child: Icon(
-                        Icons.home_rounded,
+                        Icons.home,
                         color: Color.fromARGB(255, 26, 25, 32),
                       ),
                     ),
                   )),
               BottomNavigationBarItem(
-                  icon: Icon(Icons.history_rounded),
+                  icon: Icon(Icons.history_outlined),
                   label: 'History',
                   activeIcon: Container(
                     decoration: BoxDecoration(
@@ -70,13 +70,13 @@ class _HomeState extends State<Home> {
                     child: Padding(
                       padding: EdgeInsets.all(8),
                       child: Icon(
-                        Icons.history_rounded,
+                        Icons.history,
                         color: Color.fromARGB(255, 26, 25, 32),
                       ),
                     ),
                   )),
               BottomNavigationBarItem(
-                  icon: Icon(Icons.favorite_rounded),
+                  icon: Icon(Icons.favorite_outline),
                   label: 'Wishlist',
                   activeIcon: Container(
                     decoration: BoxDecoration(
@@ -85,13 +85,13 @@ class _HomeState extends State<Home> {
                     child: Padding(
                       padding: EdgeInsets.all(8),
                       child: Icon(
-                        Icons.favorite_rounded,
+                        Icons.favorite,
                         color: Color.fromARGB(255, 26, 25, 32),
                       ),
                     ),
                   )),
               BottomNavigationBarItem(
-                  icon: Icon(Icons.person_rounded),
+                  icon: Icon(Icons.person_outline),
                   label: 'Profile',
                   activeIcon: Container(
                     decoration: BoxDecoration(
@@ -100,7 +100,7 @@ class _HomeState extends State<Home> {
                     child: Padding(
                       padding: EdgeInsets.all(8),
                       child: Icon(
-                        Icons.person_rounded,
+                        Icons.person,
                         color: Color.fromARGB(255, 26, 25, 32),
                       ),
                     ),

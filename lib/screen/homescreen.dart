@@ -240,7 +240,7 @@ class _HomeScreenState extends State<HomeScreen> {
     );
 
     Widget listActivity = isLoad ? Container(
-          padding: EdgeInsets.only(top: 100),
+          padding: const EdgeInsets.only(top: 100),
           child: const CircularProgressIndicator(color: Color.fromARGB(255, 23, 22, 29))
           )
         : activity.isEmpty ? Container(
@@ -360,6 +360,7 @@ class _HomeScreenState extends State<HomeScreen> {
           );
 
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       backgroundColor: const Color.fromARGB(255, 224, 232, 235),
       body: Column(
         children: [welcomeUser, inputURL, recentActivity, listActivity],

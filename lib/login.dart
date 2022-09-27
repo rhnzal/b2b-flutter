@@ -6,6 +6,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:projectb2b/home.dart';
 import 'package:projectb2b/register.dart';
+import 'package:projectb2b/screen/forgotpassword.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:rounded_loading_button/rounded_loading_button.dart';
 import 'package:http/http.dart' as http;
@@ -259,7 +260,11 @@ class _LoginState extends State<Login> {
             //   minimumSize: Size.zero,
             //   tapTargetSize: MaterialTapTargetSize.shrinkWrap,
             // ),
-            onPressed: () {},
+            onPressed: () {
+              Navigator.push(context, MaterialPageRoute(builder: ((context) {
+                return ForgotPassword();
+              })));
+            },
             child: Text(
               'Forgot Your Password ?',
               style: TextStyle(

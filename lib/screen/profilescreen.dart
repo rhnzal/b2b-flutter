@@ -5,6 +5,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:projectb2b/login.dart';
+import 'package:projectb2b/screen/changepassword.dart';
 import 'package:projectb2b/screen/paymentscreen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
@@ -235,7 +236,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     // ignore: prefer_const_literals_to_create_immutables
                     children: [
-                      Text("Email",
+                      Text("Address",
                           style: TextStyle(
                               fontFamily: 'Inter',
                               fontWeight: FontWeight.w500,
@@ -243,7 +244,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               color: Color.fromARGB(255, 224, 232, 235))),
                       SizedBox(height: 10),
                       Text(
-                        "something@mail.com",
+                        "-",
                         style: TextStyle(
                             fontFamily: 'Inter',
                             fontWeight: FontWeight.w700,
@@ -292,7 +293,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               color: Color.fromARGB(255, 224, 232, 235))),
                       SizedBox(height: 10),
                       Text(
-                        "",
+                        "**********",
                         style: TextStyle(
                             fontFamily: 'Inter',
                             fontWeight: FontWeight.w700,
@@ -309,7 +310,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             primary: Colors.white,
                             shape: StadiumBorder(),
                             elevation: 10),
-                        onPressed: () {},
+                        onPressed: () {
+                          Navigator.push(context, MaterialPageRoute(builder: ((context) {
+                            return ChangePassword();
+                          })));
+                        },
                         child: Text(
                           'Edit',
                           style: TextStyle(

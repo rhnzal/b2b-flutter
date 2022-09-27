@@ -100,6 +100,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
     Widget quotaList = 
       Expanded(
         child: GridView.builder(
+          physics: const BouncingScrollPhysics(),
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2),
             itemCount: grid.length,
@@ -130,7 +131,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                         Padding(
                           padding: const EdgeInsets.only(left: 5),
                           child: Text(
-                            grid[index]['title'],
+                            grid[index]['title'].toString().substring(6),
                             style: const TextStyle(
                                 fontFamily: 'Inter',
                                 fontWeight: FontWeight.w700,

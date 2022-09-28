@@ -1,10 +1,14 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/framework.dart';
+import 'package:projectb2b/home.dart';
+import 'package:projectb2b/login.dart';
 import 'package:rounded_loading_button/rounded_loading_button.dart';
 
 class ChangePassword extends StatefulWidget {
-  const ChangePassword({Key? key}) : super(key: key);
+  const ChangePassword({Key? key, required this.check}) : super(key: key);
+
+  final String check;
 
   @override
   State<ChangePassword> createState() => _ChangePasswordState();
@@ -14,8 +18,35 @@ class _ChangePasswordState extends State<ChangePassword> {
   String newPass = '';
   final RoundedLoadingButtonController _buttonController = RoundedLoadingButtonController();
 
-  void enter (RoundedLoadingButtonController controller){
-    
+  void enter (RoundedLoadingButtonController controller, String check){
+    controller.success();
+    Timer(const Duration(seconds: 1), (){
+      showDialog(barrierDismissible: false,context: context, builder: ((context) => AlertDialog(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10)),
+        backgroundColor:const Color.fromARGB(255, 224, 232, 235),
+        title: const Text('Password has been changed'),
+        titleTextStyle: const TextStyle(
+          color: Color.fromARGB(255, 23, 22, 29),
+          fontFamily: 'Inter',
+          fontWeight: FontWeight.w600),
+        actions: [
+          TextButton(
+            onPressed: (){
+              check.contains('profile') ?
+              Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: ((context) {
+                return const Home();
+              })), (route) => false) 
+              : Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: ((context) {
+                return const Login();
+              })), (route) => false); 
+            }, 
+            child: const Text('Ok',
+              style:TextStyle(color: Color.fromARGB(255, 23, 22, 29)))
+            )
+        ],
+      )));
+    });
   }
 
   @override
@@ -108,7 +139,7 @@ class _ChangePasswordState extends State<ChangePassword> {
           successColor:const Color.fromARGB(255, 217, 217, 217),
           valueColor: const Color.fromARGB(255, 27, 26, 32),
           controller: _buttonController,
-          onPressed: () => enter(_buttonController),
+          onPressed: () => enter(_buttonController, widget.check),
           child: const Padding(
               padding: EdgeInsets.fromLTRB(40, 0, 40, 0),
               child: Text('Submit',

@@ -138,7 +138,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 ],
                               )));
                     },
-                    child: Wrap(children: [
+                    style: ElevatedButton.styleFrom(
+                        primary: Colors.white,
+                        shape: StadiumBorder(),
+                        elevation: 10),
+                    child: Wrap(children: const [
                       Icon(
                         Icons.logout_rounded,
                         color: Color.fromARGB(255, 26, 25, 32),
@@ -152,10 +156,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               fontSize: 13,
                               color: Color.fromARGB(255, 26, 25, 32)))
                     ]),
-                    style: ElevatedButton.styleFrom(
-                        primary: Colors.white,
-                        shape: StadiumBorder(),
-                        elevation: 10),
                   ),
                 ),
               ],
@@ -312,7 +312,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             elevation: 10),
                         onPressed: () {
                           Navigator.push(context, MaterialPageRoute(builder: ((context) {
-                            return ChangePassword();
+                            return ChangePassword(check: 'profile');
                           })));
                         },
                         child: Text(

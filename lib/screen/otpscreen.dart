@@ -21,7 +21,7 @@ class _OtpState extends State<Otp> {
     controller.success();
       Timer(const Duration(seconds: 1), (){
         Navigator.push(context, MaterialPageRoute(builder: ((context) {
-          return const ChangePassword();
+          return const ChangePassword(check: 'otp');
         })));
         controller.reset();
       });

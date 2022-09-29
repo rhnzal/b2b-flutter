@@ -44,7 +44,7 @@ class _LoginState extends State<Login> {
                 // ignore: empty_statements
                 if (formKey.currentState!.validate()) {
                   var response = await http.post(
-                      Uri.parse("http://192.168.102.195:3000/api/auth/login"),
+                      Uri.parse("http://192.168.102.75:3000/api/auth/login"),
                       headers: {
                         HttpHeaders.contentTypeHeader: 'application/json'
                       },
@@ -285,7 +285,7 @@ class _LoginState extends State<Login> {
     //             // ignore: empty_statements
     //             if (formKey.currentState!.validate()) {
     //               var response = await http.post(
-    //                   Uri.parse("http://192.168.102.195:3000/api/auth/login"),
+    //                   Uri.parse("http://192.168.102.75:3000/api/auth/login"),
     //                   headers: {
     //                     HttpHeaders.contentTypeHeader: 'application/json'
     //                   },

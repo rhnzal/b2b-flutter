@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class FavoriteScreen extends StatefulWidget {
@@ -32,7 +30,7 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
     margin: const EdgeInsets.fromLTRB(20, 40, 10, 5),
     child: Row(
       children: [
-        CircleAvatar(
+        const CircleAvatar(
           backgroundColor: Colors.white,
           backgroundImage: AssetImage('images/user.png'),
           radius: 20,
@@ -42,14 +40,14 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text('Welcome,',
+              const Text('Welcome,',
                   style: TextStyle(
                       fontFamily: 'Inter',
                       fontWeight: FontWeight.w300,
                       fontSize: 10)),
               Text(
                 '$displayName',
-                style: TextStyle(
+                style: const TextStyle(
                     fontFamily: 'Inter',
                     fontWeight: FontWeight.w500,
                     fontSize: 12),
@@ -61,10 +59,23 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
     ),
   );
 
+  Widget wishlist = Container(
+      margin: const EdgeInsets.fromLTRB(20, 15, 10, 0),
+      child: Row(
+        children: const [
+          Icon(Icons.list_rounded),
+          SizedBox( width: 5,),
+          Text('Wishlist',
+            style: TextStyle(fontFamily: 'Inter', fontWeight: FontWeight.w800, fontSize: 12),
+          )
+        ],
+      ),
+    );
+
     return Scaffold(
       backgroundColor: Color.fromARGB(255, 224, 232, 235),
       body: Column(
-        children: [welcomeUser],
+        children: [welcomeUser, wishlist],
       ),
     );
   }

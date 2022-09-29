@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
@@ -19,6 +20,7 @@ class _HomeScreenState extends State<HomeScreen> {
   // final formKey = GlobalKey<FormState>();
   // String trimmed = '';
   TextEditingController urlCon = TextEditingController();
+  bool load = true;
   String url = '';
   late SharedPreferences prefs;
   bool isActive = false;
@@ -42,7 +44,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Future<void> getActivity() async {
     var token = prefs.getString('token');
-    final response = await http.get(Uri.parse("http://192.168.102.195:3000/api/document"),
+    final response = await http.get(Uri.parse("http://192.168.102.75:3000/api/document"),
         headers: {HttpHeaders.authorizationHeader: 'Bearer $token'});
     // print(response.body);
     activity = json.decode(response.body)["data"];
@@ -72,7 +74,7 @@ class _HomeScreenState extends State<HomeScreen> {
           // ignore: prefer_const_constructors
           CircleAvatar(
             backgroundColor: Colors.white,
-            backgroundImage: AssetImage('images/user.png'),
+            backgroundImage: const AssetImage('images/user.png'),
             radius: 20,
           ),
           Padding(
@@ -189,8 +191,25 @@ class _HomeScreenState extends State<HomeScreen> {
                                             padding: MaterialStateProperty.all(const EdgeInsets.fromLTRB(0, 0, 10, 10))),
                                         onPressed: () async {
                                           Navigator.pop(context);
+                                          showDialog(
+                                            barrierDismissible: false,
+                                                context: context, 
+                                                builder: ((context) {
+                                                  setState(() {});
+                                                  return load ? const AlertDialog(
+                                                    content: SizedBox(child: CircularProgressIndicator()),
+                                                  ):AlertDialog(
+                                                    content: Text('Done'),
+                                                    actions: 
+                                                      ((){
+                                                        Timer(Duration(seconds: 1), (){
+                                                          Navigator.pop(context);
+                                                        });
+                                                      })(),
+                                                  ); 
+                                                }));                                       
                                           var token = prefs.getString('token');
-                                          var response = await http.post(Uri.parse('http://192.168.102.195:3000/api/document/url'),
+                                          var response = await http.post(Uri.parse('http://192.168.102.75:3000/api/document/url'),
                                               headers: {
                                                 HttpHeaders.contentTypeHeader:'application/json',
                                                 HttpHeaders.authorizationHeader:'Bearer $token'
@@ -198,9 +217,14 @@ class _HomeScreenState extends State<HomeScreen> {
                                               body: json.encode({
                                                 'url': url,
                                               }));
-                                          // print(response.body);
+                                          print(response.body);
                                           await getActivity();
                                           urlCon.clear();
+                                          setState(() {
+                                            load = false;
+                                            print(load);
+                                          });
+                                          
                                         },
                                         child: const Text('Yes',
                                             style: TextStyle(color: Color.fromARGB(255, 23, 22, 29)

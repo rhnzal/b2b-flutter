@@ -32,7 +32,7 @@ class _RegisterState extends State<Register> {
     if (formKey.currentState!.validate()) {
       var response = await http.post(
           Uri.parse(
-              "http://192.168.102.75:3000/api/users/register"),
+              "http://192.168.102.195:3000/api/users/register"),
           headers: {
             HttpHeaders.contentTypeHeader: 'application/json'
           },

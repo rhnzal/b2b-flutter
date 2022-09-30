@@ -19,6 +19,8 @@ class ProfileScreen extends StatefulWidget {
 
 class _ProfileScreenState extends State<ProfileScreen> {
   late SharedPreferences prefs;
+  late String address;
+  late String editName;
   String? displayName = '';
   var activity = [];
   @override
@@ -39,7 +41,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Future<void> getActivity() async {
     var token = prefs.getString('token');
     final response = await http.get(
-        Uri.parse("http://192.168.102.75:3000/api/document"),
+        Uri.parse("http://192.168.102.195:3000/api/document"),
         headers: {HttpHeaders.authorizationHeader: 'Bearer $token'});
     // print(response.body);
     activity = json.decode(response.body)["data"];
@@ -171,6 +173,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(15),
         color: Color.fromARGB(255, 23, 22, 29),
+        boxShadow: const [
+          BoxShadow(
+            blurRadius: 4,
+            offset: Offset(0,2)
+          )
+        ]
       ),
       child: Padding(
         padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
@@ -212,7 +220,76 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             primary: Colors.white,
                             shape: StadiumBorder(),
                             elevation: 10),
-                        onPressed: () {},
+                        onPressed: () {
+                          showDialog(
+                            context: context, 
+                            builder: ((context) => AlertDialog(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.all(Radius.circular(20))
+                              ),
+                              backgroundColor: Color.fromARGB(255, 224, 232, 235),
+                              title: Text('Change Display Name',
+                              style: TextStyle(
+                                fontFamily: 'Inter',
+                                fontWeight: FontWeight.w500,
+                                fontSize: 20,
+                                color: Color.fromARGB(255, 26, 25, 32))),
+                              content: Container(
+                                height: 35,
+                                child: TextFormField(
+                                onChanged: (value) {
+                                  editName = value;
+                                },
+                              cursorColor: Colors.black,
+                              style: const TextStyle(
+                                  color: Colors.black,
+                                  fontFamily: 'Inter',
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: 14),
+                              decoration: InputDecoration(
+                                filled: true,
+                                fillColor: const Color.fromARGB(255, 255, 255, 255),
+                                contentPadding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
+                                hintText: 'Name',
+                                hintStyle: const TextStyle(
+                                    fontFamily: 'Inter',
+                                    fontWeight: FontWeight.w500,
+                                    color: Color.fromARGB(100, 0, 0, 0),
+                                    fontSize: 12),
+                                border: OutlineInputBorder(
+                                    borderSide: BorderSide.none,
+                                    borderRadius: BorderRadius.circular(20)),
+                                // prefixIcon: Padding(padding: EdgeInsets.fromLTRB(20, 10, 20, 10),
+                                //   child: Icon(Icons.),
+                                // )
+                              ),
+                              )),
+                              actions: [
+                                TextButton(
+                                  style: ButtonStyle(
+                                    overlayColor: MaterialStateProperty.all(Colors.transparent),
+                                    minimumSize: MaterialStateProperty.all(Size.zero),
+                                    tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                                    padding: MaterialStateProperty.all(const EdgeInsets.fromLTRB(0, 0, 10, 10))),
+                                  onPressed: (){
+                                    Navigator.pop(context);
+                                  }, 
+                                  child: Text('Cancel',
+                                  style: TextStyle(
+                                                color: Color.fromARGB(255, 23, 22, 29)))),
+                                TextButton(
+                                  style: ButtonStyle(
+                                    overlayColor: MaterialStateProperty.all(Colors.transparent),
+                                    minimumSize: MaterialStateProperty.all(Size.zero),
+                                    tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                                    padding: MaterialStateProperty.all(const EdgeInsets.fromLTRB(0, 0, 20, 10))),
+                                  onPressed: (){}, 
+                                  child: Text('Ok',
+                                  style: TextStyle(
+                                                color: Color.fromARGB(255, 23, 22, 29))))
+                              ],
+                            )));
+                        },
                         child: Text(
                           'Edit',
                           style: TextStyle(
@@ -261,7 +338,73 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             primary: Colors.white,
                             shape: StadiumBorder(),
                             elevation: 10),
-                        onPressed: () {},
+                        onPressed: () {
+                          showDialog(
+                            context: context, 
+                            builder: ((context) => AlertDialog(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.all(Radius.circular(20))
+                              ),
+                              backgroundColor: Color.fromARGB(255, 224, 232, 235),
+                              title: Text('Change Address',
+                              style: TextStyle(
+                                fontFamily: 'Inter',
+                                fontWeight: FontWeight.w500,
+                                fontSize: 20,
+                                color: Color.fromARGB(255, 26, 25, 32))),
+                              content: Container(
+                                height: 35,
+                                child: TextFormField(
+                                onChanged: (value) {
+                                   address = value;
+                                },
+                              cursorColor: Colors.black,
+                              style: const TextStyle(
+                                  color: Colors.black,
+                                  fontFamily: 'Inter',
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: 14),
+                              decoration: InputDecoration(
+                                filled: true,
+                                fillColor: const Color.fromARGB(255, 255, 255, 255),
+                                contentPadding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
+                                hintText: 'Address',
+                                hintStyle: const TextStyle(
+                                    fontFamily: 'Inter',
+                                    fontWeight: FontWeight.w500,
+                                    color: Color.fromARGB(100, 0, 0, 0),
+                                    fontSize: 12),
+                                border: OutlineInputBorder(
+                                    borderSide: BorderSide.none,
+                                    borderRadius: BorderRadius.circular(20)),
+                              ),
+                              )),
+                              actions: [
+                                TextButton(
+                                  style: ButtonStyle(
+                                    overlayColor: MaterialStateProperty.all(Colors.transparent),
+                                    minimumSize: MaterialStateProperty.all(Size.zero),
+                                    tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                                    padding: MaterialStateProperty.all(const EdgeInsets.fromLTRB(0, 0, 10, 10))),
+                                  onPressed: (){
+                                    Navigator.pop(context);
+                                  }, 
+                                  child: Text('Cancel',
+                                  style: TextStyle(
+                                                color: Color.fromARGB(255, 23, 22, 29)))),
+                                TextButton(
+                                  style: ButtonStyle(
+                                    overlayColor: MaterialStateProperty.all(Colors.transparent),
+                                    minimumSize: MaterialStateProperty.all(Size.zero),
+                                    tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                                    padding: MaterialStateProperty.all(const EdgeInsets.fromLTRB(0, 0, 20, 10))),
+                                  onPressed: (){}, 
+                                  child: Text('Ok',
+                                  style: TextStyle(
+                                                color: Color.fromARGB(255, 23, 22, 29))))
+                              ],
+                            )));
+                        },
                         child: Text(
                           'Edit',
                           style: TextStyle(
@@ -338,6 +481,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(15),
         color: Color.fromARGB(255, 23, 22, 29),
+        boxShadow: const [
+          BoxShadow(
+            blurRadius: 4,
+            offset: Offset(0,2)
+          )
+        ]
       ),
       child: Padding(
         padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),

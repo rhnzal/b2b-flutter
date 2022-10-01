@@ -173,9 +173,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(15),
         color: Color.fromARGB(255, 23, 22, 29),
-        boxShadow: const [
+        boxShadow: [
           BoxShadow(
-            blurRadius: 4,
+            color: Colors.grey.shade600,
+            spreadRadius: 1,
+            blurRadius: 15,
             offset: Offset(0,2)
           )
         ]
@@ -481,9 +483,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(15),
         color: Color.fromARGB(255, 23, 22, 29),
-        boxShadow: const [
+        boxShadow: [
           BoxShadow(
-            blurRadius: 4,
+            color: Colors.grey.shade600,
+            spreadRadius: 1,
+            blurRadius: 15,
             offset: Offset(0,2)
           )
         ]

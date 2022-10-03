@@ -58,7 +58,11 @@ class _HomeScreenState extends State<HomeScreen> {
     //   var trim = activity[i]['url'];
     // }
     if (trim.contains('https://')){
-    return trim.toString().substring(8);
+      if(trim.contains('www.tradewheel.com')){
+        return trim.toString().substring(34);
+      }else{
+        return trim.toString().substring(8);
+      }
     }else if(trim.contains('http://')){
     return trim.toString().substring(7);
     }

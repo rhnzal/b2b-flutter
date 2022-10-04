@@ -131,7 +131,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                         Padding(
                           padding: const EdgeInsets.only(left: 5),
                           child: Text(
-                            grid[index]['title'].toString().substring(6),
+                            grid[index]['title'].toString(),
                             style: const TextStyle(
                                 fontFamily: 'Inter',
                                 fontWeight: FontWeight.w700,

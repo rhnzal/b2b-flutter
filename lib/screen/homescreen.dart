@@ -94,7 +94,7 @@ class _HomeScreenState extends State<HomeScreen> {
       body: json.encode({
         'url': url,
       }));
-  print(response.body);
+  // print(response.body);
   Navigator.pop(context);
   await getActivity();
   urlCon.clear();
@@ -280,6 +280,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 axisDirection: AxisDirection.down,
                 color: Colors.white,
                 child: ListView.builder(
+                  physics: const BouncingScrollPhysics(),
                     itemCount: activity.length,
                     itemBuilder: (context, index) => Padding(
                           padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),

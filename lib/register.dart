@@ -32,7 +32,7 @@ class _RegisterState extends State<Register> {
     if (formKey.currentState!.validate()) {
       var response = await http.post(
           Uri.parse(
-              "http://192.168.102.195:3000/api/users/register"),
+              "https://sija-b2b.ronisetiawan.id/api/users/register"),
           headers: {
             HttpHeaders.contentTypeHeader: 'application/json'
           },
@@ -41,6 +41,7 @@ class _RegisterState extends State<Register> {
             "email": regemail,
             "password": regpas,
           }));
+          print(response.body);
       print(response.body);
       isSuccess = json.decode(response.body)['isSuccess'];
       if(isSuccess){
@@ -210,29 +211,25 @@ class _RegisterState extends State<Register> {
 
   @override
   Widget build(BuildContext context) {
-    Widget welcomeRegister = Row(
-      mainAxisAlignment: MainAxisAlignment.start,
+    Widget welcomeRegister = Padding(
+      padding: EdgeInsets.fromLTRB(24, 24, 24, 48),
+      child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Padding(padding: EdgeInsets.fromLTRB(15, 150, 15, 40)),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text('Create New Account,',
-                style: TextStyle(
-                    fontFamily: 'Inter',
-                    fontWeight: FontWeight.w600,
-                    color: Color.fromARGB(255, 255, 255, 255),
-                    fontSize: 24)),
-            Text('Please fill in the form to continue',
-                style: TextStyle(
-                    fontFamily: 'Inter',
-                    fontWeight: FontWeight.w400,
-                    color: Color.fromARGB(255, 255, 255, 255),
-                    fontSize: 20))
-          ],
-        ),
+        Text('Create New Account,',
+            style: TextStyle(
+                fontFamily: 'Inter',
+                fontWeight: FontWeight.w600,
+                color: Color.fromARGB(255, 255, 255, 255),
+                fontSize: 24)),
+        Text('Please fill in the form to continue',
+            style: TextStyle(
+                fontFamily: 'Inter',
+                fontWeight: FontWeight.w400,
+                color: Color.fromARGB(255, 255, 255, 255),
+                fontSize: 20))
       ],
-    );
+    ));
 
     Widget inputName = Container(
       padding: EdgeInsets.fromLTRB(20, 0, 20, 10),
@@ -277,6 +274,7 @@ class _RegisterState extends State<Register> {
     Widget regEmail = Container(
       padding: EdgeInsets.fromLTRB(20, 0, 20, 10),
       child: TextFormField(
+        keyboardType: TextInputType.emailAddress,
         cursorColor: Colors.white,
         style: TextStyle(color: Colors.white),
         decoration: InputDecoration(
@@ -481,9 +479,7 @@ class _RegisterState extends State<Register> {
             //   tapTargetSize: MaterialTapTargetSize.shrinkWrap,
             // ),
             onPressed: () {
-              Navigator.push(context, MaterialPageRoute(builder: (context) {
-                return Login();
-              }));
+              Navigator.pop(context);
             },
             child: Text(
               'Sign In',
@@ -499,6 +495,11 @@ class _RegisterState extends State<Register> {
     );
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 23, 22, 29),
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+
+    ),
       body: Form(
         key: formKey,
         child: ScrollConfiguration(

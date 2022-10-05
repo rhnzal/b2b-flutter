@@ -43,7 +43,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Future<void> getActivity() async {
     var token = prefs.getString('token');
-    final response = await http.get(Uri.parse("http://192.168.102.195:3000/api/document"),
+    final response = await http.get(Uri.parse("https://sija-b2b.ronisetiawan.id/api/document"),
         headers: {HttpHeaders.authorizationHeader: 'Bearer $token'});
     // print(response.body);
     activity = json.decode(response.body)["data"];
@@ -86,7 +86,7 @@ class _HomeScreenState extends State<HomeScreen> {
           );
       }));          
   var token = prefs.getString('token');
-  var response = await http.post(Uri.parse('http://192.168.102.195:3000/api/document/url'),
+  var response = await http.post(Uri.parse('https://sija-b2b.ronisetiawan.id/api/document/url'),
       headers: {
         HttpHeaders.contentTypeHeader:'application/json',
         HttpHeaders.authorizationHeader:'Bearer $token'

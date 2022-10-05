@@ -44,12 +44,14 @@ class _LoginState extends State<Login> {
                 // ignore: empty_statements
                 if (formKey.currentState!.validate()) {
                   var response = await http.post(
-                      Uri.parse("http://192.168.102.195:3000/api/auth/login"),
+                      // Uri.parse("https://sija-b2b.ronisetiawan.id/api/auth/login"),
+                      Uri.parse("https://sija-b2b.ronisetiawan.id/api/auth/login"),
                       headers: {
                         HttpHeaders.contentTypeHeader: 'application/json'
                       },
                       body:
                           json.encode({"email": email, "password": password}));
+                          print(response.body);
                   isSuccess = json.decode(response.body)['isSuccess'];
                   if (isSuccess) {
                     // var username = json.decode(response.body)['data']['fullName'];
@@ -147,6 +149,7 @@ class _LoginState extends State<Login> {
     Widget inputEmail = Container(
       padding: EdgeInsets.fromLTRB(20, 0, 20, 10),
       child: TextFormField(
+        keyboardType: TextInputType.emailAddress,
         cursorColor: Colors.white,
         style: TextStyle(color: Colors.white),
         decoration: InputDecoration(
@@ -285,7 +288,7 @@ class _LoginState extends State<Login> {
     //             // ignore: empty_statements
     //             if (formKey.currentState!.validate()) {
     //               var response = await http.post(
-    //                   Uri.parse("http://192.168.102.195:3000/api/auth/login"),
+    //                   Uri.parse("https://sija-b2b.ronisetiawan.id/api/auth/login"),
     //                   headers: {
     //                     HttpHeaders.contentTypeHeader: 'application/json'
     //                   },
@@ -409,7 +412,7 @@ class _LoginState extends State<Login> {
             //   tapTargetSize: MaterialTapTargetSize.shrinkWrap,
             // ),
             onPressed: () {
-              Navigator.pushReplacement(context,
+              Navigator.push(context,
                   MaterialPageRoute(builder: (context) {
                 //api/users/login
                 return Register();

@@ -39,7 +39,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
 
   Future<void> getProduct() async{
     var token = prefs.getString('token');
-    var response = await http.get(Uri.parse('http://192.168.102.195:3000/api/product'),
+    var response = await http.get(Uri.parse('https://sija-b2b.ronisetiawan.id/api/product'),
     headers: {
       HttpHeaders.authorizationHeader: 'Bearer $token'
     }
@@ -174,7 +174,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
               primary: const Color.fromARGB(255, 23, 22, 29), shape: const StadiumBorder()),
           onPressed: selected ? () async {
               var token = prefs.getString('token');
-              var response = await http.post(Uri.parse('http://192.168.102.195:3000/api/transaction/buy'),
+              var response = await http.post(Uri.parse('https://sija-b2b.ronisetiawan.id/api/transaction/buy'),
               headers: {
                 HttpHeaders.contentTypeHeader: 'application/json',
                 HttpHeaders.authorizationHeader: 'Bearer $token'

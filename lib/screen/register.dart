@@ -5,7 +5,8 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:projectb2b/login.dart';
+import 'package:flutter/services.dart';
+import 'package:projectb2b/screen/login.dart';
 import 'package:http/http.dart' as http;
 import 'package:rounded_loading_button/rounded_loading_button.dart';
 
@@ -73,11 +74,10 @@ class _RegisterState extends State<Register> {
                               padding: MaterialStateProperty.all(
                                   EdgeInsets.fromLTRB(0, 0, 10, 10))),
                           onPressed: () {
-                            Navigator.pushReplacement(context,
-                                MaterialPageRoute(
-                                    builder: ((context) {
+                            Navigator.pushAndRemoveUntil(context, 
+                            MaterialPageRoute(builder: (context) {
                               return Login();
-                            })));
+                            }), (route) => false);
                           },
                           child: Text(
                             'OK',
@@ -493,34 +493,42 @@ class _RegisterState extends State<Register> {
         ],
       ),
     );
-    return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 23, 22, 29),
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
+    return Builder(
+      builder: (context) {
+         SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+          statusBarColor: Colors.transparent,
+          statusBarIconBrightness: Brightness.light
+        ));
+        return Scaffold(
+          backgroundColor: const Color.fromARGB(255, 23, 22, 29),
+          appBar: AppBar(
+            backgroundColor: Colors.transparent,
+            elevation: 0,
 
-    ),
-      body: Form(
-        key: formKey,
-        child: ScrollConfiguration(
-          behavior: ScrollBehavior(),
-          child: GlowingOverscrollIndicator(
-            axisDirection: AxisDirection.down,
-            color: Colors.white,
-            child: ListView(
-              children: [
-                welcomeRegister,
-                inputName,
-                regEmail,
-                regPassword,
-                confirmPassword,
-                regButton,
-                loginButton
-              ],
+        ),
+          body: Form(
+            key: formKey,
+            child: ScrollConfiguration(
+              behavior: ScrollBehavior(),
+              child: GlowingOverscrollIndicator(
+                axisDirection: AxisDirection.down,
+                color: Colors.white,
+                child: ListView(
+                  children: [
+                    welcomeRegister,
+                    inputName,
+                    regEmail,
+                    regPassword,
+                    confirmPassword,
+                    regButton,
+                    loginButton
+                  ],
+                ),
+              ),
             ),
           ),
-        ),
-      ),
+        );
+      }
     );
   }
 }

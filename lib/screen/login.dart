@@ -4,8 +4,9 @@ import 'dart:io';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:projectb2b/home.dart';
-import 'package:projectb2b/register.dart';
+import 'package:projectb2b/screen/register.dart';
 import 'package:projectb2b/screen/forgotpassword.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:rounded_loading_button/rounded_loading_button.dart';
@@ -431,30 +432,38 @@ class _LoginState extends State<Login> {
       ),
     );
 
-    return Scaffold(
-      // appBar: AppBar(backgroundColor: Colors.transparent, elevation: 0),
-      backgroundColor: const Color.fromARGB(255, 23, 22, 29),
-      // ignore: prefer_const_literals_to_create_immutables
-      body: Form(
-        key: formKey,
-        child: ScrollConfiguration(
-          behavior: ScrollBehavior(),
-          child: GlowingOverscrollIndicator(
-            axisDirection: AxisDirection.down,
-            color: Colors.white,
-            child: ListView(
-              children: [
-                welcomeText,
-                inputEmail,
-                inputPassword,
-                forgorPassword,
-                loginButton,
-                registerButton
-              ],
+    return Builder(
+      builder: (context) {
+        SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+          statusBarColor: Colors.transparent,
+          statusBarIconBrightness: Brightness.light
+        ));
+        return Scaffold(
+          // appBar: AppBar(backgroundColor: Colors.transparent, elevation: 0),
+          backgroundColor: const Color.fromARGB(255, 23, 22, 29),
+          // ignore: prefer_const_literals_to_create_immutables
+          body: Form(
+            key: formKey,
+            child: ScrollConfiguration(
+              behavior: ScrollBehavior(),
+              child: GlowingOverscrollIndicator(
+                axisDirection: AxisDirection.down,
+                color: Colors.white,
+                child: ListView(
+                  children: [
+                    welcomeText,
+                    inputEmail,
+                    inputPassword,
+                    forgorPassword,
+                    loginButton,
+                    registerButton
+                  ],
+                ),
+              ),
             ),
           ),
-        ),
-      ),
+        );
+      }
     );
   }
 }

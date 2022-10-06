@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:projectb2b/home.dart';
-import 'package:projectb2b/login.dart';
+import 'package:projectb2b/screen/login.dart';
 import 'package:rounded_loading_button/rounded_loading_button.dart';
 
 class ChangePassword extends StatefulWidget {

@@ -4,7 +4,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:projectb2b/login.dart';
+import 'package:projectb2b/screen/login.dart';
 import 'package:projectb2b/screen/changepassword.dart';
 import 'package:projectb2b/screen/paymentscreen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -127,7 +127,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                               EdgeInsets.fromLTRB(
                                                   0, 0, 10, 10))),
                                       onPressed: () {
-                                        prefs.remove('token');
+                                        prefs.clear();
+                                        print(prefs.getString('token'));
                                         Navigator.pushAndRemoveUntil(context,
                                             MaterialPageRoute(
                                                 builder: (context) {

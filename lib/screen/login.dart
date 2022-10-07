@@ -5,6 +5,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:projectb2b/endpoints.dart';
 import 'package:projectb2b/home.dart';
 import 'package:projectb2b/screen/register.dart';
 import 'package:projectb2b/screen/forgotpassword.dart';
@@ -46,7 +47,7 @@ class _LoginState extends State<Login> {
                 if (formKey.currentState!.validate()) {
                   var response = await http.post(
                       // Uri.parse("https://sija-b2b.ronisetiawan.id/api/auth/login"),
-                      Uri.parse("https://sija-b2b.ronisetiawan.id/api/auth/login"),
+                      Uri.parse(urlLogin),
                       headers: {
                         HttpHeaders.contentTypeHeader: 'application/json'
                       },

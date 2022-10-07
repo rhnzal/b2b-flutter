@@ -6,6 +6,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
+import 'package:projectb2b/endpoints.dart';
 import 'package:projectb2b/screen/previewscreen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
@@ -44,7 +45,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Future<void> getActivity() async {
     var token = prefs.getString('token');
-    final response = await http.get(Uri.parse("https://sija-b2b.ronisetiawan.id/api/document"),
+    final response = await http.get(Uri.parse(urlDocument),
         headers: {HttpHeaders.authorizationHeader: 'Bearer $token'});
     // print(response.body);
     activity = json.decode(response.body)["data"];
@@ -87,7 +88,7 @@ class _HomeScreenState extends State<HomeScreen> {
           );
       }));          
   var token = prefs.getString('token');
-  var response = await http.post(Uri.parse('https://sija-b2b.ronisetiawan.id/api/document/url'),
+  var response = await http.post(Uri.parse(urlInput),
       headers: {
         HttpHeaders.contentTypeHeader:'application/json',
         HttpHeaders.authorizationHeader:'Bearer $token'
@@ -291,6 +292,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                   borderRadius: BorderRadius.circular(15)),
                               margin: const EdgeInsets.only(bottom: 20),
                               child: InkWell(
+                                customBorder: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(15)),
                                 onTap: (() {
                                   if (activity[index]['status'] == "SUCCESS") {
                                     Navigator.push(context,

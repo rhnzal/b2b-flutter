@@ -6,6 +6,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:projectb2b/endpoints.dart';
 import 'package:projectb2b/screen/login.dart';
 import 'package:http/http.dart' as http;
 import 'package:rounded_loading_button/rounded_loading_button.dart';
@@ -32,8 +33,7 @@ class _RegisterState extends State<Register> {
   void signup(RoundedLoadingButtonController controller) async{
     if (formKey.currentState!.validate()) {
       var response = await http.post(
-          Uri.parse(
-              "https://sija-b2b.ronisetiawan.id/api/users/register"),
+          Uri.parse(urlRegister),
           headers: {
             HttpHeaders.contentTypeHeader: 'application/json'
           },

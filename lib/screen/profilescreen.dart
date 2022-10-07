@@ -34,17 +34,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Future<void> initpreference() async {
     prefs = await SharedPreferences.getInstance();
     displayName = prefs.getString('name');
-    getActivity();
-    setState(() {});
-  }
-
-  Future<void> getActivity() async {
-    var token = prefs.getString('token');
-    final response = await http.get(
-        Uri.parse("https://sija-b2b.ronisetiawan.id/api/document"),
-        headers: {HttpHeaders.authorizationHeader: 'Bearer $token'});
-    // print(response.body);
-    activity = json.decode(response.body)["data"];
     setState(() {});
   }
 

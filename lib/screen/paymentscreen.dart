@@ -4,6 +4,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:projectb2b/endpoints.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
@@ -39,7 +40,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
 
   Future<void> getProduct() async{
     var token = prefs.getString('token');
-    var response = await http.get(Uri.parse('https://sija-b2b.ronisetiawan.id/api/product'),
+    var response = await http.get(Uri.parse(urlProduct),
     headers: {
       HttpHeaders.authorizationHeader: 'Bearer $token'
     }
@@ -108,22 +109,25 @@ class _PaymentScreenState extends State<PaymentScreen> {
             itemBuilder: ((context, index) {
               return Container(
                 padding: const EdgeInsets.all(5),
-                child: InkWell(
-                  onTap: (){
-                    setState(() {
-                      selectedIndex = index;
-                      selected = true;
-                    });
-                  },
-                  child: Card(
-                    elevation: 5,
-                    shape:(selectedIndex == index)? 
-                    RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
-                        side: const BorderSide(color:  Color.fromARGB(255, 23, 22, 29), width: 2)
-                        )
-                      : RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12)),
+                child: Card(
+                  elevation: (selectedIndex == index)? 0 : 5,
+                  shape:(selectedIndex == index)?
+                  RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                      side: const BorderSide(color:  Color.fromARGB(255, 23, 22, 29), width: 2)
+                      )
+                    : RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12)),
+                  child: InkWell(
+                    customBorder: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12)
+                    ),
+                    onTap: (){
+                      setState(() {
+                        selectedIndex = index;
+                        selected = true;
+                      });
+                    },
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -152,7 +156,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                         Padding(
                           padding: const EdgeInsets.only(left: 10),
                           child: Text(
-                            NumberFormat.simpleCurrency(locale:'in').format(grid[index]['price']),
+                            NumberFormat.simpleCurrency(locale:'in', decimalDigits: 0).format(grid[index]['price']),
                             style: const TextStyle(
                                 fontFamily: 'Inter',
                                 fontWeight: FontWeight.w600,
@@ -173,18 +177,57 @@ class _PaymentScreenState extends State<PaymentScreen> {
           style: ElevatedButton.styleFrom(
               primary: const Color.fromARGB(255, 23, 22, 29), shape: const StadiumBorder()),
           onPressed: selected ? () async {
-              var token = prefs.getString('token');
-              var response = await http.post(Uri.parse('https://sija-b2b.ronisetiawan.id/api/transaction/buy'),
-              headers: {
-                HttpHeaders.contentTypeHeader: 'application/json',
-                HttpHeaders.authorizationHeader: 'Bearer $token'
-              },
-              body: json.encode({
-                'product' : grid[selectedIndex]['id']
-              })
-              );
-              // print(response.body);
-              // print(grid[selectedIndex]['id']);
+            showDialog(context: context, builder: ((context) => AlertDialog(
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10)),
+              backgroundColor:const Color.fromARGB(255, 224, 232, 235),
+              title: const Text('Confirmation'),
+              titleTextStyle: const TextStyle(
+                  color: Color.fromARGB(255, 23, 22, 29),
+                  fontFamily: 'Inter',
+                  fontWeight: FontWeight.w600),
+              content: const Text('Are You Sure ?'),
+              contentTextStyle: const TextStyle(
+                  color: Color.fromARGB(255, 23, 22, 29)),
+              actions: [
+                  TextButton(
+                      style: ButtonStyle(
+                          overlayColor: MaterialStateProperty.all(Colors.transparent),
+                          minimumSize: MaterialStateProperty.all(Size.zero),
+                          tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                          padding: MaterialStateProperty.all(const EdgeInsets.fromLTRB(0, 0, 10, 10))),
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      child: const Text('No',
+                          style: TextStyle(
+                              color: Color.fromARGB(255, 23, 22, 29)))),
+                  TextButton(
+                      style: ButtonStyle(
+                          overlayColor: MaterialStateProperty.all(Colors.transparent),
+                          minimumSize: MaterialStateProperty.all(Size.zero),
+                          tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                          padding: MaterialStateProperty.all(const EdgeInsets.fromLTRB(0, 0, 10, 10))),
+                      onPressed: () async {
+                        var token = prefs.getString('token');
+                        var response = await http.post(Uri.parse(urlBuyProduct),
+                        headers: {
+                          HttpHeaders.contentTypeHeader: 'application/json',
+                          HttpHeaders.authorizationHeader: 'Bearer $token'
+                        },
+                        body: json.encode(grid[selectedIndex])
+                        );
+                        print(response.body);
+                        print(grid[selectedIndex]['id']);
+
+                      },
+                      child: const Text('Yes',
+                          style: TextStyle(color: Color.fromARGB(255, 23, 22, 29)
+                          )
+                        )
+                      )
+                ]
+            )));
           }:null,
           child: const SizedBox(
               width: 100,

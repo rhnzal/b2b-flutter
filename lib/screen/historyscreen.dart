@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:intl/intl.dart';
+import 'package:projectb2b/endpoints.dart';
 import 'package:projectb2b/screen/previewscreen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
@@ -42,7 +43,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
   Future<void> getActivity() async {
     var token = prefs.getString('token');
     final response = await http.get(
-        Uri.parse("https://sija-b2b.ronisetiawan.id/api/document"),
+        Uri.parse(urlDocument),
         headers: {HttpHeaders.authorizationHeader: 'Bearer $token'});
     // print(response.body);
     activity = json.decode(response.body)["data"];
@@ -125,6 +126,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
                 axisDirection: AxisDirection.down,
                 color: Colors.white,
                 child: ListView.builder(
+                    physics: const BouncingScrollPhysics(),
                     itemCount: activity.length,
                     itemBuilder: (context, index) => Padding(
                           padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
@@ -134,6 +136,8 @@ class _HistoryScreenState extends State<HistoryScreen> {
                                   borderRadius: BorderRadius.circular(15)),
                               margin: const EdgeInsets.only(bottom: 20),
                               child: InkWell(
+                                customBorder: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(15)),
                                 onTap: (() {
                                   if (activity[index]['status'] == "SUCCESS") {
                                     Navigator.push(context,

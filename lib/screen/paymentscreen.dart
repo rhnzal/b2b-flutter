@@ -7,6 +7,7 @@ import 'package:intl/intl.dart';
 import 'package:projectb2b/endpoints.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
+import 'package:webview_flutter/webview_flutter.dart';
 
 class PaymentScreen extends StatefulWidget {
   const PaymentScreen({Key? key}) : super(key: key);
@@ -22,6 +23,8 @@ class _PaymentScreenState extends State<PaymentScreen> {
   late SharedPreferences prefs;
   String? displayName = '';
   var grid = [];
+  String url = '';
+  bool urlLoad = true;
 
   @override
   void initState() {
@@ -50,6 +53,47 @@ class _PaymentScreenState extends State<PaymentScreen> {
     setState(() {
       isLoad = false;
     });
+  }
+
+  void payment() async{
+    showDialog(
+      barrierDismissible: false,
+          context: context, 
+          builder: ((context) {
+            return Center(
+              child: Container(
+                decoration: const BoxDecoration(
+                    color: const Color.fromARGB(255, 224, 232, 235),
+                    borderRadius: BorderRadius.all(Radius.circular(10))
+                  ),
+                padding: EdgeInsets.all(20),
+                child: CircularProgressIndicator(
+                  color: Color.fromARGB(255, 23, 22, 29),
+                )),
+            );
+        }));  
+    var token = prefs.getString('token');
+    var response = await http.post(Uri.parse(urlBuyProduct),
+    headers: {
+      HttpHeaders.contentTypeHeader: 'application/json',
+      HttpHeaders.authorizationHeader: 'Bearer $token'
+    },
+    body: json.encode(grid[selectedIndex])
+    );
+    print(response.body);
+    print(grid[selectedIndex]['id']);
+    Navigator.pop(context);
+    Navigator.push(context, MaterialPageRoute(builder: ((context) {
+      return Scaffold(
+        appBar: AppBar(
+          backgroundColor: const Color.fromARGB(255, 23, 22, 29)
+        ),
+        body: WebView(
+          javascriptMode: JavascriptMode.unrestricted,
+          initialUrl: 'https://checkout-staging.xendit.co/web/6322943cd0a17dc369f34252',
+        ),
+      );
+    })));
   }
 
   @override
@@ -209,17 +253,8 @@ class _PaymentScreenState extends State<PaymentScreen> {
                           tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                           padding: MaterialStateProperty.all(const EdgeInsets.fromLTRB(0, 0, 10, 10))),
                       onPressed: () async {
-                        var token = prefs.getString('token');
-                        var response = await http.post(Uri.parse(urlBuyProduct),
-                        headers: {
-                          HttpHeaders.contentTypeHeader: 'application/json',
-                          HttpHeaders.authorizationHeader: 'Bearer $token'
-                        },
-                        body: json.encode(grid[selectedIndex])
-                        );
-                        print(response.body);
-                        print(grid[selectedIndex]['id']);
-
+                        Navigator.pop(context);
+                        payment();
                       },
                       child: const Text('Yes',
                           style: TextStyle(color: Color.fromARGB(255, 23, 22, 29)

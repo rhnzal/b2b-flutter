@@ -1,7 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:intl/intl.dart';
 import 'package:projectb2b/endpoints.dart';
 import 'package:projectb2b/screen/previewscreen.dart';
@@ -28,7 +26,6 @@ class _HistoryScreenState extends State<HistoryScreen> {
   String? displayName = '';
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     initpreference();
   }
@@ -48,9 +45,11 @@ class _HistoryScreenState extends State<HistoryScreen> {
     // print(response.body);
     activity = json.decode(response.body)["data"];
     // print(activity);
-    setState(() {
-      isLoad = false;
-    });
+    if(mounted){
+      setState(() {
+        isLoad = false;
+      });
+    }
   }
 
   trimUrl(String trim){
@@ -72,7 +71,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
           // ignore: prefer_const_constructors
           CircleAvatar(
             backgroundColor: Colors.white,
-            backgroundImage: AssetImage('images/user.png'),
+            backgroundImage: const AssetImage('images/user.png'),
             radius: 20,
           ),
           Padding(
@@ -156,9 +155,9 @@ class _HistoryScreenState extends State<HistoryScreen> {
                                               shape: RoundedRectangleBorder(
                                                   borderRadius:BorderRadius.circular(10)),
                                               backgroundColor: const Color.fromARGB(255, 224, 232, 235),
-                                              title: activity[index]['status'] =="LOADING" ? Text('Your request is in queue')
+                                              title: activity[index]['status'] =="LOADING" ? const Text('Your request is in queue')
                                                   : const Text('URL Invalid'),
-                                              content: activity[index]['status'] == "LOADING" ? Text('Please Wait')
+                                              content: activity[index]['status'] == "LOADING" ? const Text('Please Wait')
                                                   : const Text('Try using another URL'),
                                               actions: [
                                                 TextButton(
@@ -277,6 +276,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
           );
 
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       backgroundColor: const Color.fromARGB(255, 224, 232, 235),
       body: Column(children: [
         welcomeUser,

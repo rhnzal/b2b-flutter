@@ -31,7 +31,6 @@ class _HomeScreenState extends State<HomeScreen> {
   // String? username = '';
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     initpreference();
   }
@@ -50,9 +49,11 @@ class _HomeScreenState extends State<HomeScreen> {
     // print(response.body);
     activity = json.decode(response.body)["data"];
     // print(activity);
-    setState(() {
-      isLoad = false;
-    });
+    if(mounted){
+      setState(() {
+        isLoad = false;
+      });
+    }
   }
 
   trimUrl(String trim){
@@ -78,16 +79,17 @@ class _HomeScreenState extends State<HomeScreen> {
           return Center(
             child: Container(
               decoration: const BoxDecoration(
-                  color: const Color.fromARGB(255, 224, 232, 235),
+                  color: Color.fromARGB(255, 224, 232, 235),
                   borderRadius: BorderRadius.all(Radius.circular(10))
                 ),
-              padding: EdgeInsets.all(20),
-              child: CircularProgressIndicator(
+              padding: const EdgeInsets.all(20),
+              child: const CircularProgressIndicator(
                 color: Color.fromARGB(255, 23, 22, 29),
               )),
           );
       }));          
   var token = prefs.getString('token');
+  // ignore: unused_local_variable
   var response = await http.post(Uri.parse(urlInput),
       headers: {
         HttpHeaders.contentTypeHeader:'application/json',
@@ -392,7 +394,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
     return Builder(
       builder: (context) {
-         SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+         SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
           statusBarColor: Colors.transparent,
           statusBarIconBrightness: Brightness.dark
         ));

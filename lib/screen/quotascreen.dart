@@ -118,18 +118,18 @@ class _QuotaScreenState extends State<QuotaScreen> {
         child: Column(
           children: [
             Row(
-              children: [
+              children: const [
                 Text('Your Subscription : '),
                 //nama paket
                 Text('TEST',
-                  style: const TextStyle(
+                  style: TextStyle(
                             fontFamily: 'Inter',
                             fontWeight: FontWeight.w700,
                             fontSize: 18),
                 )
               ],
             ),
-            Divider(
+            const Divider(
               thickness: 2,
               color: Color.fromARGB(255, 224, 232, 235),
             ),
@@ -139,11 +139,11 @@ class _QuotaScreenState extends State<QuotaScreen> {
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
+                    children: const [
                       Text(
                           'Remaining Quota',
                         // DateFormat.yMMMd().format(DateTime.parse(activity[index]["createdAt"])),
-                          style: const TextStyle(
+                          style: TextStyle(
                               fontFamily: 'Inter',
                               fontWeight: FontWeight.w400,
                               fontSize: 10)),
@@ -153,7 +153,7 @@ class _QuotaScreenState extends State<QuotaScreen> {
                       Text(
                         // getUrl().toString(),
                         'Quota',
-                        style: const TextStyle(
+                        style: TextStyle(
                             fontFamily: 'Inter',
                             fontWeight: FontWeight.w700,
                             fontSize: 18),
@@ -171,9 +171,9 @@ class _QuotaScreenState extends State<QuotaScreen> {
                         shape: const StadiumBorder(),
                         elevation: 10),
                   onPressed: (){
-                    Navigator.push(context, MaterialPageRoute(builder: ((context) => PaymentScreen())));
+                    Navigator.push(context, MaterialPageRoute(builder: ((context) => const PaymentScreen())));
                   }, 
-                  child: Text('Add', 
+                  child: const Text('Add', 
                   style: TextStyle(
                             fontFamily: 'Inter',
                             fontWeight: FontWeight.w500,
@@ -202,11 +202,11 @@ Widget transactionList = Padding(
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
+                children: const [
                   Text(
                     // getUrl().toString(),
                     'Judul',
-                    style: const TextStyle(
+                    style: TextStyle(
                         fontFamily: 'Inter',
                         fontWeight: FontWeight.w700,
                         fontSize: 18),
@@ -216,7 +216,7 @@ Widget transactionList = Padding(
                   Text(
                       'Tanggal',
                     // DateFormat.yMMMd().format(DateTime.parse(activity[index]["createdAt"])),
-                      style: const TextStyle(
+                      style: TextStyle(
                           fontFamily: 'Inter',
                           fontWeight: FontWeight.w400,
                           fontSize: 10)),
@@ -224,10 +224,10 @@ Widget transactionList = Padding(
                 ],
               ),
             ),
-            Text(
+            const Text(
                     // getUrl().toString(),
                     'Price',
-                    style: const TextStyle(
+                    style: TextStyle(
                         fontFamily: 'Inter',
                         fontWeight: FontWeight.w700,
                         fontSize: 18),
@@ -363,7 +363,8 @@ Widget transactionList = Padding(
   //   );
 
     return Scaffold(
-      backgroundColor: Color.fromARGB(255, 224, 232, 235),
+      resizeToAvoidBottomInset: false,
+      backgroundColor: const Color.fromARGB(255, 224, 232, 235),
       body: Column(
         children: [welcomeUser,favoriteList, wishlist, transactionList],
       ),

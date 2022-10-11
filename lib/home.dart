@@ -1,11 +1,7 @@
-// ignore_for_file: prefer_const_constructors
-
-
 import 'package:flutter/material.dart';
 import 'package:projectb2b/screen/quotascreen.dart';
 import 'package:projectb2b/screen/historyscreen.dart';
 import 'package:projectb2b/screen/homescreen.dart';
-import 'package:projectb2b/screen/paymentscreen.dart';
 import 'package:projectb2b/screen/profilescreen.dart';
 
 class Home extends StatefulWidget {
@@ -16,7 +12,7 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  final screen = [
+  final screen = const [
     HomeScreen(),
     HistoryScreen(),
     QuotaScreen(),
@@ -29,7 +25,7 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      backgroundColor: Color.fromARGB(255, 224, 232, 235),
+      backgroundColor: const Color.fromARGB(255, 224, 232, 235),
       body: screen[currentIndex], 
       bottomNavigationBar: Theme(
         data: ThemeData(
@@ -42,19 +38,19 @@ class _HomeState extends State<Home> {
             showSelectedLabels: false,
             showUnselectedLabels: false,
             iconSize: 30,
-            selectedItemColor: Color.fromARGB(255, 26, 25, 32),
+            selectedItemColor: const Color.fromARGB(255, 26, 25, 32),
             unselectedItemColor: Colors.white,
-            backgroundColor: Color.fromARGB(255, 23, 22, 29),
+            backgroundColor: const Color.fromARGB(255, 23, 22, 29),
             onTap: (index) => setState(() => currentIndex = index),
             items: [
               BottomNavigationBarItem(
-                  icon: Icon(Icons.home_outlined),
+                  icon: const Icon(Icons.home_outlined),
                   label: 'Home',
                   activeIcon: Container(
-                    decoration: BoxDecoration(
+                    decoration: const BoxDecoration(
                         color: Color.fromARGB(255, 224, 232, 235),
                         shape: BoxShape.circle),
-                    child: Padding(
+                    child: const Padding(
                       padding: EdgeInsets.all(8),
                       child: Icon(
                         Icons.home,
@@ -63,13 +59,13 @@ class _HomeState extends State<Home> {
                     ),
                   )),
               BottomNavigationBarItem(
-                  icon: Icon(Icons.history_outlined),
+                  icon: const Icon(Icons.history_outlined),
                   label: 'History',
                   activeIcon: Container(
-                    decoration: BoxDecoration(
+                    decoration: const BoxDecoration(
                         color: Color.fromARGB(255, 224, 232, 235),
                         shape: BoxShape.circle),
-                    child: Padding(
+                    child: const Padding(
                       padding: EdgeInsets.all(8),
                       child: Icon(
                         Icons.history,
@@ -78,13 +74,13 @@ class _HomeState extends State<Home> {
                     ),
                   )),
               BottomNavigationBarItem(
-                  icon: Icon(Icons.payments_outlined),
+                  icon: const Icon(Icons.payments_outlined),
                   label: 'Payment',
                   activeIcon: Container(
-                    decoration: BoxDecoration(
+                    decoration: const BoxDecoration(
                         color: Color.fromARGB(255, 224, 232, 235),
                         shape: BoxShape.circle),
-                    child: Padding(
+                    child: const Padding(
                       padding: EdgeInsets.all(8),
                       child: Icon(
                         Icons.payments_outlined,
@@ -93,13 +89,13 @@ class _HomeState extends State<Home> {
                     ),
                   )),
               BottomNavigationBarItem(
-                  icon: Icon(Icons.person_outline),
+                  icon: const Icon(Icons.person_outline),
                   label: 'Profile',
                   activeIcon: Container(
-                    decoration: BoxDecoration(
+                    decoration: const BoxDecoration(
                         color: Color.fromARGB(255, 224, 232, 235),
                         shape: BoxShape.circle),
-                    child: Padding(
+                    child: const Padding(
                       padding: EdgeInsets.all(8),
                       child: Icon(
                         Icons.person,
@@ -112,12 +108,3 @@ class _HomeState extends State<Home> {
     );
   }
 }
-        // child: ElevatedButton(onPressed: () {  
-        //   prefs.remove('token');
-        //   Navigator.pushReplacement(context, MaterialPageRoute(builder: (context){
-        //     return Login();
-        //   }));
-        // }, 
-        // child: Text("tes"),
-
-        // ),

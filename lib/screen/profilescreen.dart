@@ -570,6 +570,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
 
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       backgroundColor: Color.fromARGB(255, 224, 232, 235),
       body: ScrollConfiguration(
         behavior: ScrollBehavior(),

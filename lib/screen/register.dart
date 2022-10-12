@@ -1,5 +1,3 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, body_might_complete_normally_nullable, unrelated_type_equality_checks, empty_statements
-
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
@@ -42,26 +40,26 @@ class _RegisterState extends State<Register> {
             "email": regemail,
             "password": regpas,
           }));
-          print(response.body);
-      print(response.body);
+      //     print(response.body);
+      // print(response.body);
       isSuccess = json.decode(response.body)['isSuccess'];
       if(isSuccess){
         controller.success();
-        Timer(Duration(seconds: 1), (){
+        Timer(const Duration(seconds: 1), (){
         showDialog(
               context: context,
               builder: ((context) => AlertDialog(
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10)),
-                    backgroundColor: Color.fromARGB(255, 23, 22, 29),
-                    title: Text('Registration Success!'),
-                    titleTextStyle: TextStyle(
+                    backgroundColor: const Color.fromARGB(255, 23, 22, 29),
+                    title: const Text('Registration Success!'),
+                    titleTextStyle: const TextStyle(
                         color: Colors.white,
                         fontFamily: 'Inter',
                         fontWeight: FontWeight.w600),
-                    content: Text(
+                    content: const Text(
                         'Check your email to verify your account'),
-                    contentTextStyle: TextStyle(fontFamily: 'Inter',color: Colors.white),
+                    contentTextStyle: const TextStyle(fontFamily: 'Inter',color: Colors.white),
                     actions: [
                       TextButton(
                           style: ButtonStyle(
@@ -72,14 +70,14 @@ class _RegisterState extends State<Register> {
                               tapTargetSize:
                                   MaterialTapTargetSize.shrinkWrap,
                               padding: MaterialStateProperty.all(
-                                  EdgeInsets.fromLTRB(0, 0, 10, 10))),
+                                  const EdgeInsets.fromLTRB(0, 0, 10, 10))),
                           onPressed: () {
                             Navigator.pushAndRemoveUntil(context, 
                             MaterialPageRoute(builder: (context) {
-                              return Login();
+                              return const Login();
                             }), (route) => false);
                           },
-                          child: Text(
+                          child: const Text(
                             'OK',
                             style: TextStyle(color: Colors.white),
                           )),
@@ -93,14 +91,14 @@ class _RegisterState extends State<Register> {
         showDialog(context: context, builder: ((context) => AlertDialog(
           shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10)),
-                  backgroundColor: Color.fromARGB(255, 23, 22, 29),
-          title: Text('Registration failed'),
-          titleTextStyle: TextStyle(
+                  backgroundColor: const Color.fromARGB(255, 23, 22, 29),
+          title: const Text('Registration failed'),
+          titleTextStyle: const TextStyle(
                       color: Colors.white,
                       fontFamily: 'Inter',
                       fontWeight: FontWeight.w600),
           content: Text('$error'),
-          contentTextStyle: TextStyle(fontFamily: 'Inter',color: Colors.white),
+          contentTextStyle:const TextStyle(fontFamily: 'Inter',color: Colors.white),
           actions: [
                     TextButton(
                         style: ButtonStyle(
@@ -111,11 +109,11 @@ class _RegisterState extends State<Register> {
                             tapTargetSize:
                                 MaterialTapTargetSize.shrinkWrap,
                             padding: MaterialStateProperty.all(
-                                EdgeInsets.fromLTRB(0, 0, 10, 10))),
+                                const EdgeInsets.fromLTRB(0, 0, 10, 10))),
                         onPressed: () {
                           Navigator.pop(context);
                         },
-                        child: Text(
+                        child: const Text(
                           'OK',
                           style: TextStyle(color: Colors.white),
                         ))
@@ -212,10 +210,10 @@ class _RegisterState extends State<Register> {
   @override
   Widget build(BuildContext context) {
     Widget welcomeRegister = Padding(
-      padding: EdgeInsets.fromLTRB(24, 24, 24, 48),
+      padding: const EdgeInsets.fromLTRB(24, 24, 24, 48),
       child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
+      children: const [
         Text('Create New Account,',
             style: TextStyle(
                 fontFamily: 'Inter',
@@ -232,20 +230,20 @@ class _RegisterState extends State<Register> {
     ));
 
     Widget inputName = Container(
-      padding: EdgeInsets.fromLTRB(20, 0, 20, 10),
+      padding: const EdgeInsets.fromLTRB(20, 0, 20, 10),
       child: TextFormField(
         cursorColor: Colors.white,
-        style: TextStyle(color: Colors.white),
+        style: const TextStyle(color: Colors.white),
         decoration: InputDecoration(
-          prefixIcon: Icon(
+          prefixIcon: const Icon(
             Icons.person_outline,
             color: Colors.white,
           ),
           filled: true,
-          fillColor: Color.fromARGB(31, 217, 217, 217),
-          contentPadding: EdgeInsets.fromLTRB(30, 10, 20, 10),
+          fillColor: const Color.fromARGB(31, 217, 217, 217),
+          contentPadding: const EdgeInsets.fromLTRB(30, 10, 20, 10),
           hintText: 'Fullname',
-          hintStyle: TextStyle(
+          hintStyle: const TextStyle(
               fontFamily: 'Inter',
               fontWeight: FontWeight.w200,
               color: Colors.white,
@@ -267,26 +265,27 @@ class _RegisterState extends State<Register> {
             _buttonController.reset();
             return "Please enter your name";
           }
+          return null;
         },
       ),
     );
 
     Widget regEmail = Container(
-      padding: EdgeInsets.fromLTRB(20, 0, 20, 10),
+      padding: const EdgeInsets.fromLTRB(20, 0, 20, 10),
       child: TextFormField(
         keyboardType: TextInputType.emailAddress,
         cursorColor: Colors.white,
-        style: TextStyle(color: Colors.white),
+        style: const TextStyle(color: Colors.white),
         decoration: InputDecoration(
-          prefixIcon: Icon(
+          prefixIcon: const Icon(
             Icons.alternate_email,
             color: Colors.white,
           ),
           filled: true,
-          fillColor: Color.fromARGB(31, 217, 217, 217),
-          contentPadding: EdgeInsets.fromLTRB(30, 10, 20, 10),
+          fillColor: const Color.fromARGB(31, 217, 217, 217),
+          contentPadding: const EdgeInsets.fromLTRB(30, 10, 20, 10),
           hintText: 'Email',
-          hintStyle: TextStyle(
+          hintStyle: const TextStyle(
               fontFamily: 'Inter',
               fontWeight: FontWeight.w200,
               color: Colors.white,
@@ -311,27 +310,28 @@ class _RegisterState extends State<Register> {
             _buttonController.reset();
             return "Please enter a valid email";
           }
+          return null;
         },
       ),
     );
 
     Widget regPassword = Container(
-      padding: EdgeInsets.fromLTRB(20, 0, 20, 10),
+      padding: const EdgeInsets.fromLTRB(20, 0, 20, 10),
       child: TextFormField(
         cursorColor: Colors.white,
         controller: _pasreg,
         obscureText: _regpass,
-        style: TextStyle(color: Colors.white),
+        style: const TextStyle(color: Colors.white),
         decoration: InputDecoration(
-            prefixIcon: Icon(
+            prefixIcon: const Icon(
               Icons.key,
               color: Colors.white,
             ),
             filled: true,
-            fillColor: Color.fromARGB(31, 217, 217, 217),
-            contentPadding: EdgeInsets.fromLTRB(30, 10, 20, 10),
+            fillColor: const Color.fromARGB(31, 217, 217, 217),
+            contentPadding: const EdgeInsets.fromLTRB(30, 10, 20, 10),
             hintText: 'Password',
-            hintStyle: TextStyle(
+            hintStyle: const TextStyle(
                 fontFamily: 'Inter',
                 fontWeight: FontWeight.w200,
                 color: Colors.white,
@@ -371,27 +371,28 @@ class _RegisterState extends State<Register> {
             _buttonController.reset();
             return "Password must be 8 character or more";
           }
+          return null;
         },
       ),
     );
 
     Widget confirmPassword = Container(
-      padding: EdgeInsets.fromLTRB(20, 0, 20, 10),
+      padding: const EdgeInsets.fromLTRB(20, 0, 20, 10),
       child: TextFormField(
         controller: _pascon,
         cursorColor: Colors.white,
         obscureText: _conpass,
-        style: TextStyle(color: Colors.white),
+        style: const TextStyle(color: Colors.white),
         decoration: InputDecoration(
-            prefixIcon: Icon(
+            prefixIcon: const Icon(
               Icons.lock,
               color: Colors.white,
             ),
             filled: true,
-            fillColor: Color.fromARGB(31, 217, 217, 217),
-            contentPadding: EdgeInsets.fromLTRB(30, 10, 20, 10),
+            fillColor: const Color.fromARGB(31, 217, 217, 217),
+            contentPadding: const EdgeInsets.fromLTRB(30, 10, 20, 10),
             hintText: 'Confirm Password',
-            hintStyle: TextStyle(
+            hintStyle: const TextStyle(
                 fontFamily: 'Inter',
                 fontWeight: FontWeight.w200,
                 color: Colors.white,
@@ -433,17 +434,17 @@ class _RegisterState extends State<Register> {
     );
 
     Widget regButton = Container(
-        margin: EdgeInsets.only(top: 40),
+        margin: const EdgeInsets.only(top: 40),
         child: RoundedLoadingButton(
           height: 35,
           width: 150,
           loaderSize: 20,
-          color: Color.fromARGB(255, 217, 217, 217),
-          successColor: Color.fromARGB(255, 217, 217, 217),
-          valueColor: Color.fromARGB(255, 27, 26, 32),
+          color: const Color.fromARGB(255, 217, 217, 217),
+          successColor: const Color.fromARGB(255, 217, 217, 217),
+          valueColor: const Color.fromARGB(255, 27, 26, 32),
           controller: _buttonController, 
           onPressed: () => signup(_buttonController), 
-          child: Padding(
+          child: const Padding(
               padding: EdgeInsets.fromLTRB(40, 0, 40, 0),
               child: Text('Sign Up',
                   style: TextStyle(
@@ -455,11 +456,11 @@ class _RegisterState extends State<Register> {
           ));
 
     Widget loginButton = Container(
-      margin: EdgeInsets.fromLTRB(0, 20, 0, 20),
+      margin: const EdgeInsets.fromLTRB(0, 20, 0, 20),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text(
+          const Text(
             'Already Have an Account ? ',
             style: TextStyle(
                 fontFamily: 'Inter',
@@ -481,7 +482,7 @@ class _RegisterState extends State<Register> {
             onPressed: () {
               Navigator.pop(context);
             },
-            child: Text(
+            child: const Text(
               'Sign In',
               style: TextStyle(
                   fontFamily: 'Inter',
@@ -495,7 +496,7 @@ class _RegisterState extends State<Register> {
     );
     return Builder(
       builder: (context) {
-         SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+         SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
           statusBarColor: Colors.transparent,
           statusBarIconBrightness: Brightness.light
         ));
@@ -509,7 +510,7 @@ class _RegisterState extends State<Register> {
           body: Form(
             key: formKey,
             child: ScrollConfiguration(
-              behavior: ScrollBehavior(),
+              behavior: const ScrollBehavior(),
               child: GlowingOverscrollIndicator(
                 axisDirection: AxisDirection.down,
                 color: Colors.white,

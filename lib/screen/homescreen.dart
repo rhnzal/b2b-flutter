@@ -314,9 +314,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                               shape: RoundedRectangleBorder(
                                                   borderRadius:BorderRadius.circular(10)),
                                               backgroundColor: const Color.fromARGB(255, 224, 232, 235),
-                                              title: activity[index]['status'] =="LOADING" ? Text('Your request is in queue')
+                                              title: activity[index]['status'] =="LOADING" ? const Text('Your request is in queue')
                                                   : const Text('URL Invalid'),
-                                              content: activity[index]['status'] == "LOADING" ? Text('Please Wait')
+                                              content: activity[index]['status'] == "LOADING" ? const Text('Please Wait')
                                                   : const Text('Try using another URL'),
                                               actions: [
                                                 TextButton(

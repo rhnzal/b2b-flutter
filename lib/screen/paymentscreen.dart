@@ -48,7 +48,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
       HttpHeaders.authorizationHeader: 'Bearer $token'
     }
     );
-    print(response.body);
+    // print(response.body);
     grid = json.decode(response.body)['data'];
     setState(() {
       isLoad = false;
@@ -63,32 +63,32 @@ class _PaymentScreenState extends State<PaymentScreen> {
             return Center(
               child: Container(
                 decoration: const BoxDecoration(
-                    color: const Color.fromARGB(255, 224, 232, 235),
+                    color: Color.fromARGB(255, 224, 232, 235),
                     borderRadius: BorderRadius.all(Radius.circular(10))
                   ),
-                padding: EdgeInsets.all(20),
-                child: CircularProgressIndicator(
+                padding: const EdgeInsets.all(20),
+                child: const CircularProgressIndicator(
                   color: Color.fromARGB(255, 23, 22, 29),
                 )),
             );
         }));  
     var token = prefs.getString('token');
-    var response = await http.post(Uri.parse(urlBuyProduct),
+    await http.post(Uri.parse(urlBuyProduct),
     headers: {
       HttpHeaders.contentTypeHeader: 'application/json',
       HttpHeaders.authorizationHeader: 'Bearer $token'
     },
     body: json.encode(grid[selectedIndex])
     );
-    print(response.body);
-    print(grid[selectedIndex]['id']);
+    // print(response.body);
+    // print(grid[selectedIndex]['id']);
     Navigator.pop(context);
     Navigator.push(context, MaterialPageRoute(builder: ((context) {
       return Scaffold(
         appBar: AppBar(
           backgroundColor: const Color.fromARGB(255, 23, 22, 29)
         ),
-        body: WebView(
+        body: const WebView(
           javascriptMode: JavascriptMode.unrestricted,
           initialUrl: 'https://checkout-staging.xendit.co/web/6322943cd0a17dc369f34252',
         ),

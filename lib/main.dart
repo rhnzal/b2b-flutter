@@ -36,7 +36,7 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: widget.token != null ? Home() : Login(),
+      home: widget.token != null ? const Home() : const Login(),
     );
   }
 }

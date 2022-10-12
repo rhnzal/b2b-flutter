@@ -1,4 +1,3 @@
-// ignore_for_file: prefer_const_literals_to_create_immutables, duplicate_ignore, prefer_const_constructors, prefer_final_fields, body_might_complete_normally_nullable
 import 'dart:async';
 import 'dart:io';
 import 'dart:convert';
@@ -32,7 +31,6 @@ class _LoginState extends State<Login> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     initpreference();
   }
@@ -53,7 +51,7 @@ class _LoginState extends State<Login> {
                       },
                       body:
                           json.encode({"email": email, "password": password}));
-                          print(response.body);
+                          // print(response.body);
                   isSuccess = json.decode(response.body)['isSuccess'];
                   if (isSuccess) {
                     // var username = json.decode(response.body)['data']['fullName'];
@@ -64,10 +62,10 @@ class _LoginState extends State<Login> {
                     prefs.setString('name', displayName);
                     prefs.setString('token', token);
                     controller.success();
-                    Timer(Duration(seconds: 1), (){
+                    Timer(const Duration(seconds: 1), (){
                     Navigator.pushReplacement(context,
                         MaterialPageRoute(builder: ((context) {
-                      return Home();
+                      return const Home();
                     })));
                     });
                     // ignore: use_build_context_synchronously
@@ -75,21 +73,21 @@ class _LoginState extends State<Login> {
                   } else {
                     _buttonController.reset();
                     var error = json.decode(response.body)['message'];
-                    print(error);
+                    // print(error);
                     showDialog(
                         
                         context: context,
                         builder: ((context) => AlertDialog(
                               shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(10)),
-                              backgroundColor: Color.fromARGB(255, 23, 22, 29),
-                              title: Text('Error'),
-                              titleTextStyle: TextStyle(
+                              backgroundColor: const Color.fromARGB(255, 23, 22, 29),
+                              title: const Text('Error'),
+                              titleTextStyle: const TextStyle(
                                   color: Colors.white,
                                   fontFamily: 'Inter',
                                   fontWeight: FontWeight.w600),
                               content: Text('$error'),
-                              contentTextStyle: TextStyle(color: Colors.white),
+                              contentTextStyle: const TextStyle(color: Colors.white),
                               actions: [
                                 TextButton(
                                     style: ButtonStyle(
@@ -100,19 +98,19 @@ class _LoginState extends State<Login> {
                                         tapTargetSize:
                                             MaterialTapTargetSize.shrinkWrap,
                                         padding: MaterialStateProperty.all(
-                                            EdgeInsets.fromLTRB(0, 0, 10, 10))),
+                                            const EdgeInsets.fromLTRB(0, 0, 10, 10))),
                                     onPressed: () {
                                       Navigator.pop(context);
                                     },
-                                    child: Text(
+                                    child: const Text(
                                       'OK',
                                       style: TextStyle(color: Colors.white),
                                     )),
                               ],
                             )));
                   }
-                  print(response.body);
-                  print(isSuccess);
+                  // print(response.body);
+                  // print(isSuccess);
 
                   // print(mengege);
                   // print(loginStat);
@@ -128,9 +126,9 @@ class _LoginState extends State<Login> {
     Widget welcomeText = Row(
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
-        Padding(padding: EdgeInsets.fromLTRB(15, 150, 15, 40)),
+        const Padding(padding: EdgeInsets.fromLTRB(15, 150, 15, 40)),
         Column(
-          children: [
+          children: const[
             Text('Welcome,',
                 style: TextStyle(
                     fontFamily: 'Inter',
@@ -149,22 +147,22 @@ class _LoginState extends State<Login> {
     );
 
     Widget inputEmail = Container(
-      padding: EdgeInsets.fromLTRB(20, 0, 20, 10),
+      padding: const EdgeInsets.fromLTRB(20, 0, 20, 10),
       child: TextFormField(
         keyboardType: TextInputType.emailAddress,
         cursorColor: Colors.white,
-        style: TextStyle(color: Colors.white),
+        style: const TextStyle(color: Colors.white),
         decoration: InputDecoration(
           // prefixIcon: Image.asset('icons/email.png',height: 4 ),
-          prefixIcon: Icon(
+          prefixIcon: const Icon(
             Icons.alternate_email,
             color: Colors.white,
           ),
           filled: true,
-          fillColor: Color.fromARGB(31, 217, 217, 217),
-          contentPadding: EdgeInsets.fromLTRB(30, 10, 20, 10),
+          fillColor: const Color.fromARGB(31, 217, 217, 217),
+          contentPadding: const EdgeInsets.fromLTRB(30, 10, 20, 10),
           hintText: 'Email',
-          hintStyle: TextStyle(
+          hintStyle: const TextStyle(
               fontFamily: 'Inter',
               fontWeight: FontWeight.w200,
               color: Colors.white,
@@ -189,27 +187,28 @@ class _LoginState extends State<Login> {
             _buttonController.reset();
             return "Please enter a valid email";
           }
+          return null;
         },
       ),
     );
 
     Widget inputPassword = Container(
-      margin: EdgeInsets.only(top: 10),
-      padding: EdgeInsets.fromLTRB(20, 0, 20, 10),
+      margin: const EdgeInsets.only(top: 10),
+      padding: const EdgeInsets.fromLTRB(20, 0, 20, 10),
       child: TextFormField(
         cursorColor: Colors.white,
-        style: TextStyle(color: Colors.white),
+        style: const TextStyle(color: Colors.white),
         obscureText: _isObscure,
         decoration: InputDecoration(
-            prefixIcon: Icon(
+            prefixIcon: const Icon(
               Icons.key,
               color: Colors.white,
             ),
             filled: true,
-            fillColor: Color.fromARGB(31, 217, 217, 217),
-            contentPadding: EdgeInsets.fromLTRB(30, 10, 0, 0),
+            fillColor: const Color.fromARGB(31, 217, 217, 217),
+            contentPadding: const EdgeInsets.fromLTRB(30, 10, 0, 0),
             hintText: 'Password',
-            hintStyle: TextStyle(
+            hintStyle: const TextStyle(
                 fontFamily: 'Inter',
                 fontWeight: FontWeight.w200,
                 color: Colors.white,
@@ -245,6 +244,7 @@ class _LoginState extends State<Login> {
             _buttonController.reset();
             return "Password must be 8 character or more";
           }
+          return null;
         },
       ),
     );
@@ -267,10 +267,10 @@ class _LoginState extends State<Login> {
             // ),
             onPressed: () {
               Navigator.push(context, MaterialPageRoute(builder: ((context) {
-                return ForgotPassword();
+                return const ForgotPassword();
               })));
             },
-            child: Text(
+            child: const Text(
               'Forgot Your Password ?',
               style: TextStyle(
                   fontFamily: 'Inter',
@@ -368,17 +368,17 @@ class _LoginState extends State<Login> {
     //           )),
 
     Widget loginButton = Container(
-        margin: EdgeInsets.only(top: 40),
+        margin: const EdgeInsets.only(top: 40),
         child: RoundedLoadingButton(
           height: 35,
           width: 150,
           loaderSize: 20,
-          color: Color.fromARGB(255, 217, 217, 217),
-          successColor: Color.fromARGB(255, 217, 217, 217),
-          valueColor: Color.fromARGB(255, 27, 26, 32),
+          color: const Color.fromARGB(255, 217, 217, 217),
+          successColor: const Color.fromARGB(255, 217, 217, 217),
+          valueColor: const Color.fromARGB(255, 27, 26, 32),
           controller: _buttonController,
           onPressed: () => login(_buttonController),
-          child: Padding(
+          child: const Padding(
               padding: EdgeInsets.fromLTRB(40, 0, 40, 0),
               child: Text('Sign In',
                   style: TextStyle(
@@ -390,11 +390,11 @@ class _LoginState extends State<Login> {
         ));
 
     Widget registerButton = Container(
-      margin: EdgeInsets.fromLTRB(0, 60, 0, 20),
+      margin: const EdgeInsets.fromLTRB(0, 60, 0, 20),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text(
+          const Text(
             'Don\'t Have an Account ? ',
             style: TextStyle(
                 fontFamily: 'Inter',
@@ -417,10 +417,10 @@ class _LoginState extends State<Login> {
               Navigator.push(context,
                   MaterialPageRoute(builder: (context) {
                 //api/users/login
-                return Register();
+                return const Register();
               }));
             },
-            child: Text(
+            child: const Text(
               'Sign Up',
               style: TextStyle(
                   fontFamily: 'Inter',
@@ -435,7 +435,7 @@ class _LoginState extends State<Login> {
 
     return Builder(
       builder: (context) {
-        SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+        SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
           statusBarColor: Colors.transparent,
           statusBarIconBrightness: Brightness.light
         ));
@@ -446,7 +446,7 @@ class _LoginState extends State<Login> {
           body: Form(
             key: formKey,
             child: ScrollConfiguration(
-              behavior: ScrollBehavior(),
+              behavior: const ScrollBehavior(),
               child: GlowingOverscrollIndicator(
                 axisDirection: AxisDirection.down,
                 color: Colors.white,

@@ -1,14 +1,8 @@
-// ignore_for_file: prefer_const_constructors
-
-import 'dart:convert';
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:projectb2b/screen/login.dart';
 import 'package:projectb2b/screen/changepassword.dart';
 import 'package:projectb2b/screen/paymentscreen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:http/http.dart' as http;
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({Key? key}) : super(key: key);
@@ -40,10 +34,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
     Widget profilePreview = Container(
-      margin: EdgeInsets.fromLTRB(40, 50, 40, 0),
+      margin: const EdgeInsets.fromLTRB(40, 50, 40, 0),
       child: Row(
         children: [
-          CircleAvatar(
+          const CircleAvatar(
             backgroundColor: Colors.white,
             backgroundImage: AssetImage('images/user.png'),
             radius: 30,
@@ -54,11 +48,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text('$displayName',
-                    style: TextStyle(
+                    style: const TextStyle(
                         fontFamily: 'Inter',
                         fontWeight: FontWeight.w700,
                         fontSize: 20)),
-                SizedBox(
+                const SizedBox(
                   height: 5,
                 ),
                 SizedBox(
@@ -72,16 +66,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(10)),
                                 backgroundColor:
-                                    Color.fromARGB(255, 224, 232, 235),
-                                title: Text('Confirmation'),
-                                titleTextStyle: TextStyle(
+                                    const Color.fromARGB(255, 224, 232, 235),
+                                title: const Text('Confirmation'),
+                                titleTextStyle: const TextStyle(
                                     color: Color.fromARGB(255, 23, 22, 29),
                                     fontFamily: 'Inter',
                                     fontWeight: FontWeight.w600),
                                 content:
-                                    Text('Are you sure want to Sign Out ?'),
+                                    const Text('Are you sure want to Sign Out ?'),
                                 contentTextStyle:
-                                    TextStyle(color: Color.fromARGB(255, 23, 22, 29)),
+                                    const TextStyle(color: Color.fromARGB(255, 23, 22, 29)),
                                 actions: [
                                   TextButton(
                                       style: ButtonStyle(
@@ -94,12 +88,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                           tapTargetSize:
                                               MaterialTapTargetSize.shrinkWrap,
                                           padding: MaterialStateProperty.all(
-                                              EdgeInsets.fromLTRB(
+                                              const EdgeInsets.fromLTRB(
                                                   0, 0, 10, 10))),
                                       onPressed: () {
                                         Navigator.pop(context);
                                       },
-                                      child: Text('No',
+                                      child: const Text('No',
                                           style:
                                               TextStyle(color: Color.fromARGB(255, 23, 22, 29)))),
                                   TextButton(
@@ -113,18 +107,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                           tapTargetSize:
                                               MaterialTapTargetSize.shrinkWrap,
                                           padding: MaterialStateProperty.all(
-                                              EdgeInsets.fromLTRB(
+                                              const EdgeInsets.fromLTRB(
                                                   0, 0, 10, 10))),
                                       onPressed: () {
                                         prefs.clear();
-                                        print(prefs.getString('token'));
+                                        // print(prefs.getString('token'));
                                         Navigator.pushAndRemoveUntil(context,
                                             MaterialPageRoute(
                                                 builder: (context) {
-                                          return Login();
+                                          return const Login();
                                         }), (Route<dynamic> route) => false);
                                       },
-                                      child: Text('Yes',
+                                      child: const Text('Yes',
                                           style:
                                               TextStyle(color: Color.fromARGB(255, 23, 22, 29))))
                                 ],
@@ -132,7 +126,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     },
                     style: ElevatedButton.styleFrom(
                         primary: Colors.white,
-                        shape: StadiumBorder(),
+                        shape: const StadiumBorder(),
                         elevation: 10),
                     child: Wrap(children: const [
                       Icon(
@@ -159,16 +153,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
     Widget editProfile = Container(
       height: 220,
-      margin: EdgeInsets.fromLTRB(20, 40, 20, 20),
+      margin: const EdgeInsets.fromLTRB(20, 40, 20, 20),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(15),
-        color: Color.fromARGB(255, 23, 22, 29),
+        color: const Color.fromARGB(255, 23, 22, 29),
         boxShadow: [
           BoxShadow(
             color: Colors.grey.shade600,
             spreadRadius: 1,
             blurRadius: 15,
-            offset: Offset(0,2)
+            offset: const Offset(0,2)
           )
         ]
       ),
@@ -187,16 +181,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     // ignore: prefer_const_literals_to_create_immutables
                     children: [
-                      Text("Display Name",
+                      const Text("Display Name",
                           style: TextStyle(
                               fontFamily: 'Inter',
                               fontWeight: FontWeight.w500,
                               fontSize: 12,
                               color: Color.fromARGB(255, 224, 232, 235))),
-                      SizedBox(height: 10),
+                      const SizedBox(height: 10),
                       Text(
                         "$displayName",
-                        style: TextStyle(
+                        style: const TextStyle(
                             fontFamily: 'Inter',
                             fontWeight: FontWeight.w700,
                             fontSize: 16,
@@ -210,23 +204,23 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
                             primary: Colors.white,
-                            shape: StadiumBorder(),
+                            shape: const StadiumBorder(),
                             elevation: 10),
                         onPressed: () {
                           showDialog(
                             context: context, 
                             builder: ((context) => AlertDialog(
-                              shape: RoundedRectangleBorder(
+                              shape: const RoundedRectangleBorder(
                                 borderRadius: BorderRadius.all(Radius.circular(20))
                               ),
-                              backgroundColor: Color.fromARGB(255, 224, 232, 235),
-                              title: Text('Change Display Name',
+                              backgroundColor: const Color.fromARGB(255, 224, 232, 235),
+                              title: const Text('Change Display Name',
                               style: TextStyle(
                                 fontFamily: 'Inter',
                                 fontWeight: FontWeight.w500,
                                 fontSize: 20,
                                 color: Color.fromARGB(255, 26, 25, 32))),
-                              content: Container(
+                              content: SizedBox(
                                 height: 35,
                                 child: TextFormField(
                                 onChanged: (value) {
@@ -266,7 +260,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   onPressed: (){
                                     Navigator.pop(context);
                                   }, 
-                                  child: Text('Cancel',
+                                  child: const Text('Cancel',
                                   style: TextStyle(
                                                 color: Color.fromARGB(255, 23, 22, 29)))),
                                 TextButton(
@@ -276,13 +270,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                                     padding: MaterialStateProperty.all(const EdgeInsets.fromLTRB(0, 0, 20, 10))),
                                   onPressed: (){}, 
-                                  child: Text('Ok',
+                                  child: const Text('Ok',
                                   style: TextStyle(
                                                 color: Color.fromARGB(255, 23, 22, 29))))
                               ],
                             )));
                         },
-                        child: Text(
+                        child: const Text(
                           'Edit',
                           style: TextStyle(
                               fontFamily: 'Inter',
@@ -304,7 +298,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     // ignore: prefer_const_literals_to_create_immutables
-                    children: [
+                    children: const [
                       Text("Address",
                           style: TextStyle(
                               fontFamily: 'Inter',
@@ -328,23 +322,23 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
                             primary: Colors.white,
-                            shape: StadiumBorder(),
+                            shape: const StadiumBorder(),
                             elevation: 10),
                         onPressed: () {
                           showDialog(
                             context: context, 
                             builder: ((context) => AlertDialog(
-                              shape: RoundedRectangleBorder(
+                              shape: const RoundedRectangleBorder(
                                 borderRadius: BorderRadius.all(Radius.circular(20))
                               ),
-                              backgroundColor: Color.fromARGB(255, 224, 232, 235),
-                              title: Text('Change Address',
+                              backgroundColor: const Color.fromARGB(255, 224, 232, 235),
+                              title: const Text('Change Address',
                               style: TextStyle(
                                 fontFamily: 'Inter',
                                 fontWeight: FontWeight.w500,
                                 fontSize: 20,
                                 color: Color.fromARGB(255, 26, 25, 32))),
-                              content: Container(
+                              content: SizedBox(
                                 height: 35,
                                 child: TextFormField(
                                 onChanged: (value) {
@@ -381,7 +375,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   onPressed: (){
                                     Navigator.pop(context);
                                   }, 
-                                  child: Text('Cancel',
+                                  child: const Text('Cancel',
                                   style: TextStyle(
                                                 color: Color.fromARGB(255, 23, 22, 29)))),
                                 TextButton(
@@ -391,13 +385,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                                     padding: MaterialStateProperty.all(const EdgeInsets.fromLTRB(0, 0, 20, 10))),
                                   onPressed: (){}, 
-                                  child: Text('Ok',
+                                  child: const Text('Ok',
                                   style: TextStyle(
                                                 color: Color.fromARGB(255, 23, 22, 29))))
                               ],
                             )));
                         },
-                        child: Text(
+                        child: const Text(
                           'Edit',
                           style: TextStyle(
                               fontFamily: 'Inter',
@@ -419,7 +413,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     // ignore: prefer_const_literals_to_create_immutables
-                    children: [
+                    children: const [
                       Text("Password",
                           style: TextStyle(
                               fontFamily: 'Inter',
@@ -443,14 +437,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
                             primary: Colors.white,
-                            shape: StadiumBorder(),
+                            shape: const StadiumBorder(),
                             elevation: 10),
                         onPressed: () {
                           Navigator.push(context, MaterialPageRoute(builder: ((context) {
-                            return ChangePassword(check: 'profile');
+                            return const ChangePassword(check: 'profile');
                           })));
                         },
-                        child: Text(
+                        child: const Text(
                           'Edit',
                           style: TextStyle(
                               fontFamily: 'Inter',
@@ -468,17 +462,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
 
     Widget quota = Container(
-      margin: EdgeInsets.fromLTRB(20, 0, 20, 20),
+      margin: const EdgeInsets.fromLTRB(20, 0, 20, 20),
       height: 120,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(15),
-        color: Color.fromARGB(255, 23, 22, 29),
+        color: const Color.fromARGB(255, 23, 22, 29),
         boxShadow: [
           BoxShadow(
             color: Colors.grey.shade600,
             spreadRadius: 1,
             blurRadius: 15,
-            offset: Offset(0,2)
+            offset: const Offset(0,2)
           )
         ]
       ),
@@ -498,7 +492,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       // ignore: prefer_const_literals_to_create_immutables
-                      children: [
+                      children: const [
                         Text("Remaining Quota",
                             style: TextStyle(
                                 fontFamily: 'Inter',
@@ -520,20 +514,20 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
-                      SizedBox(
+                      const SizedBox(
                         height: 20,
                         width: 60,
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 10,
                       ),
-                      Text('100 URL Left',
+                      const Text('100 URL Left',
                           style: TextStyle(
                               fontFamily: 'Inter',
                               fontWeight: FontWeight.w700,
                               fontSize: 16,
                               color: Color.fromARGB(255, 224, 232, 235))),
-                      SizedBox(
+                      const SizedBox(
                         height: 10,
                       ),
                       SizedBox(
@@ -542,15 +536,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         child: ElevatedButton(
                             style: ElevatedButton.styleFrom(
                                 primary: Colors.white,
-                                shape: StadiumBorder(),
+                                shape: const StadiumBorder(),
                                 elevation: 10),
                             onPressed: () {
                               Navigator.push(context,
                                   MaterialPageRoute(builder: ((context) {
-                                return PaymentScreen();
+                                return const PaymentScreen();
                               })));
                             },
-                            child: Text(
+                            child: const Text(
                               'More',
                               style: TextStyle(
                                   fontFamily: 'Inter',
@@ -571,9 +565,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      backgroundColor: Color.fromARGB(255, 224, 232, 235),
+      backgroundColor: const Color.fromARGB(255, 224, 232, 235),
       body: ScrollConfiguration(
-        behavior: ScrollBehavior(),
+        behavior: const ScrollBehavior(),
         child: GlowingOverscrollIndicator(
           axisDirection: AxisDirection.down,
           color: Colors.white,

@@ -10,6 +10,7 @@ import 'package:projectb2b/endpoints.dart';
 import 'package:projectb2b/screen/previewscreen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
+import 'package:projectb2b/http.dart' as http_test;
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -26,7 +27,7 @@ class _HomeScreenState extends State<HomeScreen> {
   late SharedPreferences prefs;
   bool isActive = false;
   bool isLoad = true;
-  var activity = [];
+  List activity = [];
   String? displayName = '';
   // String? username = '';
   @override
@@ -42,12 +43,34 @@ class _HomeScreenState extends State<HomeScreen> {
     setState(() {});
   }
 
+  // Future<void> getActivity() async {
+  //   var token = prefs.getString('token');
+  //   final response = await http.get(Uri.parse(urlDocument),
+  //       headers: {HttpHeaders.authorizationHeader: 'Bearer $token'});
+  //   // print(response.body);
+  //   activity = json.decode(response.body)["data"];
+  //   // print(activity);
+  //   if(mounted){
+  //     setState(() {
+  //       isLoad = false;
+  //     });
+  //   }
+  // }
   Future<void> getActivity() async {
-    var token = prefs.getString('token');
-    final response = await http.get(Uri.parse(urlDocument),
-        headers: {HttpHeaders.authorizationHeader: 'Bearer $token'});
+    var response = await http_test.get(url: urlDocument);
     // print(response.body);
-    activity = json.decode(response.body)["data"];
+    print(response.status);
+    if(response.isSuccess){
+      activity = response.data;
+
+    }else{
+      showDialog(context: context, builder: ((context) {
+        return AlertDialog(
+          title: Text('Error'),
+          content: Text(response.message.toString()),
+        );
+      }));
+    }
     // print(activity);
     if(mounted){
       setState(() {
@@ -62,7 +85,7 @@ class _HomeScreenState extends State<HomeScreen> {
     // }
     if (trim.contains('https://')){
       if(trim.contains('www.tradewheel.com')){
-        return trim.toString().substring(34);
+        return trim.toString().substring(27);
       }else{
         return trim.toString().substring(8);
       }
@@ -180,7 +203,7 @@ class _HomeScreenState extends State<HomeScreen> {
               onChanged: ((value) {
                 url = value;
                 setState(() {
-                  isActive = value.contains('http://') || value.contains('https://') ? true : false;
+                  isActive = value.contains('http://www.tradewheel.com') || value.contains('https://www.tradewheel.com') || value.contains('http://www.go4worldbusiness.com') || value.contains('https://www.go4worldbusiness.com') ? true : false;
                   // print(url);
                 });
               }),

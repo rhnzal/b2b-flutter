@@ -28,6 +28,8 @@ class _LoginState extends State<Login> {
   late bool isSuccess;
   late SharedPreferences prefs;
   final RoundedLoadingButtonController _buttonController = RoundedLoadingButtonController();
+  TextEditingController emailCon = TextEditingController();
+  TextEditingController passCon = TextEditingController();
 
   @override
   void initState() {
@@ -80,14 +82,14 @@ class _LoginState extends State<Login> {
                         builder: ((context) => AlertDialog(
                               shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(10)),
-                              backgroundColor: const Color.fromARGB(255, 23, 22, 29),
+                              backgroundColor:const Color.fromARGB(255, 224, 232, 235),
                               title: const Text('Error'),
                               titleTextStyle: const TextStyle(
-                                  color: Colors.white,
+                                  color: Color.fromARGB(255, 23, 22, 29),
                                   fontFamily: 'Inter',
                                   fontWeight: FontWeight.w600),
                               content: Text('$error'),
-                              contentTextStyle: const TextStyle(color: Colors.white),
+                              contentTextStyle: const TextStyle(color: Color.fromARGB(255, 23, 22, 29)),
                               actions: [
                                 TextButton(
                                     style: ButtonStyle(
@@ -100,11 +102,12 @@ class _LoginState extends State<Login> {
                                         padding: MaterialStateProperty.all(
                                             const EdgeInsets.fromLTRB(0, 0, 10, 10))),
                                     onPressed: () {
+                                      passCon.clear();
                                       Navigator.pop(context);
                                     },
                                     child: const Text(
                                       'OK',
-                                      style: TextStyle(color: Colors.white),
+                                      style: TextStyle(color: Color.fromARGB(255, 23, 22, 29),),
                                     )),
                               ],
                             )));
@@ -149,6 +152,7 @@ class _LoginState extends State<Login> {
     Widget inputEmail = Container(
       padding: const EdgeInsets.fromLTRB(20, 0, 20, 10),
       child: TextFormField(
+        controller: emailCon,
         keyboardType: TextInputType.emailAddress,
         cursorColor: Colors.white,
         style: const TextStyle(color: Colors.white),
@@ -196,6 +200,7 @@ class _LoginState extends State<Login> {
       margin: const EdgeInsets.only(top: 10),
       padding: const EdgeInsets.fromLTRB(20, 0, 20, 10),
       child: TextFormField(
+        controller: passCon,
         cursorColor: Colors.white,
         style: const TextStyle(color: Colors.white),
         obscureText: _isObscure,
@@ -269,6 +274,8 @@ class _LoginState extends State<Login> {
               Navigator.push(context, MaterialPageRoute(builder: ((context) {
                 return const ForgotPassword();
               })));
+              emailCon.clear();
+              passCon.clear();
             },
             child: const Text(
               'Forgot Your Password ?',

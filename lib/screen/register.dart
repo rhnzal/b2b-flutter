@@ -51,15 +51,15 @@ class _RegisterState extends State<Register> {
               builder: ((context) => AlertDialog(
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10)),
-                    backgroundColor: const Color.fromARGB(255, 23, 22, 29),
+                    backgroundColor: const Color.fromARGB(255, 217, 217, 217),
                     title: const Text('Registration Success!'),
                     titleTextStyle: const TextStyle(
-                        color: Colors.white,
+                        color: Color.fromARGB(255, 23, 22, 29),
                         fontFamily: 'Inter',
                         fontWeight: FontWeight.w600),
                     content: const Text(
                         'Check your email to verify your account'),
-                    contentTextStyle: const TextStyle(fontFamily: 'Inter',color: Colors.white),
+                    contentTextStyle: const TextStyle(fontFamily: 'Inter',color: Color.fromARGB(255, 23, 22, 29)),
                     actions: [
                       TextButton(
                           style: ButtonStyle(
@@ -79,7 +79,7 @@ class _RegisterState extends State<Register> {
                           },
                           child: const Text(
                             'OK',
-                            style: TextStyle(color: Colors.white),
+                            style: TextStyle(color: Color.fromARGB(255, 23, 22, 29)),
                           )),
                     ],
                   )));
@@ -91,14 +91,14 @@ class _RegisterState extends State<Register> {
         showDialog(context: context, builder: ((context) => AlertDialog(
           shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10)),
-                  backgroundColor: const Color.fromARGB(255, 23, 22, 29),
+                  backgroundColor: const Color.fromARGB(255, 217, 217, 217),
           title: const Text('Registration failed'),
           titleTextStyle: const TextStyle(
-                      color: Colors.white,
+                      color: Color.fromARGB(255, 23, 22, 29),
                       fontFamily: 'Inter',
                       fontWeight: FontWeight.w600),
           content: Text('$error'),
-          contentTextStyle:const TextStyle(fontFamily: 'Inter',color: Colors.white),
+          contentTextStyle:const TextStyle(fontFamily: 'Inter',color: Color.fromARGB(255, 23, 22, 29)),
           actions: [
                     TextButton(
                         style: ButtonStyle(
@@ -115,7 +115,9 @@ class _RegisterState extends State<Register> {
                         },
                         child: const Text(
                           'OK',
-                          style: TextStyle(color: Colors.white),
+                          style: TextStyle(
+                            fontFamily: 'Inter',
+                            color: Color.fromARGB(255, 23, 22, 29)),
                         ))
       ])));
       _pasreg.clear();

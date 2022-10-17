@@ -45,14 +45,14 @@ class _ForgotPasswordState extends State<ForgotPassword> {
         showDialog(context: context, builder: ((context) => AlertDialog(
           shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(10)),
-          backgroundColor: const Color.fromARGB(255, 23, 22, 29),
+          backgroundColor: const Color.fromARGB(255, 217, 217, 217),
           title: const Text('Error'),
           titleTextStyle: const TextStyle(
-              color: Colors.white,
+              color: Color.fromARGB(255, 23, 22, 29),
               fontFamily: 'Inter',
               fontWeight: FontWeight.w600),
           content: Text('$message'),
-          contentTextStyle: const TextStyle(color: Colors.white),
+          contentTextStyle: const TextStyle(color: Color.fromARGB(255, 23, 22, 29)),
           actions: [
             TextButton(
                 style: ButtonStyle(
@@ -71,7 +71,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                 },
                 child: const Text(
                   'OK',
-                  style: TextStyle(color: Colors.white),
+                  style: TextStyle(color: Color.fromARGB(255, 23, 22, 29)),
                 )),
           ]
         )));

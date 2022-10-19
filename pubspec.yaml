@@ -41,6 +41,7 @@ dependencies:
   rounded_loading_button: ^2.1.0
   http: ^0.13.5
   flutter_lints: ^2.0.0
+  photo_view: ^0.14.0
 
 
 dev_dependencies:
@@ -68,6 +69,7 @@ flutter:
   assets:
     - icons/
     - images/user.png
+    - images/folder.png
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

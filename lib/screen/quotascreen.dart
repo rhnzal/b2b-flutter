@@ -165,7 +165,11 @@ class _QuotaScreenState extends State<QuotaScreen> {
                         shape: const StadiumBorder(),
                         elevation: 10),
                   onPressed: (){
-                    Navigator.push(context, MaterialPageRoute(builder: ((context) => const PaymentScreen())));
+                    Navigator.of(context).push(MaterialPageRoute(builder: (_) {
+                      return const PaymentScreen();
+                    },
+                      settings: const RouteSettings(name: 'quota')
+                    ));
                   }, 
                   child: const Text('Add', 
                   style: TextStyle(

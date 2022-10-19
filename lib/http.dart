@@ -52,7 +52,7 @@ Future<HTTPResponse> get({@required url, Duration timeout = const Duration(secon
         HttpHeaders.authorizationHeader : 'Bearer $token'
       },
     ).timeout(timeout);
-    print(json.decode(response.body));
+    // print(json.decode(response.body));
     var data = json.decode(response.body)["data"];
     if (response.statusCode == 200 ){
       return HTTPResponse (

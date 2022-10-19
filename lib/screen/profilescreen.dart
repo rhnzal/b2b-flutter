@@ -223,6 +223,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               content: SizedBox(
                                 height: 35,
                                 child: TextFormField(
+                                  initialValue: '$displayName',
                                 onChanged: (value) {
                                   editName = value;
                                 },

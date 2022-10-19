@@ -66,7 +66,10 @@ class _HomeScreenState extends State<HomeScreen> {
     }else{
       showDialog(context: context, builder: ((context) {
         return AlertDialog(
-          title: Text('Error'),
+          shape: RoundedRectangleBorder(
+              borderRadius:BorderRadius.circular(10)),
+          backgroundColor: const Color.fromARGB(255, 224, 232, 235),
+          title: const Text('Error'),
           content: Text(response.message.toString()),
         );
       }));
@@ -125,6 +128,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Navigator.pop(context);
   await getActivity();
   urlCon.clear();
+  isActive = false;
 }
 
   @override

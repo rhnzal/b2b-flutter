@@ -62,17 +62,18 @@ class _HomeScreenState extends State<HomeScreen> {
     print(response.status);
     if(response.isSuccess){
       activity = response.data;
-
     }else{
-      showDialog(context: context, builder: ((context) {
-        return AlertDialog(
-          shape: RoundedRectangleBorder(
-              borderRadius:BorderRadius.circular(10)),
-          backgroundColor: const Color.fromARGB(255, 224, 232, 235),
-          title: const Text('Error'),
-          content: Text(response.message.toString()),
-        );
-      }));
+      if(mounted){
+        showDialog(context: context, builder: ((context) {
+          return AlertDialog(
+            shape: RoundedRectangleBorder(
+                borderRadius:BorderRadius.circular(10)),
+            backgroundColor: const Color.fromARGB(255, 224, 232, 235),
+            title: const Text('Error'),
+            content: Text(response.message.toString()),
+          );
+        }));
+      }
     }
     // print(activity);
     if(mounted){

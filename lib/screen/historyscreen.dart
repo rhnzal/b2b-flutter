@@ -5,6 +5,7 @@ import 'package:projectb2b/endpoints.dart';
 import 'package:projectb2b/screen/previewscreen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
+import 'package:projectb2b/http.dart' as http_test;
 import 'dart:convert';
 import 'dart:io';
 
@@ -37,13 +38,38 @@ class _HistoryScreenState extends State<HistoryScreen> {
     setState(() {});
   }
 
+  // Future<void> getActivity() async {
+  //   var token = prefs.getString('token');
+  //   final response = await http.get(
+  //       Uri.parse(urlDocument),
+  //       headers: {HttpHeaders.authorizationHeader: 'Bearer $token'});
+  //   // print(response.body);
+  //   activity = json.decode(response.body)["data"];
+  //   // print(activity);
+  //   if(mounted){
+  //     setState(() {
+  //       isLoad = false;
+  //     });
+  //   }
+  // }
+
   Future<void> getActivity() async {
-    var token = prefs.getString('token');
-    final response = await http.get(
-        Uri.parse(urlDocument),
-        headers: {HttpHeaders.authorizationHeader: 'Bearer $token'});
+    var response = await http_test.get(url: urlDocument);
+    if(response.isSuccess){
+      activity = response.data;
+    }else{
+      if(mounted){
+      showDialog(context: context, builder: ((context) {
+        return AlertDialog(
+          shape: RoundedRectangleBorder(
+              borderRadius:BorderRadius.circular(10)),
+          backgroundColor: const Color.fromARGB(255, 224, 232, 235),
+          title: const Text('Error'),
+          content: Text(response.message.toString()),
+        );
+      }));}
+    }
     // print(response.body);
-    activity = json.decode(response.body)["data"];
     // print(activity);
     if(mounted){
       setState(() {
@@ -51,7 +77,6 @@ class _HistoryScreenState extends State<HistoryScreen> {
       });
     }
   }
-
   trimUrl(String trim){
     // for( var i = 0 ; i < activity.length; i++){
     //   var trim = activity[i]['url'];

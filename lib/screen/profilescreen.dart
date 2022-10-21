@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:projectb2b/endpoints.dart';
 import 'package:projectb2b/screen/login.dart';
 import 'package:projectb2b/screen/changepassword.dart';
 import 'package:projectb2b/screen/paymentscreen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:projectb2b/http.dart' as  http_test;
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({Key? key}) : super(key: key);
@@ -270,7 +272,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     minimumSize: MaterialStateProperty.all(Size.zero),
                                     tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                                     padding: MaterialStateProperty.all(const EdgeInsets.fromLTRB(0, 0, 20, 10))),
-                                  onPressed: (){}, 
+                                  onPressed: ()async{
+                                    var response = await http_test.put(
+                                      url: urlEditName, 
+                                      body: {
+                                        "fullName" : editName
+                                      }
+                                    );
+                                    Navigator.pop(context);
+                                  }, 
                                   child: const Text('Ok',
                                   style: TextStyle(
                                                 color: Color.fromARGB(255, 23, 22, 29))))

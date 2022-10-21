@@ -8,4 +8,5 @@ const String urlInput = '$baseURL/api/document/url';
 const String urlDocument = '$baseURL/api/document';
 const String urlProduct = '$baseURL/api/product';
 const String urlForgot = '$baseURL/api/auth/forgot';
+const String urlEditName = '$baseURL/api/users/editprofil';
 // const String urlQuota = '$baseURL/';

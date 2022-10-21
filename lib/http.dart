@@ -73,3 +73,34 @@ Future<HTTPResponse> get({@required url, Duration timeout = const Duration(secon
         );
   }
 }
+
+Future<HTTPResponse> put({@required url, @required body, Duration timeout = const Duration(seconds: 20)}) async{
+  await initpreference();
+  try{
+    var token =  prefs.getString('token');
+    var response = await http.put(Uri.parse(url),
+      headers: {
+        HttpHeaders.contentTypeHeader : 'application/json',
+        HttpHeaders.authorizationHeader : 'Bearer $token'
+      },
+      body: (body)
+    ).timeout(timeout);
+    var res = json.decode(response.body);
+    if(response.statusCode == 200){
+      return HTTPResponse(
+        status: HTTPResponseStatus.success,
+        data: res
+        );
+    }else{
+      return HTTPResponse(
+        status: HTTPResponseStatus.error,
+        additionalData: 'Something Went Wrong'
+        );
+    }
+  }catch (e){
+    return HTTPResponse(
+      status: HTTPResponseStatus.timeout,
+      message: 'Timeout'
+      );
+  }
+}

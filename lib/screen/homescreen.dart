@@ -126,7 +126,9 @@ class _HomeScreenState extends State<HomeScreen> {
         'url': url,
       }));
   // print(response.body);
-  Navigator.pop(context);
+  if(mounted){
+    Navigator.pop(context);
+  }
   await getActivity();
   urlCon.clear();
   isActive = false;
@@ -313,7 +315,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 color: Colors.white,
                 child: ListView.builder(
                   physics: const BouncingScrollPhysics(),
-                    itemCount: activity.length,
+                    itemCount: 1,
                     itemBuilder: (context, index) => Padding(
                           padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
                           child: Card(
@@ -361,54 +363,74 @@ class _HomeScreenState extends State<HomeScreen> {
                                 }),
                                 child: Padding(
                                   padding:const EdgeInsets.fromLTRB(15, 20, 15, 20),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  child: Column(
                                     children: [
-                                      Expanded(
-                                        child: Column(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                          children: [
-                                            Text(
-                                              // getUrl().toString(),
-                                              trimUrl(activity[index]['url']).toString(),
-                                              style: const TextStyle(
-                                                  fontFamily: 'Inter',
-                                                  fontWeight: FontWeight.w700,
-                                                  fontSize: 18),
-                                              maxLines: 1,
-                                              overflow: TextOverflow.ellipsis,
-                                            ),
-                                            Text(DateFormat.yMMMd().format(DateTime.parse(activity[index]["createdAt"])),
-                                                style: const TextStyle(
-                                                    fontFamily: 'Inter',
-                                                    fontWeight: FontWeight.w400,
-                                                    fontSize: 10)),
-                                            // Text(activity[index]["createdAt"])
-                                          ],
-                                        ),
-                                      ),
-                                      Column(
+                                      Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                         children: [
-                                          const Text("Status",
-                                            style: TextStyle(
-                                                fontFamily: 'Inter',
-                                                fontWeight: FontWeight.w600),
+                                          Expanded(
+                                            child: Column(
+                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              children: [
+                                                Text(
+                                                  trimUrl(activity[index]["url"]),
+                                                  style: const TextStyle(
+                                                      fontFamily: 'Inter',
+                                                      fontWeight: FontWeight.w700,
+                                                      fontSize: 18),
+                                                  maxLines: 2,
+                                                  overflow: TextOverflow.ellipsis,
+                                                ),
+                                                Text(DateFormat.yMMMd().format(DateTime.parse(activity[index]["createdAt"])),
+                                                    style: const TextStyle(
+                                                        fontFamily: 'Inter',
+                                                        fontWeight: FontWeight.w400,
+                                                        fontSize: 10)),
+                                                // Text(activity[index]["createdAt"])
+                                              ],
+                                            ),
                                           ),
-                                          const SizedBox(height: 5),
-                                          // if(activity[index]['status'] == "SUCCESS"){
-                                          //   Icon(Icons.done)
-                                          // }
-                                          if (activity[index]['status'] == "SUCCESS") ...[
-                                            const Icon(Icons.done, color: Colors.green,)
-                                          ] else if (activity[index]['status'] == "LOADING") ...[
-                                            // const Icon(Icons.pending_outlined)
-                                            const CupertinoActivityIndicator()
-                                            // CircularProgressIndicator()
-                                          ] else ...[
-                                            const Icon(Icons.clear,color: Colors.red)
-                                          ]
+                                          Column(
+                                            children: [
+                                              const Text("Status",
+                                                style: TextStyle(
+                                                    fontFamily: 'Inter',
+                                                    fontWeight: FontWeight.w600),
+                                              ),
+                                              const SizedBox(height: 5),
+                                              // if(activity[index]['status'] == "SUCCESS"){
+                                              //   Icon(Icons.done)
+                                              // }
+                                              if (activity[index]['status'] == "SUCCESS") ...[
+                                                const Icon(Icons.done, color: Colors.green,)
+                                              ] else if (activity[index]['status'] == "LOADING") ...[
+                                                // const Icon(Icons.pending_outlined)
+                                                const CupertinoActivityIndicator()
+                                                // CircularProgressIndicator()
+                                              ] else ...[
+                                                const Icon(Icons.clear,color: Colors.red)
+                                              ]
+                                            ],
+                                          )
                                         ],
-                                      )
+                                      ),
+                                      if (activity[index]['status'] == 'SUCCESS')...[
+                                        if(activity[index]['url'].toString().contains('tradewheel') ||activity[index]['url'].toString().contains('go4worldbusiness') )...[
+                                          const SizedBox(
+                                            height: 10,
+                                          ),
+                                          SizedBox(
+                                            height: 200,
+                                            child: FadeInImage(
+                                              image: NetworkImage(
+                                                activity[index]['result'],
+                                              ),
+                                              placeholder: const AssetImage('./images/folder.png'),
+                                            )
+                                          )
+                                        ]
+
+                                    ]
                                     ],
                                   ),
                                 ),

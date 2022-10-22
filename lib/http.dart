@@ -83,7 +83,7 @@ Future<HTTPResponse> put({@required url, @required body, Duration timeout = cons
         HttpHeaders.contentTypeHeader : 'application/json',
         HttpHeaders.authorizationHeader : 'Bearer $token'
       },
-      body: (body)
+      body: json.encode(body)
     ).timeout(timeout);
     var res = json.decode(response.body);
     if(response.statusCode == 200){

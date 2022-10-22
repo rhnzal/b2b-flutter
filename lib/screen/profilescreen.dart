@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:projectb2b/endpoints.dart';
 import 'package:projectb2b/screen/login.dart';
@@ -272,14 +274,20 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     minimumSize: MaterialStateProperty.all(Size.zero),
                                     tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                                     padding: MaterialStateProperty.all(const EdgeInsets.fromLTRB(0, 0, 20, 10))),
-                                  onPressed: ()async{
+                                  onPressed: () async{
                                     var response = await http_test.put(
                                       url: urlEditName, 
                                       body: {
                                         "fullName" : editName
                                       }
                                     );
-                                    Navigator.pop(context);
+                                    var name = json.decode(response.data)['data']['fullName'];
+                                    setState(() {
+                                      prefs.setString('name', name);
+                                    });
+                                    if(mounted){
+                                      Navigator.pop(context);
+                                    }
                                   }, 
                                   child: const Text('Ok',
                                   style: TextStyle(

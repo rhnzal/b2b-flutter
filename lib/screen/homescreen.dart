@@ -83,6 +83,13 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
+  Future<void> refreshList() async{
+    setState(() {
+      isLoad = true;
+      getActivity();
+    });
+  }
+
   trimUrl(String trim){
     // for( var i = 0 ; i < activity.length; i++){
     //   var trim = activity[i]['url'];
@@ -303,9 +310,24 @@ class _HomeScreenState extends State<HomeScreen> {
           padding: const EdgeInsets.only(top: 100),
           child: const CircularProgressIndicator(color: Color.fromARGB(255, 23, 22, 29))
           )
-        : activity.isEmpty ? Container(
-          padding:const  EdgeInsets.only(top: 100),
-          child: const Icon(Icons.folder_off_outlined, size: 60, color: Color.fromARGB(255, 26, 25, 32),),
+        : activity.isEmpty ? Expanded(
+          child: RefreshIndicator(
+            displacement: 10,
+            backgroundColor: const Color.fromARGB(255, 224, 232, 235),
+            color: const Color.fromARGB(255, 23, 22, 29),
+            onRefresh: refreshList,
+            child: ScrollConfiguration(
+              behavior: const ScrollBehavior(),
+              child: GlowingOverscrollIndicator(
+                color: Colors.white,
+                axisDirection: AxisDirection.down,
+                child: ListView(
+                  padding:const  EdgeInsets.only(top: 100),
+                  children: [const Icon(Icons.folder_off_outlined, size: 60, color: Color.fromARGB(255, 26, 25, 32),),]
+                ),
+              ),
+            )
+          ),
         )
         : Expanded(
             child: ScrollConfiguration(

@@ -9,4 +9,5 @@ const String urlDocument = '$baseURL/api/document';
 const String urlProduct = '$baseURL/api/product';
 const String urlForgot = '$baseURL/api/auth/forgot';
 const String urlEditName = '$baseURL/api/users/editprofil';
+const String urlChangePassword = '$baseURL/api/auth/edit';
 // const String urlQuota = '$baseURL/';

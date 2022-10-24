@@ -232,7 +232,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   editName = value;
                                 },
                               cursorColor: Colors.black,
-                              style: const TextStyle(
+                              style:                                                             const TextStyle(
                                   color: Colors.black,
                                   fontFamily: 'Inter',
                                   fontWeight: FontWeight.w500,
@@ -281,7 +281,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                         "fullName" : editName
                                       }
                                     );
-                                    var name = json.decode(response.data)['data']['fullName'];
+                                    var name = response.data[0][2];
+                                    print(name);
                                     setState(() {
                                       prefs.setString('name', name);
                                     });

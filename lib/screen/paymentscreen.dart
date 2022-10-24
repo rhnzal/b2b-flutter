@@ -82,27 +82,31 @@ class _PaymentScreenState extends State<PaymentScreen> {
     );
     // print(response.body);
     // print(grid[selectedIndex]['id']);
-    Navigator.pop(context);
+    if(mounted){
+      Navigator.pop(context); 
+    }
     var count = 0;
-    Navigator.push(context, MaterialPageRoute(builder: ((context) {
-      return Scaffold(
-        appBar: AppBar(
-          leading: BackButton(
-            onPressed: (){
-              Navigator.popUntil(context, ((route) {
-                return count++ == 2;
-              }));
-            },
+    if(mounted){
+      Navigator.push(context, MaterialPageRoute(builder: ((context) {
+        return Scaffold(
+          appBar: AppBar(
+            leading: BackButton(
+              onPressed: (){
+                Navigator.popUntil(context, ((route) {
+                  return count++ == 2;
+                }));
+              },
+            ),
+            backgroundColor: const Color.fromARGB(255, 23, 22, 29),
+            automaticallyImplyLeading: false,
           ),
-          backgroundColor: const Color.fromARGB(255, 23, 22, 29),
-          automaticallyImplyLeading: false,
-        ),
-        body: const WebView(
-          javascriptMode: JavascriptMode.unrestricted,
-          initialUrl: 'https://checkout-staging.xendit.co/web/6322943cd0a17dc369f34252',
-        ),
-      );
-    })));
+          body: const WebView(
+            javascriptMode: JavascriptMode.unrestricted,
+            initialUrl: 'https://checkout-staging.xendit.co/web/6322943cd0a17dc369f34252',
+          ),
+        );
+      })));
+    }
   }
 
   @override

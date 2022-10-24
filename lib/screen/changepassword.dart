@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:projectb2b/home.dart';
 import 'package:projectb2b/screen/login.dart';
 import 'package:rounded_loading_button/rounded_loading_button.dart';
+import 'package:projectb2b/http.dart' as http_test;
+import 'package:projectb2b/endpoints.dart';
 
 class ChangePassword extends StatefulWidget {
   const ChangePassword({Key? key, required this.check}) : super(key: key);
@@ -15,38 +17,76 @@ class ChangePassword extends StatefulWidget {
 }
 
 class _ChangePasswordState extends State<ChangePassword> {
+  final formKey = GlobalKey<FormState>();
+  final TextEditingController passCon = TextEditingController();
   String newPass = '';
   final RoundedLoadingButtonController _buttonController = RoundedLoadingButtonController();
 
-  void enter (RoundedLoadingButtonController controller, String check){
-    controller.success();
-    Timer(const Duration(seconds: 1), (){
-      showDialog(barrierDismissible: false,context: context, builder: ((context) => AlertDialog(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10)),
-        backgroundColor:const Color.fromARGB(255, 224, 232, 235),
-        title: const Text('Password has been changed'),
-        titleTextStyle: const TextStyle(
-          color: Color.fromARGB(255, 23, 22, 29),
-          fontFamily: 'Inter',
-          fontWeight: FontWeight.w600),
-        actions: [
-          TextButton(
-            onPressed: (){
-              check.contains('profile') ?
-              Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: ((context) {
-                return const Home();
-              })), (route) => false) 
-              : Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: ((context) {
-                return const Login();
-              })), (route) => false); 
-            }, 
-            child: const Text('Ok',
-              style:TextStyle(color: Color.fromARGB(255, 23, 22, 29)))
-            )
-        ],
-      )));
-    });
+  void enter (RoundedLoadingButtonController controller, String check) async{
+    if(formKey.currentState!.validate()){
+      var response = await http_test.put(
+        url: urlChangePassword, 
+        body: {
+          "password": newPass
+        }
+      );
+      print(response.status);
+      if(response.isSuccess){
+        controller.success();
+        Timer(const Duration(seconds: 1), (){
+          showDialog(barrierDismissible: false,context: context, builder: ((context) => AlertDialog(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10)),
+            backgroundColor:const Color.fromARGB(255, 224, 232, 235),
+            title: const Text('Password has been changed'),
+            titleTextStyle: const TextStyle(
+              color: Color.fromARGB(255, 23, 22, 29),
+              fontFamily: 'Inter',
+              fontWeight: FontWeight.w600),
+            actions: [
+              TextButton(
+                onPressed: (){
+                  var count = 0;
+                  check.contains('profile') ?
+                  Navigator.popUntil(context, ((route) {
+                    return count++ == 2;
+                  }))
+                  : Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: ((context) {
+                    return const Login();
+                  })), (route) => false); 
+                }, 
+                child: const Text('Ok',
+                  style:TextStyle(color: Color.fromARGB(255, 23, 22, 29)))
+                )
+            ],
+          )));
+        });
+      }else{
+        controller.reset();
+        showDialog(context: context, builder: ((context) => AlertDialog(
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10)),
+            backgroundColor:const Color.fromARGB(255, 224, 232, 235),
+            title: const Text('Error'),
+            titleTextStyle: const TextStyle(
+              color: Color.fromARGB(255, 23, 22, 29),
+              fontFamily: 'Inter',
+              fontWeight: FontWeight.w600),
+            content: Text(response.message!),
+            contentTextStyle: const TextStyle(
+              color: Color.fromARGB(255, 23, 22, 29)),
+            actions: [
+              TextButton(
+                onPressed: (){
+                  Navigator.pop(context);
+                }, 
+                child: const Text('Ok',
+                  style:TextStyle(color: Color.fromARGB(255, 23, 22, 29)))
+                )
+            ],
+          )));
+      }
+    }
   }
 
   @override
@@ -73,6 +113,7 @@ class _ChangePasswordState extends State<ChangePassword> {
     Widget newPassword = Container(
       padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
       child: TextFormField(
+        controller: passCon,
         cursorColor: Colors.white,
         style: const TextStyle(color: Colors.white),
         decoration: InputDecoration(
@@ -97,6 +138,16 @@ class _ChangePasswordState extends State<ChangePassword> {
       onChanged: ((value) {
         newPass = value;
       }),
+      validator: (value){
+        if(value!.isEmpty){
+          return 'Please enter your new password';
+        }else if (value.length < 8) {
+          _buttonController.reset();
+          return "Password must be 8 character or more";
+        }else{
+          return null;
+        }
+      },
     ));
 
     Widget confirmPassword = Container(
@@ -123,8 +174,16 @@ class _ChangePasswordState extends State<ChangePassword> {
               borderSide: BorderSide.none,
               borderRadius: BorderRadius.circular(20)),
       ),
-      onChanged: ((value) {
-        newPass = value;
+      validator: ((value) {
+        if(value!.isEmpty){
+          _buttonController.reset();
+          return 'Please confirm your new password';
+        }else if(value != passCon.text){
+          _buttonController.reset();
+          return 'Pasword not match';
+        }else {
+          return null;
+        }
       }),
     )
     );
@@ -158,14 +217,17 @@ class _ChangePasswordState extends State<ChangePassword> {
         backgroundColor: Colors.transparent,
         elevation: 0,
       ),
-      body: ListView(
-        physics: const BouncingScrollPhysics(),
-        children: [
-          tittle,
-          newPassword,
-          confirmPassword,
-          submit
-        ],
+      body: Form(
+        key: formKey,
+        child: ListView(
+          physics: const BouncingScrollPhysics(),
+          children: [
+            tittle,
+            newPassword,
+            confirmPassword,
+            submit
+          ],
+        ),
       ),
       );
   }

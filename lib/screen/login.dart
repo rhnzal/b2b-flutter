@@ -11,6 +11,7 @@ import 'package:projectb2b/screen/forgotpassword.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:rounded_loading_button/rounded_loading_button.dart';
 import 'package:http/http.dart' as http;
+import 'package:projectb2b/http.dart' as http_test;
 
 class Login extends StatefulWidget {
   const Login({Key? key}) : super(key: key);
@@ -45,22 +46,19 @@ class _LoginState extends State<Login> {
   void login (RoundedLoadingButtonController controller) async{
                 // ignore: empty_statements
                 if (formKey.currentState!.validate()) {
-                  var response = await http.post(
-                      // Uri.parse("https://sija-b2b.ronisetiawan.id/api/auth/login"),
-                      Uri.parse(urlLogin),
-                      headers: {
-                        HttpHeaders.contentTypeHeader: 'application/json'
-                      },
-                      body:
-                          json.encode({"email": email, "password": password}));
-                          // print(response.body);
-                  isSuccess = json.decode(response.body)['isSuccess'];
-                  if (isSuccess) {
+                  var response = await http_test.post(
+                    url: urlLogin, 
+                    body: {
+                      "email": email,
+                      "password": password
+                    }
+                  );
+                  if (response.isSuccess) {
                     // var username = json.decode(response.body)['data']['fullName'];
                     // prefs.setString('username', username);
                     // print(username);
-                    var token = json.decode(response.body)['data']['token'];
-                    var displayName = json.decode(response.body)['data']['fullName'];
+                    var token = response.data["token"];
+                    var displayName = response.data["fullName"];
                     prefs.setString('name', displayName);
                     prefs.setString('token', token);
                     controller.success();
@@ -74,43 +72,45 @@ class _LoginState extends State<Login> {
                     //circular progress indicator
                   } else {
                     _buttonController.reset();
-                    var error = json.decode(response.body)['message'];
+                    var error = response.message;
                     // print(error);
-                    showDialog(
-                        
-                        context: context,
-                        builder: ((context) => AlertDialog(
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10)),
-                              backgroundColor:const Color.fromARGB(255, 224, 232, 235),
-                              title: const Text('Error'),
-                              titleTextStyle: const TextStyle(
-                                  color: Color.fromARGB(255, 23, 22, 29),
-                                  fontFamily: 'Inter',
-                                  fontWeight: FontWeight.w600),
-                              content: Text('$error'),
-                              contentTextStyle: const TextStyle(color: Color.fromARGB(255, 23, 22, 29)),
-                              actions: [
-                                TextButton(
-                                    style: ButtonStyle(
-                                        overlayColor: MaterialStateProperty.all(
-                                            Colors.transparent),
-                                        minimumSize: MaterialStateProperty.all(
-                                            Size.zero),
-                                        tapTargetSize:
-                                            MaterialTapTargetSize.shrinkWrap,
-                                        padding: MaterialStateProperty.all(
-                                            const EdgeInsets.fromLTRB(0, 0, 10, 10))),
-                                    onPressed: () {
-                                      passCon.clear();
-                                      Navigator.pop(context);
-                                    },
-                                    child: const Text(
-                                      'OK',
-                                      style: TextStyle(color: Color.fromARGB(255, 23, 22, 29),),
-                                    )),
-                              ],
-                            )));
+                    if(mounted){
+                      showDialog(
+                          context: context,
+                          builder: ((context) => AlertDialog(
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10)),
+                                backgroundColor:const Color.fromARGB(255, 224, 232, 235),
+                                title: const Text('Error'),
+                                titleTextStyle: const TextStyle(
+                                    color: Color.fromARGB(255, 23, 22, 29),
+                                    fontFamily: 'Inter',
+                                    fontWeight: FontWeight.w600),
+                                content: Text('$error'),
+                                contentTextStyle: const TextStyle(color: Color.fromARGB(255, 23, 22, 29)),
+                                actions: [
+                                  TextButton(
+                                      style: ButtonStyle(
+                                          overlayColor: MaterialStateProperty.all(
+                                              Colors.transparent),
+                                          minimumSize: MaterialStateProperty.all(
+                                              Size.zero),
+                                          tapTargetSize:
+                                              MaterialTapTargetSize.shrinkWrap,
+                                          padding: MaterialStateProperty.all(
+                                              const EdgeInsets.fromLTRB(0, 0, 10, 10))),
+                                      onPressed: () {
+                                        passCon.clear();
+                                        Navigator.pop(context);
+                                      },
+                                      child: const Text(
+                                        'OK',
+                                        style: TextStyle(color: Color.fromARGB(255, 23, 22, 29),),
+                                      )),
+                                ],
+                              )));
+
+                    }
                   }
                   // print(response.body);
                   // print(isSuccess);
@@ -422,10 +422,13 @@ class _LoginState extends State<Login> {
             // ),
             onPressed: () {
               Navigator.push(context,
-                  MaterialPageRoute(builder: (context) {
-                //api/users/login
+                MaterialPageRoute(builder: (context) {
+              //api/users/login
                 return const Register();
-              }));
+                }));
+                _buttonController.reset();
+                emailCon.clear();
+                passCon.clear();
             },
             child: const Text(
               'Sign Up',

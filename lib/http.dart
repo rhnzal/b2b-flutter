@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
@@ -31,17 +32,42 @@ Future<void> initpreference() async {
     prefs = await SharedPreferences.getInstance();
   }
 
-Future<void> post({@required url, Object? body, Duration timeout = const Duration(seconds: 20)}) async{
+Future<HTTPResponse> post({@required url, @required body, Duration timeout = const Duration(seconds: 20)}) async{
   await initpreference();
   try{
+    var token = prefs.getString('token');
     var response = await http.post(Uri.parse(url),
-      headers: {HttpHeaders.contentTypeHeader : 'application/json'},
-      body: (body)
+      headers: {
+        HttpHeaders.contentTypeHeader : 'application/json',
+        HttpHeaders.authorizationHeader : 'Bearer $token'
+        },
+      body: json.encode(body)
     ).timeout(timeout);
-    } catch (e){
-      print(e);
-  }
+    var data = json.decode(response.body)['data'];
+    if(response.statusCode == 200){
+      return HTTPResponse(
+        status: HTTPResponseStatus.success,
+        data: data
+        );
+    }else {
+      return HTTPResponse(
+        status: HTTPResponseStatus.failed,
+        message: json.decode(response.body)['message'] ?? 'Something Went Wrong'
+      );
+    }
+    } on TimeoutException catch (e){
+      return HTTPResponse(
+        status: HTTPResponseStatus.timeout,
+        message: 'Timeout'
+        );
+    } on Exception catch (e){
+      return HTTPResponse(
+        status: HTTPResponseStatus.error,
+        message: 'Something Went Wrong'
+        );
+    }
 }
+
 Future<HTTPResponse> get({@required url, Duration timeout = const Duration(seconds: 20)}) async{
   await initpreference(); 
   try{
@@ -61,17 +87,22 @@ Future<HTTPResponse> get({@required url, Duration timeout = const Duration(secon
       );
     }else {
       return HTTPResponse(
-        status: HTTPResponseStatus.failed,
+        status: HTTPResponseStatus.error,
         message: json.decode(response.body)['message'] ?? 'Something Went Wrong' 
         );
         
     }
-    } catch (e){
+    } on TimeoutException catch (e){
       return HTTPResponse(
         status: HTTPResponseStatus.timeout,
         message: 'Timeout'
         );
-  }
+    } on Exception catch (e){
+      return HTTPResponse(
+        status: HTTPResponseStatus.error,
+        message: 'Something Went Wrong'
+        );
+    }
 }
 
 Future<HTTPResponse> put({@required url, @required body, Duration timeout = const Duration(seconds: 20)}) async{
@@ -102,5 +133,39 @@ Future<HTTPResponse> put({@required url, @required body, Duration timeout = cons
       status: HTTPResponseStatus.timeout,
       message: 'Timeout'
       );
+  }
+}
+
+Future<HTTPResponse> delete({@required url, Duration timeout = const Duration(seconds: 20)}) async{
+  await initpreference();
+  try{
+    var token = prefs.getString('token');
+    var response = await http.delete(Uri.parse(url),
+      headers: {
+        HttpHeaders.contentTypeHeader: 'application/json',
+        HttpHeaders.authorizationHeader: 'Bearer $token'
+      }
+    ).timeout(timeout);
+    if(response.statusCode == 200){
+      return HTTPResponse(
+        status: HTTPResponseStatus.success,
+        message: 'Success'
+      );
+    }else{
+      return HTTPResponse(
+        status: HTTPResponseStatus.failed,
+        message: 'Something Went Wrong'
+      );
+    }
+  }on TimeoutException catch (e){
+    return HTTPResponse(
+      status: HTTPResponseStatus.timeout,
+      message: 'Timeout'
+    );
+  }on Exception catch (e){
+    return HTTPResponse(
+      status: HTTPResponseStatus.error,
+      message: 'Something Went Wrong'
+    );
   }
 }

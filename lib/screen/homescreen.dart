@@ -122,23 +122,35 @@ class _HomeScreenState extends State<HomeScreen> {
               )),
           );
       }));          
-  var token = prefs.getString('token');
   // ignore: unused_local_variable
-  var response = await http.post(Uri.parse(urlInput),
-      headers: {
-        HttpHeaders.contentTypeHeader:'application/json',
-        HttpHeaders.authorizationHeader:'Bearer $token'
-      },
-      body: json.encode({
-        'url': url,
+  var response = await http_test.post(
+    url: urlInput, 
+    body: {"url": url}
+  );
+
+  if(response.isSuccess){
+    if(mounted){
+      Navigator.pop(context);
+    }
+    await getActivity();
+    urlCon.clear();
+    isActive = false;
+  }else{
+    if(mounted){
+      Navigator.pop(context);
+      urlCon.clear;
+      showDialog(context: context, builder: ((context) {
+        return AlertDialog(
+          shape: RoundedRectangleBorder(
+              borderRadius:BorderRadius.circular(10)),
+          backgroundColor: const Color.fromARGB(255, 224, 232, 235),
+          title: const Text('Error'),
+          content: Text(response.message.toString()),
+        );
       }));
-  // print(response.body);
-  if(mounted){
-    Navigator.pop(context);
+      }
   }
-  await getActivity();
-  urlCon.clear();
-  isActive = false;
+  // print(response.body);
 }
 
   @override

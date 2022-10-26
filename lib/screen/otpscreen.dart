@@ -1,11 +1,15 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:projectb2b/endpoints.dart';
 import 'package:projectb2b/screen/changepassword.dart';
 import 'package:rounded_loading_button/rounded_loading_button.dart';
+import 'package:projectb2b/http.dart' as http_test;
 
 class Otp extends StatefulWidget {
-  const Otp({Key? key}) : super(key: key);
+  const Otp({Key? key, required this.email}) : super(key: key);
+
+  final String email;
 
   @override
   State<Otp> createState() => _OtpState();
@@ -14,15 +18,51 @@ class Otp extends StatefulWidget {
 class _OtpState extends State<Otp> {
   String otp = '';
   final RoundedLoadingButtonController _buttonController = RoundedLoadingButtonController();
+  final formKey = GlobalKey<FormState>();
 
-  void otpsend (RoundedLoadingButtonController controller){
-    controller.success();
-      Timer(const Duration(seconds: 1), (){
-        Navigator.push(context, MaterialPageRoute(builder: ((context) {
-          return const ChangePassword(check: 'otp');
-        })));
+  void otpsend (RoundedLoadingButtonController controller) async{
+    if(formKey.currentState!.validate()){
+      var response = await http_test.post(
+        url: urlCheckOTP, 
+        body: {
+          "email": widget.email,
+          "otp": otp
+        }
+      );
+      if(response.isSuccess){
+        controller.success();
+          Timer(const Duration(seconds: 1), (){
+            Navigator.push(context, MaterialPageRoute(builder: ((context) {
+              return ChangePassword(check: 'otp', email: widget.email, otp: otp);
+            })));
+            controller.reset();
+          });
+      }else{
         controller.reset();
-      });
+        showDialog(context: context, builder: ((context) => AlertDialog(
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10)),
+            backgroundColor:const Color.fromARGB(255, 224, 232, 235),
+            title: const Text('Error'),
+            titleTextStyle: const TextStyle(
+              color: Color.fromARGB(255, 23, 22, 29),
+              fontFamily: 'Inter',
+              fontWeight: FontWeight.w600),
+            content: Text(response.message!),
+            contentTextStyle: const TextStyle(
+              color: Color.fromARGB(255, 23, 22, 29)),
+            actions: [
+              TextButton(
+                onPressed: (){
+                  Navigator.pop(context);
+                }, 
+                child: const Text('Ok',
+                  style:TextStyle(color: Color.fromARGB(255, 23, 22, 29)))
+                )
+            ],
+          )));
+      }
+    }
   }
 
   @override
@@ -73,6 +113,7 @@ class _OtpState extends State<Otp> {
       onChanged: ((value) {
         otp = value;
       }),
+
     ));
 
     Widget submitOtp = Container(
@@ -105,13 +146,16 @@ class _OtpState extends State<Otp> {
         elevation: 0,
 
     ),
-      body: ListView(
-        physics: const BouncingScrollPhysics(),
-        children: [
-          tittle,
-          otpInput,
-          submitOtp
-        ],
+      body: Form(
+        key: formKey,
+        child: ListView(
+          physics: const BouncingScrollPhysics(),
+          children: [
+            tittle,
+            otpInput,
+            submitOtp
+          ],
+        ),
       ),
     );
   }

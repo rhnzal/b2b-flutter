@@ -113,14 +113,59 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                           padding: MaterialStateProperty.all(
                                               const EdgeInsets.fromLTRB(
                                                   0, 0, 10, 10))),
-                                      onPressed: () {
-                                        prefs.clear();
+                                      onPressed: () async{
+                                        var response = await http_test.delete(url: urlLogout);
+                                        if(response.isSuccess){
+                                          if (mounted){
+                                            prefs.clear();
+                                            Navigator.pushAndRemoveUntil(context,
+                                                MaterialPageRoute(
+                                                    builder: (context) {
+                                              return const Login();
+                                            }), (Route<dynamic> route) => false);
+                                          }
+                                        }else{
+                                          if(mounted){
+                                            Navigator.pop(context);
+                                          }
+                                          var error = response.message;
+                                          showDialog(
+                                              context: context,
+                                              builder: ((context) => AlertDialog(
+                                                    shape: RoundedRectangleBorder(
+                                                        borderRadius: BorderRadius.circular(10)),
+                                                    backgroundColor:const Color.fromARGB(255, 224, 232, 235),
+                                                    title: const Text('Error'),
+                                                    titleTextStyle: const TextStyle(
+                                                        color: Color.fromARGB(255, 23, 22, 29),
+                                                        fontFamily: 'Inter',
+                                                        fontWeight: FontWeight.w600),
+                                                    content: Text('$error'),
+                                                    contentTextStyle: const TextStyle(color: Color.fromARGB(255, 23, 22, 29)),
+                                                    actions: [
+                                                      TextButton(
+                                                          style: ButtonStyle(
+                                                              overlayColor: MaterialStateProperty.all(
+                                                                  Colors.transparent),
+                                                              minimumSize: MaterialStateProperty.all(
+                                                                  Size.zero),
+                                                              tapTargetSize:
+                                                                  MaterialTapTargetSize.shrinkWrap,
+                                                              padding: MaterialStateProperty.all(
+                                                                  const EdgeInsets.fromLTRB(0, 0, 10, 10))),
+                                                          onPressed: () {
+                                                            Navigator.pop(context);
+                                                          },
+                                                          child: const Text(
+                                                            'OK',
+                                                            style: TextStyle(color: Color.fromARGB(255, 23, 22, 29),),
+                                                          )),
+                                                    ],
+                                                  )
+                                                )
+                                              );
+                                        }
                                         // print(prefs.getString('token'));
-                                        Navigator.pushAndRemoveUntil(context,
-                                            MaterialPageRoute(
-                                                builder: (context) {
-                                          return const Login();
-                                        }), (Route<dynamic> route) => false);
                                       },
                                       child: const Text('Yes',
                                           style:

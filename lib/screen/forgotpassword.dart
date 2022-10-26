@@ -35,7 +35,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
         controller.success();
           Timer(const Duration(seconds: 1), (){
             Navigator.push(context, MaterialPageRoute(builder: ((context) {
-              return const Otp();
+              return  Otp(email: email);
             })));
             controller.reset();
             emailCon.clear();

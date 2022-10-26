@@ -7,6 +7,7 @@ import 'package:intl/intl.dart';
 import 'package:projectb2b/endpoints.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
+import 'package:projectb2b/http.dart' as http_test;
 import 'package:webview_flutter/webview_flutter.dart';
 
 class PaymentScreen extends StatefulWidget {
@@ -42,17 +43,54 @@ class _PaymentScreenState extends State<PaymentScreen> {
   }
 
   Future<void> getProduct() async{
-    var token = prefs.getString('token');
-    var response = await http.get(Uri.parse(urlProduct),
-    headers: {
-      HttpHeaders.authorizationHeader: 'Bearer $token'
-    }
-    );
+    var response = await http_test.get(url: urlProduct);
     // print(response.body);
-    grid = json.decode(response.body)['data'];
-    setState(() {
-      isLoad = false;
-    });
+    if(response.isSuccess){
+      grid = response.data;
+      setState(() {
+        isLoad = false;
+      });
+    }else{
+      var error = response.message;
+      if(mounted){
+        showDialog(
+            context: context,
+            builder: ((context) => AlertDialog(
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10)),
+                  backgroundColor:const Color.fromARGB(255, 224, 232, 235),
+                  title: const Text('Error'),
+                  titleTextStyle: const TextStyle(
+                      color: Color.fromARGB(255, 23, 22, 29),
+                      fontFamily: 'Inter',
+                      fontWeight: FontWeight.w600),
+                  content: Text('$error'),
+                  contentTextStyle: const TextStyle(color: Color.fromARGB(255, 23, 22, 29)),
+                  actions: [
+                    TextButton(
+                        style: ButtonStyle(
+                            overlayColor: MaterialStateProperty.all(
+                                Colors.transparent),
+                            minimumSize: MaterialStateProperty.all(
+                                Size.zero),
+                            tapTargetSize:
+                                MaterialTapTargetSize.shrinkWrap,
+                            padding: MaterialStateProperty.all(
+                                const EdgeInsets.fromLTRB(0, 0, 10, 10))),
+                        onPressed: () {
+                          Navigator.pop(context);
+                          getProduct();
+                        },
+                        child: const Text(
+                          'OK',
+                          style: TextStyle(color: Color.fromARGB(255, 23, 22, 29),),
+                        )),
+                  ],
+                )
+              )
+            );
+      }
+    }
   }
 
   void payment() async{
@@ -72,41 +110,55 @@ class _PaymentScreenState extends State<PaymentScreen> {
                 )),
             );
         }));  
-    var token = prefs.getString('token');
-    await http.post(Uri.parse(urlBuyProduct),
-    headers: {
-      HttpHeaders.contentTypeHeader: 'application/json',
-      HttpHeaders.authorizationHeader: 'Bearer $token'
-    },
-    body: json.encode(grid[selectedIndex])
+    var response = await http_test.post(
+      url: urlBuyProduct, 
+      body: {
+        "product": grid[selectedIndex]['id']
+      }
     );
+    if(response.isSuccess){
+      if(mounted){
+        Navigator.pop(context); 
+      }
+      var count = 0;
+      if(mounted){
+        Navigator.push(context, MaterialPageRoute(builder: ((context) {
+          return Scaffold(
+            appBar: AppBar(
+              leading: BackButton(
+                onPressed: (){
+                  Navigator.popUntil(context, ((route) {
+                    return count++ == 2;
+                  }));
+                },
+              ),
+              backgroundColor: const Color.fromARGB(255, 23, 22, 29),
+              automaticallyImplyLeading: false,
+            ),
+            body: const WebView(
+              javascriptMode: JavascriptMode.unrestricted,
+              initialUrl: 'https://checkout-staging.xendit.co/web/6322943cd0a17dc369f34252',
+            ),
+          );
+        })));
+      }else{
+        var error = response.message;
+        if(mounted){
+          showDialog(context: context, builder: ((context) {
+        return AlertDialog(
+          shape: RoundedRectangleBorder(
+              borderRadius:BorderRadius.circular(10)),
+          backgroundColor: const Color.fromARGB(255, 224, 232, 235),
+          title: const Text('Error'),
+          content: Text(response.message.toString()),
+        );
+      }));
+        }
+      }
+
+    }
     // print(response.body);
     // print(grid[selectedIndex]['id']);
-    if(mounted){
-      Navigator.pop(context); 
-    }
-    var count = 0;
-    if(mounted){
-      Navigator.push(context, MaterialPageRoute(builder: ((context) {
-        return Scaffold(
-          appBar: AppBar(
-            leading: BackButton(
-              onPressed: (){
-                Navigator.popUntil(context, ((route) {
-                  return count++ == 2;
-                }));
-              },
-            ),
-            backgroundColor: const Color.fromARGB(255, 23, 22, 29),
-            automaticallyImplyLeading: false,
-          ),
-          body: const WebView(
-            javascriptMode: JavascriptMode.unrestricted,
-            initialUrl: 'https://checkout-staging.xendit.co/web/6322943cd0a17dc369f34252',
-          ),
-        );
-      })));
-    }
   }
 
   @override

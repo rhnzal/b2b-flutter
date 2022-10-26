@@ -4,10 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:projectb2b/endpoints.dart';
 import 'package:projectb2b/screen/previewscreen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:http/http.dart' as http;
 import 'package:projectb2b/http.dart' as http_test;
-import 'dart:convert';
-import 'dart:io';
 
 import 'package:webview_flutter/webview_flutter.dart';
 

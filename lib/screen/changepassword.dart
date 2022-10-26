@@ -8,9 +8,11 @@ import 'package:projectb2b/http.dart' as http_test;
 import 'package:projectb2b/endpoints.dart';
 
 class ChangePassword extends StatefulWidget {
-  const ChangePassword({Key? key, required this.check}) : super(key: key);
+  const ChangePassword({Key? key, required this.check, this.email, this.otp}) : super(key: key);
 
   final String check;
+  final String? email;
+  final String? otp;
 
   @override
   State<ChangePassword> createState() => _ChangePasswordState();
@@ -21,12 +23,16 @@ class _ChangePasswordState extends State<ChangePassword> {
   final TextEditingController passCon = TextEditingController();
   String newPass = '';
   final RoundedLoadingButtonController _buttonController = RoundedLoadingButtonController();
+  bool _isObscure = true;
+  bool _confirmObsecure = true;
 
   void enter (RoundedLoadingButtonController controller, String check) async{
     if(formKey.currentState!.validate()){
       var response = await http_test.put(
         url: urlChangePassword, 
         body: {
+          "email" : widget.email,
+          "otp" : widget.otp,
           "password": newPass
         }
       );
@@ -116,6 +122,7 @@ class _ChangePasswordState extends State<ChangePassword> {
         controller: passCon,
         cursorColor: Colors.white,
         style: const TextStyle(color: Colors.white),
+        obscureText: _isObscure,
         decoration: InputDecoration(
           // prefixIcon: Image.asset('icons/email.png',height: 4 ),
           prefixIcon: const Icon(
@@ -131,13 +138,27 @@ class _ChangePasswordState extends State<ChangePassword> {
               fontWeight: FontWeight.w200,
               color: Colors.white,
               fontSize: 12),
+          suffixIcon: IconButton(
+            onPressed: (){
+              setState(() {
+                _isObscure = !_isObscure;
+              });
+            }, 
+            icon: Icon(
+              _isObscure ? Icons.visibility_outlined
+                : Icons.visibility_off_outlined,
+              color: Colors.white
+            ),
+              splashColor: Colors.transparent,
+              highlightColor: Colors.transparent,
+            ),
           border: OutlineInputBorder(
               borderSide: BorderSide.none,
               borderRadius: BorderRadius.circular(20)),
       ),
-      onChanged: ((value) {
+      onChanged: (value) {
         newPass = value;
-      }),
+      },
       validator: (value){
         if(value!.isEmpty){
           return 'Please enter your new password';
@@ -155,6 +176,7 @@ class _ChangePasswordState extends State<ChangePassword> {
       child: TextFormField(
         cursorColor: Colors.white,
         style: const TextStyle(color: Colors.white),
+        obscureText: _confirmObsecure,
         decoration: InputDecoration(
           // prefixIcon: Image.asset('icons/email.png',height: 4 ),
           prefixIcon: const Icon(
@@ -170,6 +192,20 @@ class _ChangePasswordState extends State<ChangePassword> {
               fontWeight: FontWeight.w200,
               color: Colors.white,
               fontSize: 12),
+          suffixIcon: IconButton(
+            onPressed: (){
+              setState(() {
+                _confirmObsecure = !_confirmObsecure;
+              });
+            }, 
+            icon: Icon(
+              _confirmObsecure ? Icons.visibility_outlined
+                : Icons.visibility_off_outlined,
+              color: Colors.white
+            ),
+            splashColor: Colors.transparent,
+            highlightColor: Colors.transparent,
+          ),
           border: OutlineInputBorder(
               borderSide: BorderSide.none,
               borderRadius: BorderRadius.circular(20)),

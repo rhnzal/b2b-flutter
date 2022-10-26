@@ -7,6 +7,7 @@ import 'package:flutter/services.dart';
 import 'package:projectb2b/endpoints.dart';
 import 'package:projectb2b/screen/login.dart';
 import 'package:http/http.dart' as http;
+import 'package:projectb2b/http.dart' as http_test;
 import 'package:rounded_loading_button/rounded_loading_button.dart';
 
 class Register extends StatefulWidget {
@@ -30,20 +31,16 @@ class _RegisterState extends State<Register> {
 
   void signup(RoundedLoadingButtonController controller) async{
     if (formKey.currentState!.validate()) {
-      var response = await http.post(
-          Uri.parse(urlRegister),
-          headers: {
-            HttpHeaders.contentTypeHeader: 'application/json'
-          },
-          body: json.encode({
-            "fullName": regname,
-            "email": regemail,
-            "password": regpas,
-          }));
-      //     print(response.body);
-      // print(response.body);
-      isSuccess = json.decode(response.body)['isSuccess'];
-      if(isSuccess){
+      var response = await http_test.post(
+        url: urlRegister, 
+        body: {
+          "fullName": regname,
+          "email": regemail,
+          "password": regpas
+        }
+      );
+      
+      if(response.isSuccess){
         controller.success();
         Timer(const Duration(seconds: 1), (){
         showDialog(
@@ -87,7 +84,7 @@ class _RegisterState extends State<Register> {
         });
       } else {
         _buttonController.reset();
-        var error = json.decode(response.body)['message'];
+        var error = response.message;
         showDialog(context: context, builder: ((context) => AlertDialog(
           shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10)),

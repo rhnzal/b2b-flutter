@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:projectb2b/endpoints.dart';
 import 'package:projectb2b/screen/paymentscreen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:projectb2b/http.dart' as http_test;
 
 class QuotaScreen extends StatefulWidget {
   const QuotaScreen({Key? key}) : super(key: key);
@@ -12,8 +15,9 @@ class QuotaScreen extends StatefulWidget {
 class _QuotaScreenState extends State<QuotaScreen> {
   late SharedPreferences prefs;
   String? displayName = '';
-  // var list = [];
-  // bool isLoad = true;
+  String quota = '';
+  var list = [];
+  bool isLoad = true;
 
   @override
   void initState(){
@@ -26,6 +30,24 @@ class _QuotaScreenState extends State<QuotaScreen> {
     displayName = prefs.getString('name');
     // getActivity();
     setState(() {});
+    getQuota();
+    getHistory();
+  }
+
+  getQuota()async{
+    var response = await http_test.get(url: urlQuota);
+    quota = response.data.toString();
+    setState(() {});
+  }
+
+  getHistory()async{
+    var response = await http_test.get(url: urlHistory);
+    if(response.isSuccess){
+      list = response.data;
+      setState(() {
+        isLoad = false;
+      });
+    }
   }
 
   // Future<void> getActivity() async {
@@ -88,7 +110,7 @@ class _QuotaScreenState extends State<QuotaScreen> {
   );
 
   Widget wishlist = Container(
-      margin: const EdgeInsets.fromLTRB(20, 0, 10, 10),
+      margin: const EdgeInsets.fromLTRB(20, 0, 10, 0),
       child: Row(
         children: const [
           Icon(Icons.list_rounded),
@@ -133,21 +155,21 @@ class _QuotaScreenState extends State<QuotaScreen> {
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    children: const [
-                      Text(
-                          'Remaining Quota',
+                    children: [
+                      const Text(
+                          'Remaining Quota :',
                         // DateFormat.yMMMd().format(DateTime.parse(activity[index]["createdAt"])),
                           style: TextStyle(
                               fontFamily: 'Inter',
                               fontWeight: FontWeight.w400,
                               fontSize: 10)),
-                      SizedBox(
+                      const SizedBox(
                         height: 5,
                       ),
                       Text(
                         // getUrl().toString(),
-                        'Quota',
-                        style: TextStyle(
+                        quota,
+                        style: const TextStyle(
                             fontFamily: 'Inter',
                             fontWeight: FontWeight.w700,
                             fontSize: 18),
@@ -185,176 +207,130 @@ class _QuotaScreenState extends State<QuotaScreen> {
     )
   );
 
-Widget transactionList = Padding(
-    padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
-    child: Card(
-      elevation: 2,
-      shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(15)),
-      margin: const EdgeInsets.only(bottom: 20),
-      child: Padding(
-        padding:const EdgeInsets.fromLTRB(15, 15, 15, 15),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: const [
-                  Text(
-                    // getUrl().toString(),
-                    'Judul',
-                    style: TextStyle(
-                        fontFamily: 'Inter',
-                        fontWeight: FontWeight.w700,
-                        fontSize: 18),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  Text(
-                      'Tanggal',
-                    // DateFormat.yMMMd().format(DateTime.parse(activity[index]["createdAt"])),
-                      style: TextStyle(
-                          fontFamily: 'Inter',
-                          fontWeight: FontWeight.w400,
-                          fontSize: 10)),
-                  // Text(activity[index]["createdAt"])
-                ],
-              ),
-            ),
-            const Text(
-                    // getUrl().toString(),
-                    'Price',
-                    style: TextStyle(
-                        fontFamily: 'Inter',
-                        fontWeight: FontWeight.w700,
-                        fontSize: 18),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  )
-          ],
-        ),
-      )
-    )
-  );
-
-// Widget favoriteList = isLoad ? Container(
-//           padding: const EdgeInsets.only(top: 150),
-//           child:const CircularProgressIndicator(color: Color.fromARGB(255, 23, 22, 29),)) 
-//         : list.isEmpty ? Container(
-//           padding: const EdgeInsets.only(top: 150),
-//           child: const Icon(Icons.folder_off_outlined, size: 60, color: Color.fromARGB(255, 26, 25, 32),),
-//         )
-//         : Expanded(
-//             child: ScrollConfiguration(
-//               behavior: const ScrollBehavior(),
-//               child: GlowingOverscrollIndicator(
-//                 axisDirection: AxisDirection.down,
-//                 color: Colors.white,
-//                 child: ListView.builder(
-//                     itemCount: list.length,
-//                     itemBuilder: (context, index) => Padding(
-//                       padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
-//                       child: Card(
-//                         elevation: 10,
-//                         shape: RoundedRectangleBorder(
-//                             borderRadius: BorderRadius.circular(15)),
-//                         margin: const EdgeInsets.only(bottom: 20),
-//                         child: Padding(
-//                           padding:const EdgeInsets.fromLTRB(15, 20, 15, 20),
-//                           child: Row(
-//                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//                             children: [
-//                               Expanded(
-//                                 child: Column(
-//                                   crossAxisAlignment: CrossAxisAlignment.start,
-//                                   children: [
-//                                     Text(
-//                                       // getUrl().toString(),
-//                                       list[index]['judul'],
-//                                       style: const TextStyle(
-//                                           fontFamily: 'Inter',
-//                                           fontWeight: FontWeight.w700,
-//                                           fontSize: 18),
-//                                       maxLines: 1,
-//                                       overflow: TextOverflow.ellipsis,
-//                                     ),
-//                                     Text(
-//                                         // 'Tanggal',
-//                                       DateFormat.yMMMd().format(DateTime.parse(list[index]["createdAt"])),
-//                                         style: const TextStyle(
-//                                             fontFamily: 'Inter',
-//                                             fontWeight: FontWeight.w400,
-//                                             fontSize: 10)),
-//                                     // Text(activity[index]["createdAt"])
-//                                   ],
-//                                 ),
-//                               ),
-//                               ElevatedButton(
-//                                 style: ElevatedButton.styleFrom(
-//                                       onSurface: const Color.fromARGB(255, 255, 255, 255),
-//                                       primary: const Color.fromARGB(255, 217, 217, 217),
-//                                       shape: const StadiumBorder(),
-//                                       elevation: 10),
-//                                 onPressed: (){
-//                                   showDialog(
-//                                     context: context, 
-//                                     builder: ((context) => AlertDialog(
-//                                       shape: RoundedRectangleBorder(
-//                                         borderRadius: BorderRadius.all(Radius.circular(20))
-//                                       ),
-//                                       backgroundColor: Color.fromARGB(255, 224, 232, 235),
-//                                       title: Text('Open this URL ?',
-//                                       style: TextStyle(
-//                                         fontFamily: 'Inter',
-//                                         fontWeight: FontWeight.w500,
-//                                         fontSize: 20,
-//                                         color: Color.fromARGB(255, 26, 25, 32))),
-//                                       content: Container(
-//                                         height: 35,
-//                                         child: Text('URL')
-//                                         ),
-//                                       actions: [
-//                                         TextButton(
-//                                           style: ButtonStyle(
-//                                             overlayColor: MaterialStateProperty.all(Colors.transparent),
-//                                             minimumSize: MaterialStateProperty.all(Size.zero),
-//                                             tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-//                                             padding: MaterialStateProperty.all(const EdgeInsets.fromLTRB(0, 0, 10, 10))),
-//                                           onPressed: (){
-//                                             Navigator.pop(context);
-//                                           }, 
-//                                           child: Text('Cancel',
-//                                           style: TextStyle(
-//                                                         color: Color.fromARGB(255, 23, 22, 29)))),
-//                                         TextButton(
-//                                           style: ButtonStyle(
-//                                             overlayColor: MaterialStateProperty.all(Colors.transparent),
-//                                             minimumSize: MaterialStateProperty.all(Size.zero),
-//                                             tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-//                                             padding: MaterialStateProperty.all(const EdgeInsets.fromLTRB(0, 0, 20, 10))),
-//                                           onPressed: (){}, 
-//                                           child: Text('Ok',
-//                                           style: TextStyle(
-//                                                         color: Color.fromARGB(255, 23, 22, 29))))
-//                                       ],
-//                                     )));
-//                                 }, 
-//                                 child: Text('Open', 
-//                                 style: TextStyle(
-//                                           fontFamily: 'Inter',
-//                                           fontWeight: FontWeight.w500,
-//                                           color: Color.fromARGB(255, 27, 26, 32),
-//                                           fontSize: 12)))
-//                             ],
-//                           ),
-//                         )
-//                       )
-//                     )
-//                       ),
+// Widget transactionList = Padding(
+//     padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
+//     child: Card(
+//       elevation: 2,
+//       shape: RoundedRectangleBorder(
+//           borderRadius: BorderRadius.circular(15)),
+//       margin: const EdgeInsets.only(bottom: 20),
+//       child: Padding(
+//         padding:const EdgeInsets.fromLTRB(15, 15, 15, 15),
+//         child: Row(
+//           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//           children: [
+//             Expanded(
+//               child: Column(
+//                 crossAxisAlignment: CrossAxisAlignment.start,
+//                 children: const [
+//                   Text(
+//                     // getUrl().toString(),
+//                     'Judul',
+//                     style: TextStyle(
+//                         fontFamily: 'Inter',
+//                         fontWeight: FontWeight.w700,
+//                         fontSize: 18),
+//                     maxLines: 1,
+//                     overflow: TextOverflow.ellipsis,
+//                   ),
+//                   Text(
+//                       'Tanggal',
+//                     // DateFormat.yMMMd().format(DateTime.parse(activity[index]["createdAt"])),
+//                       style: TextStyle(
+//                           fontFamily: 'Inter',
+//                           fontWeight: FontWeight.w400,
+//                           fontSize: 10)),
+//                   // Text(activity[index]["createdAt"])
+//                 ],
 //               ),
 //             ),
-//           );
+//             const Text(
+//                     // getUrl().toString(),
+//                     'Status',
+//                     style: TextStyle(
+//                         fontFamily: 'Inter',
+//                         fontWeight: FontWeight.w700,
+//                         fontSize: 18),
+//                     maxLines: 1,
+//                     overflow: TextOverflow.ellipsis,
+//                   )
+//           ],
+//         ),
+//       )
+//     )
+//   );
+
+Widget transactionList= isLoad ? Container(
+          padding: const EdgeInsets.only(top: 150),
+          child:const CircularProgressIndicator(color: Color.fromARGB(255, 23, 22, 29),)) 
+        : list.isEmpty ? Container(
+          padding: const EdgeInsets.only(top: 150),
+          child: const Icon(Icons.folder_off_outlined, size: 60, color: Color.fromARGB(255, 26, 25, 32),),
+        )
+        : Expanded(
+            child: ScrollConfiguration(
+              behavior: const ScrollBehavior(),
+              child: GlowingOverscrollIndicator(
+                axisDirection: AxisDirection.down,
+                color: Colors.white,
+                child: ListView.builder(
+                    itemCount: list.length,
+                    itemBuilder: (context, index) => Padding(
+                      padding: const EdgeInsets.fromLTRB(20, 5, 20, 0),
+                      child: Card(
+                        elevation: 10,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(15)),
+                        margin: const EdgeInsets.only(bottom: 20),
+                        child: Padding(
+                          padding:const EdgeInsets.fromLTRB(15, 20, 15, 20),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      // getUrl().toString(),
+                                      list[index]['product']['title'],
+                                      style: const TextStyle(
+                                          fontFamily: 'Inter',
+                                          fontWeight: FontWeight.w700,
+                                          fontSize: 18),
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                    Text(
+                                        // 'Tanggal',
+                                      DateFormat.yMMMd().format(DateTime.parse(list[index]["createdAt"])),
+                                        style: const TextStyle(
+                                            fontFamily: 'Inter',
+                                            fontWeight: FontWeight.w400,
+                                            fontSize: 10)),
+                                    // Text(activity[index]["createdAt"])
+                                  ],
+                                ),
+                              ),
+                              Text(
+                                      // getUrl().toString(),
+                                      list[index]['product']['price'].toString(),
+                                      style: const TextStyle(
+                                          fontFamily: 'Inter',
+                                          fontWeight: FontWeight.w700,
+                                          fontSize: 18),
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                            ],
+                          ),
+                        )
+                      )
+                    )
+                      ),
+              ),
+            ),
+          );
 
   // Widget addItem = FloatingActionButton(
   //   onPressed: (){},

@@ -12,4 +12,6 @@ const String urlEditName = '$baseURL/api/users/editprofil';
 const String urlChangePassword = '$baseURL/api/auth/edit-password';
 const String urlCheckOTP = '$baseURL/api/auth/check-otp';
 const String urlLogout = '$baseURL/api/auth/logout';
+const String urlQuota = '$baseURL/api/users/quota';
+const String urlHistory = '$baseURL/api/transaction/history';
 // const String urlQuota = '$baseURL/';

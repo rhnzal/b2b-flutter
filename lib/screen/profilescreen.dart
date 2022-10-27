@@ -18,6 +18,7 @@ class ProfileScreen extends StatefulWidget {
 class _ProfileScreenState extends State<ProfileScreen> {
   late SharedPreferences prefs;
   late String address;
+  String quotaRemaining = '';
   late String editName;
   String? displayName = '';
   var activity = [];
@@ -32,6 +33,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Future<void> initpreference() async {
     prefs = await SharedPreferences.getInstance();
     displayName = prefs.getString('name');
+    setState(() {});
+    getQuota();
+  }
+
+    getQuota()async{
+    var response = await http_test.get(url: urlQuota);
+    quotaRemaining = response.data.toString();
     setState(() {});
   }
 
@@ -586,8 +594,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       const SizedBox(
                         height: 10,
                       ),
-                      const Text('100 URL Left',
-                          style: TextStyle(
+                      Text('$quotaRemaining URL Left',
+                          style: const TextStyle(
                               fontFamily: 'Inter',
                               fontWeight: FontWeight.w700,
                               fontSize: 16,

@@ -1,12 +1,9 @@
 import 'dart:async';
-import 'dart:convert';
-import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:projectb2b/endpoints.dart';
 import 'package:projectb2b/screen/login.dart';
-import 'package:http/http.dart' as http;
 import 'package:projectb2b/http.dart' as http_test;
 import 'package:rounded_loading_button/rounded_loading_button.dart';
 

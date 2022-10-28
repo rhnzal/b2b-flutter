@@ -39,7 +39,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
     getQuota()async{
     var response = await http_test.get(url: urlQuota);
-    quotaRemaining = response.data.toString();
+    quotaRemaining = response.data['quota'].toString();
     setState(() {});
   }
 

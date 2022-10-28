@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:projectb2b/endpoints.dart';
+import 'package:projectb2b/screen/detailtransaction.dart';
 import 'package:projectb2b/screen/paymentscreen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:projectb2b/http.dart' as http_test;
@@ -16,6 +17,7 @@ class _QuotaScreenState extends State<QuotaScreen> {
   late SharedPreferences prefs;
   String? displayName = '';
   String quota = '';
+  String subs = '';
   var list = [];
   bool isLoad = true;
 
@@ -36,7 +38,8 @@ class _QuotaScreenState extends State<QuotaScreen> {
 
   getQuota()async{
     var response = await http_test.get(url: urlQuota);
-    quota = response.data.toString();
+    quota = response.data['quota'].toString();
+    subs = response.data['subs'].toString();
     setState(() {});
   }
 
@@ -47,6 +50,44 @@ class _QuotaScreenState extends State<QuotaScreen> {
       setState(() {
         isLoad = false;
       });
+    }else{
+      var error = response.message;
+      if(mounted){
+        showDialog(
+            context: context,
+            builder: ((context) => AlertDialog(
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10)),
+                  backgroundColor:const Color.fromARGB(255, 224, 232, 235),
+                  title: const Text('Error'),
+                  titleTextStyle: const TextStyle(
+                      color: Color.fromARGB(255, 23, 22, 29),
+                      fontFamily: 'Inter',
+                      fontWeight: FontWeight.w600),
+                  content: Text('$error'),
+                  contentTextStyle: const TextStyle(color: Color.fromARGB(255, 23, 22, 29)),
+                  actions: [
+                    TextButton(
+                        style: ButtonStyle(
+                            overlayColor: MaterialStateProperty.all(
+                                Colors.transparent),
+                            minimumSize: MaterialStateProperty.all(
+                                Size.zero),
+                            tapTargetSize:
+                                MaterialTapTargetSize.shrinkWrap,
+                            padding: MaterialStateProperty.all(
+                                const EdgeInsets.fromLTRB(0, 0, 10, 10))),
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        child: const Text(
+                          'OK',
+                          style: TextStyle(color: Color.fromARGB(255, 23, 22, 29),),
+                        )),
+                  ],
+                )));
+
+      }
     }
   }
 
@@ -134,11 +175,11 @@ class _QuotaScreenState extends State<QuotaScreen> {
         child: Column(
           children: [
             Row(
-              children: const [
-                Text('Your Subscription : '),
+              children: [
+                const Text('Your Subscription : '),
                 //nama paket
-                Text('TEST',
-                  style: TextStyle(
+                Text(subs,
+                  style: const TextStyle(
                             fontFamily: 'Inter',
                             fontWeight: FontWeight.w700,
                             fontSize: 18),
@@ -261,10 +302,10 @@ class _QuotaScreenState extends State<QuotaScreen> {
 //   );
 
 Widget transactionList= isLoad ? Container(
-          padding: const EdgeInsets.only(top: 150),
+          padding: const EdgeInsets.only(top: 70),
           child:const CircularProgressIndicator(color: Color.fromARGB(255, 23, 22, 29),)) 
         : list.isEmpty ? Container(
-          padding: const EdgeInsets.only(top: 150),
+          padding: const EdgeInsets.only(top: 70),
           child: const Icon(Icons.folder_off_outlined, size: 60, color: Color.fromARGB(255, 26, 25, 32),),
         )
         : Expanded(
@@ -276,53 +317,62 @@ Widget transactionList= isLoad ? Container(
                 child: ListView.builder(
                     itemCount: list.length,
                     itemBuilder: (context, index) => Padding(
-                      padding: const EdgeInsets.fromLTRB(20, 5, 20, 0),
+                      padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
                       child: Card(
-                        elevation: 10,
+                        elevation: 2,
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(15)),
                         margin: const EdgeInsets.only(bottom: 20),
-                        child: Padding(
-                          padding:const EdgeInsets.fromLTRB(15, 20, 15, 20),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Expanded(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      // getUrl().toString(),
-                                      list[index]['product']['title'],
-                                      style: const TextStyle(
-                                          fontFamily: 'Inter',
-                                          fontWeight: FontWeight.w700,
-                                          fontSize: 18),
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                                    Text(
-                                        // 'Tanggal',
-                                      DateFormat.yMMMd().format(DateTime.parse(list[index]["createdAt"])),
+                        child: InkWell(
+                          borderRadius: BorderRadius.circular(15),
+                          onTap: () {
+                            Navigator.push(context, MaterialPageRoute(builder: ((context) {
+                              return DetailTransaction(index: index);
+                            })));
+                          },
+                          child: Padding(
+                            padding:const EdgeInsets.fromLTRB(15, 20, 15, 20),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        // getUrl().toString(),
+                                        list[index]['product']['title'],
                                         style: const TextStyle(
                                             fontFamily: 'Inter',
-                                            fontWeight: FontWeight.w400,
-                                            fontSize: 10)),
-                                    // Text(activity[index]["createdAt"])
-                                  ],
+                                            fontWeight: FontWeight.w700,
+                                            fontSize: 18),
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                      Text(
+                                          // 'Tanggal',
+                                        DateFormat.yMMMd().format(DateTime.parse(list[index]["createdAt"])),
+                                          style: const TextStyle(
+                                              fontFamily: 'Inter',
+                                              fontWeight: FontWeight.w400,
+                                              fontSize: 10)),
+                                      // Text(activity[index]["createdAt"])
+                                    ],
+                                  ),
                                 ),
-                              ),
-                              Text(
-                                      // getUrl().toString(),
-                                      list[index]['product']['price'].toString(),
-                                      style: const TextStyle(
-                                          fontFamily: 'Inter',
-                                          fontWeight: FontWeight.w700,
-                                          fontSize: 18),
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                            ],
+                                Text(
+                                        // getUrl().toString(),
+                                        NumberFormat.simpleCurrency(locale:'in', decimalDigits: 0).format(list[index]['product']['price']),
+                                        style: const TextStyle(
+                                            fontFamily: 'Inter',
+                                            fontWeight: FontWeight.w700,
+                                            fontSize: 18),
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                const Icon(Icons.navigate_next_outlined)
+                              ],
+                            ),
                           ),
                         )
                       )

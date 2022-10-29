@@ -59,8 +59,10 @@ class _LoginState extends State<Login> {
                     // print(username);
                     var token = response.data["token"];
                     var displayName = response.data["fullName"];
+                    var email = response.data["email"];
                     prefs.setString('name', displayName);
                     prefs.setString('token', token);
+                    prefs.setString('email', email);
                     controller.success();
                     Timer(const Duration(seconds: 1), (){
                     Navigator.pushReplacement(context,

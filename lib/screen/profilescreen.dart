@@ -21,6 +21,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   String quotaRemaining = '';
   late String editName;
   String? displayName = '';
+  String? email = '';
   var activity = [];
   @override
   void initState() {
@@ -33,6 +34,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Future<void> initpreference() async {
     prefs = await SharedPreferences.getInstance();
     displayName = prefs.getString('name');
+    email = prefs.getString('email');
     setState(() {});
     getQuota();
   }
@@ -371,17 +373,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     // ignore: prefer_const_literals_to_create_immutables
-                    children: const [
-                      Text("Address",
+                    children: [
+                      const Text("Email",
                           style: TextStyle(
                               fontFamily: 'Inter',
                               fontWeight: FontWeight.w500,
                               fontSize: 12,
                               color: Color.fromARGB(255, 224, 232, 235))),
-                      SizedBox(height: 10),
+                      const SizedBox(height: 10),
                       Text(
-                        "-",
-                        style: TextStyle(
+                        email.toString(),
+                        style: const TextStyle(
                             fontFamily: 'Inter',
                             fontWeight: FontWeight.w700,
                             fontSize: 16,
@@ -389,90 +391,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       )
                     ],
                   ),
-                  SizedBox(
-                    height: 20,
-                    width: 60,
-                    child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                            primary: Colors.white,
-                            shape: const StadiumBorder(),
-                            elevation: 10),
-                        onPressed: () {
-                          showDialog(
-                            context: context, 
-                            builder: ((context) => AlertDialog(
-                              shape: const RoundedRectangleBorder(
-                                borderRadius: BorderRadius.all(Radius.circular(20))
-                              ),
-                              backgroundColor: const Color.fromARGB(255, 224, 232, 235),
-                              title: const Text('Change Address',
-                              style: TextStyle(
-                                fontFamily: 'Inter',
-                                fontWeight: FontWeight.w500,
-                                fontSize: 20,
-                                color: Color.fromARGB(255, 26, 25, 32))),
-                              content: SizedBox(
-                                height: 35,
-                                child: TextFormField(
-                                onChanged: (value) {
-                                   address = value;
-                                },
-                              cursorColor: Colors.black,
-                              style: const TextStyle(
-                                  color: Colors.black,
-                                  fontFamily: 'Inter',
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: 14),
-                              decoration: InputDecoration(
-                                filled: true,
-                                fillColor: const Color.fromARGB(255, 255, 255, 255),
-                                contentPadding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
-                                hintText: 'Address',
-                                hintStyle: const TextStyle(
-                                    fontFamily: 'Inter',
-                                    fontWeight: FontWeight.w500,
-                                    color: Color.fromARGB(100, 0, 0, 0),
-                                    fontSize: 12),
-                                border: OutlineInputBorder(
-                                    borderSide: BorderSide.none,
-                                    borderRadius: BorderRadius.circular(20)),
-                              ),
-                              )),
-                              actions: [
-                                TextButton(
-                                  style: ButtonStyle(
-                                    overlayColor: MaterialStateProperty.all(Colors.transparent),
-                                    minimumSize: MaterialStateProperty.all(Size.zero),
-                                    tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                                    padding: MaterialStateProperty.all(const EdgeInsets.fromLTRB(0, 0, 10, 10))),
-                                  onPressed: (){
-                                    Navigator.pop(context);
-                                  }, 
-                                  child: const Text('Cancel',
-                                  style: TextStyle(
-                                                color: Color.fromARGB(255, 23, 22, 29)))),
-                                TextButton(
-                                  style: ButtonStyle(
-                                    overlayColor: MaterialStateProperty.all(Colors.transparent),
-                                    minimumSize: MaterialStateProperty.all(Size.zero),
-                                    tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                                    padding: MaterialStateProperty.all(const EdgeInsets.fromLTRB(0, 0, 20, 10))),
-                                  onPressed: (){}, 
-                                  child: const Text('Ok',
-                                  style: TextStyle(
-                                                color: Color.fromARGB(255, 23, 22, 29))))
-                              ],
-                            )));
-                        },
-                        child: const Text(
-                          'Edit',
-                          style: TextStyle(
-                              fontFamily: 'Inter',
-                              fontWeight: FontWeight.w500,
-                              fontSize: 12,
-                              color: Color.fromARGB(255, 26, 25, 32)),
-                        )),
-                  )
                 ],
               ),
             ),

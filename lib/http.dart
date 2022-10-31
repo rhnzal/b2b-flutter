@@ -116,7 +116,7 @@ Future<HTTPResponse> put({@required url, @required body, Duration timeout = cons
       },
       body: json.encode(body)
     ).timeout(timeout);
-    var res = json.decode(response.body);
+    var res = json.decode(response.body)['data'];
     if(response.statusCode == 200){
       return HTTPResponse(
         status: HTTPResponseStatus.success,

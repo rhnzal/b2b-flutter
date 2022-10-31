@@ -1,4 +1,6 @@
 import 'dart:convert';
+import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:projectb2b/endpoints.dart';
@@ -6,6 +8,7 @@ import 'package:projectb2b/screen/login.dart';
 import 'package:projectb2b/screen/changepassword.dart';
 import 'package:projectb2b/screen/paymentscreen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:projectb2b/http.dart' as  http_test;
 
 class ProfileScreen extends StatefulWidget {
@@ -16,6 +19,7 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
+  final ImagePicker _picker = ImagePicker();
   late SharedPreferences prefs;
   late String address;
   String quotaRemaining = '';
@@ -51,13 +55,136 @@ class _ProfileScreenState extends State<ProfileScreen> {
       margin: const EdgeInsets.fromLTRB(40, 50, 40, 0),
       child: Row(
         children: [
-          const CircleAvatar(
-            backgroundColor: Colors.white,
-            backgroundImage: AssetImage('images/user.png'),
-            radius: 30,
+          Stack(
+            children: [
+              const CircleAvatar(
+                backgroundColor: Colors.white,
+                backgroundImage: AssetImage('images/user.png'),
+                radius: 35,
+              ),
+              Positioned(
+                top: 0,
+                right: 0,
+                child: Container(
+                  height: 25,
+                  width: 25,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    shape: BoxShape.circle,
+                    border: Border.all(
+                      width: 2,
+                      color: const Color.fromARGB(255, 224, 232, 235)
+                    )
+                  ),
+                  child: IconButton(
+                    onPressed: () {
+                      showDialog(context: context, builder: ((context) => AlertDialog(
+                        shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10)),
+                                backgroundColor:const Color.fromARGB(255, 224, 232, 235),
+                                title: const Center(child: Text('Pick Image From')),
+                                titleTextStyle: const TextStyle(
+                                    color: Color.fromARGB(255, 23, 22, 29),
+                                    fontSize: 17,
+                                    fontFamily: 'Inter',
+                                    fontWeight: FontWeight.w600),
+                                content: SizedBox(
+                                  height: 100,
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                    children: [
+                                      Column(
+                                        children: [
+                                          ElevatedButton(
+                                            style: ElevatedButton.styleFrom(
+                                              shape: const CircleBorder(),
+                                              primary: const Color.fromARGB(255, 23, 22, 29),
+                                              onPrimary: const Color.fromARGB(255, 224, 232, 235)
+                                            ),
+                                            onPressed: () async{
+                                              XFile? pickedImage = await _picker.pickImage(source: ImageSource.camera);
+                                              if(mounted){
+                                                Navigator.pop(context);
+                                              }
+                                              Uint8List imageBytes = await pickedImage!.readAsBytes();
+                                              String result = base64.encode(imageBytes);
+                                              print(result);
+                                              var response = await http_test.put(
+                                                url: urlChangePicture, 
+                                                body: {
+                                                  "base64": result
+                                                }
+                                              );
+                                              if(response.isSuccess){
+                                                print('sugsegs');
+                                              }
+                                            }, 
+                                            child: const SizedBox(
+                                              height: 75,
+                                              child: Icon(Icons.photo_camera_outlined),
+                                            )
+                                          ),
+                                          const Text('Camera',
+                                            style: TextStyle(fontFamily: 'Inter',color: Color.fromARGB(255, 23, 22, 29),fontSize: 14, fontWeight: FontWeight.w600),
+                                          )
+                                        ],
+                                      ),
+                                      Column(
+                                        children: [
+                                          ElevatedButton(
+                                            style: ElevatedButton.styleFrom(
+                                              shape: const CircleBorder(),
+                                              primary: const Color.fromARGB(255, 23, 22, 29),
+                                              onPrimary: const Color.fromARGB(255, 224, 232, 235)
+                                            ),
+                                            onPressed: () async{
+                                              XFile? pickedImage = await _picker.pickImage(source: ImageSource.gallery);
+                                              if(mounted){
+                                                Navigator.pop(context);
+                                              }
+                                              Uint8List imageBytes = await pickedImage!.readAsBytes();
+                                              String result = base64.encode(imageBytes);
+                                              print(result);
+                                              var response = await http_test.put(
+                                                url: urlChangePicture, 
+                                                body: {
+                                                  "base64": result
+                                                }
+                                              );
+                                              if(response.isSuccess){
+                                                print('sugsegs');
+                                              }
+                                            }, 
+                                            child: const SizedBox(
+                                              height: 75,
+                                              child: Icon(Icons.collections_outlined),
+                                            )
+                                          ),
+                                          const Text('Gallery', 
+                                            style: TextStyle(fontFamily: 'Inter',color: Color.fromARGB(255, 23, 22, 29),fontSize: 14, fontWeight: FontWeight.w600),
+                                          )
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                ),                                  
+                      )));
+                    },
+                    padding: const EdgeInsets.all(0),
+                    splashColor: Colors.transparent,
+                    highlightColor: Colors.transparent,
+                    icon: const Icon(
+                      Icons.edit_outlined, 
+                      size: 15,
+                      color: Color.fromARGB(255, 26, 25, 32)
+                    ),
+                  ),
+                ),
+              )
+            ],
           ),
           Padding(
-            padding: const EdgeInsets.only(left: 10),
+            padding: const EdgeInsets.only(left: 15),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -336,10 +463,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                         "fullName" : editName
                                       }
                                     );
-                                    var name = response.data[0][2];
+                                    var name = response.data['fullName'];
                                     print(name);
                                     setState(() {
                                       prefs.setString('name', name);
+                                      displayName = prefs.getString('name');
                                     });
                                     if(mounted){
                                       Navigator.pop(context);

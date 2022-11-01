@@ -22,6 +22,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   final ImagePicker _picker = ImagePicker();
   late SharedPreferences prefs;
   late String address;
+  String? pfp = '';
   String quotaRemaining = '';
   late String editName;
   String? displayName = '';
@@ -39,6 +40,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
     prefs = await SharedPreferences.getInstance();
     displayName = prefs.getString('name');
     email = prefs.getString('email');
+    pfp = prefs.getString('pfp');
+    print(pfp);
     setState(() {});
     getQuota();
   }
@@ -46,7 +49,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
     getQuota()async{
     var response = await http_test.get(url: urlQuota);
     quotaRemaining = response.data['quota'].toString();
-    setState(() {});
+    if(mounted){
+      setState(() {});
+    }
   }
 
   @override
@@ -57,9 +62,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
         children: [
           Stack(
             children: [
-              const CircleAvatar(
+              CircleAvatar(
                 backgroundColor: Colors.white,
-                backgroundImage: AssetImage('images/user.png'),
+                backgroundImage: NetworkImage(pfp!),
                 radius: 35,
               ),
               Positioned(
@@ -103,20 +108,28 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                             ),
                                             onPressed: () async{
                                               XFile? pickedImage = await _picker.pickImage(source: ImageSource.camera);
-                                              if(mounted){
-                                                Navigator.pop(context);
-                                              }
-                                              Uint8List imageBytes = await pickedImage!.readAsBytes();
-                                              String result = base64.encode(imageBytes);
-                                              print(result);
-                                              var response = await http_test.put(
-                                                url: urlChangePicture, 
-                                                body: {
-                                                  "base64": result
+                                              if(pickedImage != null){
+                                                if(mounted){
+                                                  Navigator.pop(context);
                                                 }
-                                              );
-                                              if(response.isSuccess){
-                                                print('sugsegs');
+                                                Uint8List imageBytes = await pickedImage.readAsBytes();
+                                                String result = base64.encode(imageBytes);
+                                                print(result);
+                                                var response = await http_test.put(
+                                                  url: urlChangePicture, 
+                                                  body: {
+                                                    "base64": result
+                                                  }
+                                                );
+                                                if(response.isSuccess){
+                                                  setState(() {
+                                                    List avatar = response.data['avatar'];
+                                                    prefs.setString('pfp', avatar.last);
+                                                    pfp = prefs.getString('pfp');
+                                                  });
+                                                  print('sugsegs');
+                                                  print(response.data);
+                                                }
                                               }
                                             }, 
                                             child: const SizedBox(
@@ -139,20 +152,26 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                             ),
                                             onPressed: () async{
                                               XFile? pickedImage = await _picker.pickImage(source: ImageSource.gallery);
-                                              if(mounted){
-                                                Navigator.pop(context);
-                                              }
-                                              Uint8List imageBytes = await pickedImage!.readAsBytes();
-                                              String result = base64.encode(imageBytes);
-                                              print(result);
-                                              var response = await http_test.put(
-                                                url: urlChangePicture, 
-                                                body: {
-                                                  "base64": result
+                                              if(pickedImage != null){
+                                                if(mounted){
+                                                  Navigator.pop(context);
                                                 }
-                                              );
-                                              if(response.isSuccess){
-                                                print('sugsegs');
+                                                Uint8List imageBytes = await pickedImage.readAsBytes();
+                                                String result = base64.encode(imageBytes);
+                                                print(result);
+                                                var response = await http_test.put(
+                                                  url: urlChangePicture, 
+                                                  body: {
+                                                    "base64": result
+                                                  }
+                                                );
+                                                if(response.isSuccess){
+                                                  setState(() {
+                                                    List avatar = response.data['avatar'];
+                                                    prefs.setString('pfp', avatar.last);
+                                                    pfp = prefs.getString('pfp');
+                                                  });
+                                                }
                                               }
                                             }, 
                                             child: const SizedBox(
@@ -192,7 +211,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     style: const TextStyle(
                         fontFamily: 'Inter',
                         fontWeight: FontWeight.w700,
-                        fontSize: 20)),
+                        fontSize: 20),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis, 
+                    ),
                 const SizedBox(
                   height: 5,
                 ),
@@ -376,6 +398,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       const SizedBox(height: 10),
                       Text(
                         "$displayName",
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 1,
                         style: const TextStyle(
                             fontFamily: 'Inter',
                             fontWeight: FontWeight.w700,

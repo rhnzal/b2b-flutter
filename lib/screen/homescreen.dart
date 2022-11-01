@@ -29,6 +29,7 @@ class _HomeScreenState extends State<HomeScreen> {
   bool isLoad = true;
   List activity = [];
   String? displayName = '';
+  String? pfp = '';
   // String? username = '';
   @override
   void initState() {
@@ -39,6 +40,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Future<void> initpreference() async {
     prefs = await SharedPreferences.getInstance();
     displayName = prefs.getString('name');
+    pfp = prefs.getString('pfp');
     getActivity();
     setState(() {});
   }
@@ -160,10 +162,9 @@ class _HomeScreenState extends State<HomeScreen> {
       margin: const EdgeInsets.fromLTRB(20, 40, 10, 20),
       child: Row(
         children: [
-          // ignore: prefer_const_constructors
           CircleAvatar(
             backgroundColor: Colors.white,
-            backgroundImage: const AssetImage('images/user.png'),
+            backgroundImage: NetworkImage(pfp ?? 'https://img.icons8.com/windows/344/guest-male--v1.png'),
             radius: 20,
           ),
           Padding(

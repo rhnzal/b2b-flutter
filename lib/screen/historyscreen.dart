@@ -21,6 +21,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
   bool isLoad = true;
   var activity = [];
   String result = '';
+  String? pfp = '';
   String? displayName = '';
   @override
   void initState() {
@@ -31,6 +32,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
   Future<void> initpreference() async {
     prefs = await SharedPreferences.getInstance();
     displayName = prefs.getString('name');
+    pfp = prefs.getString('pfp');
     getActivity();
     setState(() {});
   }
@@ -93,7 +95,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
           // ignore: prefer_const_constructors
           CircleAvatar(
             backgroundColor: Colors.white,
-            backgroundImage: const AssetImage('images/user.png'),
+            backgroundImage: NetworkImage(pfp!),
             radius: 20,
           ),
           Padding(

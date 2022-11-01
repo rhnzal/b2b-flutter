@@ -15,6 +15,7 @@ class QuotaScreen extends StatefulWidget {
 
 class _QuotaScreenState extends State<QuotaScreen> {
   late SharedPreferences prefs;
+  String? pfp = '';
   String? displayName = '';
   String quota = '';
   String subs = '';
@@ -30,6 +31,7 @@ class _QuotaScreenState extends State<QuotaScreen> {
   Future<void> initpreference() async {
     prefs = await SharedPreferences.getInstance();
     displayName = prefs.getString('name');
+    pfp = prefs.getString('pfp');
     // getActivity();
     setState(() {});
     getQuota();
@@ -40,16 +42,20 @@ class _QuotaScreenState extends State<QuotaScreen> {
     var response = await http_test.get(url: urlQuota);
     quota = response.data['quota'].toString();
     subs = response.data['subs'].toString();
-    setState(() {});
+    if(mounted){
+      setState(() {});
+    }
   }
 
   getHistory()async{
     var response = await http_test.get(url: urlHistory);
     if(response.isSuccess){
       list = response.data;
-      setState(() {
-        isLoad = false;
-      });
+      if(mounted){
+        setState(() {
+          isLoad = false;
+        });
+      }
     }else{
       var error = response.message;
       if(mounted){
@@ -121,9 +127,9 @@ class _QuotaScreenState extends State<QuotaScreen> {
     margin: const EdgeInsets.fromLTRB(20, 40, 10, 5),
     child: Row(
       children: [
-        const CircleAvatar(
+        CircleAvatar(
           backgroundColor: Colors.white,
-          backgroundImage: AssetImage('images/user.png'),
+          backgroundImage: NetworkImage(pfp!),
           radius: 20,
         ),
         Padding(

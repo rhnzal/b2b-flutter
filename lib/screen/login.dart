@@ -57,19 +57,62 @@ class _LoginState extends State<Login> {
                     // var username = json.decode(response.body)['data']['fullName'];
                     // prefs.setString('username', username);
                     // print(username);
-                    var token = response.data["token"];
-                    var displayName = response.data["fullName"];
-                    var email = response.data["email"];
-                    prefs.setString('name', displayName);
-                    prefs.setString('token', token);
-                    prefs.setString('email', email);
-                    controller.success();
-                    Timer(const Duration(seconds: 1), (){
-                    Navigator.pushReplacement(context,
-                        MaterialPageRoute(builder: ((context) {
-                      return const Home();
-                    })));
-                    });
+                    if(response.additionalData){
+                      var token = response.data["token"];
+                      var displayName = response.data["fullName"];
+                      var email = response.data["email"];
+                      List avatar = response.data['avatar'];
+                      print(avatar.last);
+                      prefs.setString('name', displayName);
+                      prefs.setString('token', token);
+                      prefs.setString('email', email);
+                      prefs.setString('pfp', avatar.last);
+                      controller.success();
+                      Timer(const Duration(seconds: 1), (){
+                      Navigator.pushReplacement(context,
+                          MaterialPageRoute(builder: ((context) {
+                        return const Home();
+                      })));
+                      });
+                    }else{
+                      _buttonController.reset();
+                      var error = response.data['message'];
+                       showDialog(
+
+                        context: context,
+                        builder: ((context) => AlertDialog(
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10)),
+                              backgroundColor:const Color.fromARGB(255, 224, 232, 235),
+                              title: const Text('Error'),
+                              titleTextStyle: const TextStyle(
+                                  color: Color.fromARGB(255, 23, 22, 29),
+                                  fontFamily: 'Inter',
+                                  fontWeight: FontWeight.w600),
+                              content: Text('$error'),
+                              contentTextStyle: const TextStyle(color: Color.fromARGB(255, 23, 22, 29)),
+                              actions: [
+                                TextButton(
+                                    style: ButtonStyle(
+                                        overlayColor: MaterialStateProperty.all(
+                                            Colors.transparent),
+                                        minimumSize: MaterialStateProperty.all(
+                                            Size.zero),
+                                        tapTargetSize:
+                                            MaterialTapTargetSize.shrinkWrap,
+                                        padding: MaterialStateProperty.all(
+                                            const EdgeInsets.fromLTRB(0, 0, 10, 10))),
+                                    onPressed: () {
+                                      passCon.clear();
+                                      Navigator.pop(context);
+                                    },
+                                    child: const Text(
+                                      'OK',
+                                      style: TextStyle(color: Color.fromARGB(255, 23, 22, 29),),
+                                    )),
+                              ],
+                            )));
+                    }
                     // ignore: use_build_context_synchronously
                     //circular progress indicator
                   } else {

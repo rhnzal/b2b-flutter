@@ -15,7 +15,7 @@ class QuotaScreen extends StatefulWidget {
 
 class _QuotaScreenState extends State<QuotaScreen> {
   late SharedPreferences prefs;
-  String? pfp = '';
+  String? pfp;
   String? displayName = '';
   String quota = '';
   String subs = '';
@@ -129,7 +129,7 @@ class _QuotaScreenState extends State<QuotaScreen> {
       children: [
         CircleAvatar(
           backgroundColor: Colors.white,
-          backgroundImage: NetworkImage(pfp!),
+          backgroundImage: NetworkImage(pfp ?? 'https://img.icons8.com/windows/344/guest-male--v1.png'),
           radius: 20,
         ),
         Padding(

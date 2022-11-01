@@ -28,8 +28,8 @@ class _HomeScreenState extends State<HomeScreen> {
   bool isActive = false;
   bool isLoad = true;
   List activity = [];
-  String? displayName = '';
-  String? pfp = '';
+  String? displayName;
+  String? pfp;
   // String? username = '';
   @override
   void initState() {
@@ -179,7 +179,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         fontSize: 10)),
                 Text(
                   // '$username',
-                  '$displayName',
+                  displayName ?? '',
                   style: const TextStyle(
                       fontFamily: 'Inter',
                       fontWeight: FontWeight.w500,

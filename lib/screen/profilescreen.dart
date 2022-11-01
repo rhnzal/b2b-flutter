@@ -22,7 +22,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   final ImagePicker _picker = ImagePicker();
   late SharedPreferences prefs;
   late String address;
-  String? pfp = '';
+  String? pfp;
   String quotaRemaining = '';
   late String editName;
   String? displayName = '';
@@ -64,7 +64,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             children: [
               CircleAvatar(
                 backgroundColor: Colors.white,
-                backgroundImage: NetworkImage(pfp!),
+                backgroundImage: NetworkImage(pfp ?? 'https://img.icons8.com/windows/344/guest-male--v1.png'),
                 radius: 35,
               ),
               Positioned(

@@ -21,7 +21,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
   bool isLoad = true;
   var activity = [];
   String result = '';
-  String? pfp = '';
+  String? pfp;
   String? displayName = '';
   @override
   void initState() {
@@ -95,7 +95,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
           // ignore: prefer_const_constructors
           CircleAvatar(
             backgroundColor: Colors.white,
-            backgroundImage: NetworkImage(pfp!),
+            backgroundImage: NetworkImage(pfp ?? 'https://img.icons8.com/windows/344/guest-male--v1.png'),
             radius: 20,
           ),
           Padding(

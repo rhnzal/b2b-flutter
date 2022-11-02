@@ -76,7 +76,7 @@ class _LoginState extends State<Login> {
                       });
                     }else{
                       _buttonController.reset();
-                      var error = response.data['message'];
+                      var error = response.message;
                        showDialog(
 
                         context: context,

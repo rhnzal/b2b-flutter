@@ -43,13 +43,13 @@ Future<HTTPResponse> post({@required url, @required body, Duration timeout = con
         },
       body: json.encode(body)
     ).timeout(timeout);
-    var addData = json.decode(response.body)['isSuccess'];
-    var data = json.decode(response.body)['data'];
+    var data = json.decode(response.body);
     if(response.statusCode == 200){
       return HTTPResponse(
         status: HTTPResponseStatus.success,
-        data: data,
-        additionalData: addData
+        data: data['data'],
+        additionalData: data['isSuccess'],
+        message: data['message']
         );
     }else {
       return HTTPResponse(

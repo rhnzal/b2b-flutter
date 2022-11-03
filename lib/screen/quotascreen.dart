@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:projectb2b/endpoints.dart';
 import 'package:projectb2b/screen/detailtransaction.dart';
@@ -321,6 +322,7 @@ Widget transactionList= isLoad ? Container(
                 axisDirection: AxisDirection.down,
                 color: Colors.white,
                 child: ListView.builder(
+                  physics: const BouncingScrollPhysics(),
                     itemCount: list.length,
                     itemBuilder: (context, index) => Padding(
                       padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
@@ -328,7 +330,7 @@ Widget transactionList= isLoad ? Container(
                         elevation: 2,
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(15)),
-                        margin: const EdgeInsets.only(bottom: 20),
+                        margin: const EdgeInsets.only(bottom: 10),
                         child: InkWell(
                           borderRadius: BorderRadius.circular(15),
                           onTap: () {
@@ -388,16 +390,18 @@ Widget transactionList= isLoad ? Container(
             ),
           );
 
-  // Widget addItem = FloatingActionButton(
-  //   onPressed: (){},
-  //   );
-
-    return Scaffold(
-      resizeToAvoidBottomInset: false,
-      backgroundColor: const Color.fromARGB(255, 224, 232, 235),
-      body: Column(
-        children: [welcomeUser,favoriteList, wishlist, transactionList],
-      ),
+    return Builder(builder: (context) {
+      SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
+        statusBarColor: Colors.transparent,
+        statusBarIconBrightness: Brightness.dark
+      ));
+      return Scaffold(
+        resizeToAvoidBottomInset: false,
+        backgroundColor: const Color.fromARGB(255, 224, 232, 235),
+        body: Column(
+          children: [welcomeUser,favoriteList, wishlist, transactionList],
+        ),
     );
+    });
   }
 }

@@ -576,7 +576,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ),
                   SizedBox(
                     height: 20,
-                    width: 60,
+                    width: 80,
                     child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
                             primary: Colors.white,
@@ -588,7 +588,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           })));
                         },
                         child: const Text(
-                          'Edit',
+                          'Change',
                           style: TextStyle(
                               fontFamily: 'Inter',
                               fontWeight: FontWeight.w500,
@@ -683,9 +683,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 elevation: 10),
                             onPressed: () {
                               Navigator.push(context,
-                                  MaterialPageRoute(builder: ((context) {
-                                return const PaymentScreen();
-                              })));
+                                  MaterialPageRoute(builder: (context) {
+                                    return const PaymentScreen();
+                                  }
+                                )
+                              );
                             },
                             child: const Text(
                               'More',
@@ -694,7 +696,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   fontWeight: FontWeight.w500,
                                   fontSize: 12,
                                   color: Color.fromARGB(255, 26, 25, 32)),
-                            )),
+                            )
+                          ),
                       ),
                     ],
                   )

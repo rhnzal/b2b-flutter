@@ -86,29 +86,6 @@ class _DetailTransactionState extends State<DetailTransaction> {
     }
   }
 
-  pay() async{
-    var count = 0;
-    Navigator.push(context, MaterialPageRoute(builder: ((context) {
-          return Scaffold(
-            appBar: AppBar(
-              leading: BackButton(
-                onPressed: (){
-                  Navigator.popUntil(context, ((route) {
-                    return count++ == 2;
-                  }));
-                },
-              ),
-              backgroundColor: const Color.fromARGB(255, 23, 22, 29),
-              automaticallyImplyLeading: false,
-            ),
-            body: const WebView(
-              javascriptMode: JavascriptMode.unrestricted,
-              initialUrl: 'https://checkout-staging.xendit.co/web/6322943cd0a17dc369f34252',
-            ),
-          );
-        })));
-  }
-
   @override
   Widget build(BuildContext context) {
     Widget card =Padding(
@@ -295,48 +272,26 @@ class _DetailTransactionState extends State<DetailTransaction> {
             style: ElevatedButton.styleFrom(
                 primary: const Color.fromARGB(255, 23, 22, 29), shape: const StadiumBorder()),
             onPressed:() async {
-              showDialog(context: context, builder: ((context) => AlertDialog(
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10)),
-                backgroundColor:const Color.fromARGB(255, 224, 232, 235),
-                title: const Text('Confirmation'),
-                titleTextStyle: const TextStyle(
-                    color: Color.fromARGB(255, 23, 22, 29),
-                    fontFamily: 'Inter',
-                    fontWeight: FontWeight.w600),
-                content: const Text('Are You Sure ?'),
-                contentTextStyle: const TextStyle(
-                    color: Color.fromARGB(255, 23, 22, 29)),
-                actions: [
-                    TextButton(
-                        style: ButtonStyle(
-                            overlayColor: MaterialStateProperty.all(Colors.transparent),
-                            minimumSize: MaterialStateProperty.all(Size.zero),
-                            tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                            padding: MaterialStateProperty.all(const EdgeInsets.fromLTRB(0, 0, 10, 10))),
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                        child: const Text('No',
-                            style: TextStyle(
-                                color: Color.fromARGB(255, 23, 22, 29)))),
-                    TextButton(
-                        style: ButtonStyle(
-                            overlayColor: MaterialStateProperty.all(Colors.transparent),
-                            minimumSize: MaterialStateProperty.all(Size.zero),
-                            tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                            padding: MaterialStateProperty.all(const EdgeInsets.fromLTRB(0, 0, 10, 10))),
-                        onPressed: () async {
-                          Navigator.pop(context);
-                          pay();
-                        },
-                        child: const Text('Yes',
-                            style: TextStyle(color: Color.fromARGB(255, 23, 22, 29)
-                            )
-                          )
-                        )
-                  ]
-              )));
+              var count = 0;
+              Navigator.push(context, MaterialPageRoute(builder: ((context) {
+                    return Scaffold(
+                      appBar: AppBar(
+                        leading: BackButton(
+                          onPressed: (){
+                            Navigator.popUntil(context, ((route) {
+                              return count++ == 2;
+                            }));
+                          },
+                        ),
+                        backgroundColor: const Color.fromARGB(255, 23, 22, 29),
+                        automaticallyImplyLeading: false,
+                      ),
+                      body: const WebView(
+                        javascriptMode: JavascriptMode.unrestricted,
+                        initialUrl: 'https://checkout-staging.xendit.co/web/6322943cd0a17dc369f34252',
+                      ),
+                    );
+                  })));
             },
             child: const SizedBox(
                 width: 100,

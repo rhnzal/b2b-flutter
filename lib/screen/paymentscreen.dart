@@ -21,6 +21,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
   bool isLoad = true;
   int selectedIndex = -1;
   bool selected = false;
+  String? pfp;
   late SharedPreferences prefs;
   String? displayName = '';
   var grid = [];
@@ -38,6 +39,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
   Future<void> initpreference() async {
     prefs = await SharedPreferences.getInstance();
     displayName = prefs.getString('name');
+    pfp = prefs.getString('pfp');
     getProduct();
     setState(() {});
   }
@@ -167,9 +169,9 @@ class _PaymentScreenState extends State<PaymentScreen> {
       margin: const EdgeInsets.fromLTRB(20, 40, 10, 5),
       child: Row(
         children: [
-          const CircleAvatar(
+          CircleAvatar(
             backgroundColor: Colors.white,
-            backgroundImage: AssetImage('images/user.png'),
+            backgroundImage: NetworkImage(pfp ?? 'https://img.icons8.com/windows/344/guest-male--v1.png'),
             radius: 20,
           ),
           Padding(
@@ -234,6 +236,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                     onTap: (){
                       setState(() {
                         selectedIndex = index;
+                        print(grid[selectedIndex]['id']);
                         selected = true;
                       });
                     },

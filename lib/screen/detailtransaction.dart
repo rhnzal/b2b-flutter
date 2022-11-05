@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:intl/intl.dart';
 import 'package:projectb2b/endpoints.dart';
 import 'package:projectb2b/http.dart' as http_test;
@@ -28,7 +26,7 @@ class _DetailTransactionState extends State<DetailTransaction> {
   void initState(){
     super.initState();
     getActivity();
-    print(widget.index);
+    // print(widget.index);
   }
 
   Future<void> getActivity() async{

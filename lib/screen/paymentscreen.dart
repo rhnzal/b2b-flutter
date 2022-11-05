@@ -1,12 +1,9 @@
 import 'dart:async';
-import 'dart:io';
-import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:projectb2b/endpoints.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:http/http.dart' as http;
 import 'package:projectb2b/http.dart' as http_test;
 import 'package:webview_flutter/webview_flutter.dart';
 
@@ -144,7 +141,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
           );
         })));
       }else{
-        var error = response.message;
+        // var error = response.message;
         if(mounted){
           showDialog(context: context, builder: ((context) {
         return AlertDialog(
@@ -236,7 +233,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                     onTap: (){
                       setState(() {
                         selectedIndex = index;
-                        print(grid[selectedIndex]['id']);
+                        // print(grid[selectedIndex]['id']);
                         selected = true;
                       });
                     },

@@ -57,12 +57,12 @@ Future<HTTPResponse> post({@required url, @required body, Duration timeout = con
         message: json.decode(response.body)['message'] ?? 'Something Went Wrong'
       );
     }
-    } on TimeoutException catch (e){
+    } on TimeoutException {
       return HTTPResponse(
         status: HTTPResponseStatus.timeout,
         message: 'Timeout'
         );
-    } on Exception catch (e){
+    } on Exception {
       return HTTPResponse(
         status: HTTPResponseStatus.error,
         message: 'Something Went Wrong'
@@ -94,12 +94,12 @@ Future<HTTPResponse> get({@required url, Duration timeout = const Duration(secon
         );
         
     }
-    } on TimeoutException catch (e){
+    } on TimeoutException {
       return HTTPResponse(
         status: HTTPResponseStatus.timeout,
         message: 'Timeout'
         );
-    } on Exception catch (e){
+    } on Exception {
       return HTTPResponse(
         status: HTTPResponseStatus.error,
         message: 'Something Went Wrong'
@@ -159,12 +159,12 @@ Future<HTTPResponse> delete({@required url, Duration timeout = const Duration(se
         message: 'Something Went Wrong'
       );
     }
-  }on TimeoutException catch (e){
+  }on TimeoutException {
     return HTTPResponse(
       status: HTTPResponseStatus.timeout,
       message: 'Timeout'
     );
-  }on Exception catch (e){
+  }on Exception {
     return HTTPResponse(
       status: HTTPResponseStatus.error,
       message: 'Something Went Wrong'

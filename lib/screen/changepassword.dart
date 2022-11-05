@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:projectb2b/home.dart';
 import 'package:projectb2b/screen/login.dart';
 import 'package:rounded_loading_button/rounded_loading_button.dart';
 import 'package:projectb2b/http.dart' as http_test;
@@ -36,7 +35,7 @@ class _ChangePasswordState extends State<ChangePassword> {
           "password": newPass
         }
       );
-      print(response.status);
+      // print(response.status);
       if(response.isSuccess){
         controller.success();
         Timer(const Duration(seconds: 1), (){

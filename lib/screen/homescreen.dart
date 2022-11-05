@@ -1,6 +1,4 @@
 import 'dart:async';
-import 'dart:convert';
-import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -9,7 +7,6 @@ import 'package:intl/intl.dart';
 import 'package:projectb2b/endpoints.dart';
 import 'package:projectb2b/screen/previewscreen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:http/http.dart' as http;
 import 'package:projectb2b/http.dart' as http_test;
 
 class HomeScreen extends StatefulWidget {
@@ -61,7 +58,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Future<void> getActivity() async {
     var response = await http_test.get(url: urlDocument);
     // print(response.body);
-    print(response.status);
+    // print(response.status);
     if(response.isSuccess){
       activity = response.data;
     }else{
@@ -336,7 +333,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 axisDirection: AxisDirection.down,
                 child: ListView(
                   padding:const  EdgeInsets.only(top: 100),
-                  children: [const Icon(Icons.folder_off_outlined, size: 60, color: Color.fromARGB(255, 26, 25, 32),),]
+                  children: const [Icon(Icons.folder_off_outlined, size: 60, color: Color.fromARGB(255, 26, 25, 32),),]
                 ),
               ),
             )

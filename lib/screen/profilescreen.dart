@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
@@ -41,7 +40,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     displayName = prefs.getString('name');
     email = prefs.getString('email');
     pfp = prefs.getString('pfp');
-    print(pfp);
+    // print(pfp);
     setState(() {});
     getQuota();
   }
@@ -114,7 +113,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                 }
                                                 Uint8List imageBytes = await pickedImage.readAsBytes();
                                                 String result = base64.encode(imageBytes);
-                                                print(result);
+                                                // print(result);
                                                 var response = await http_test.put(
                                                   url: urlChangePicture, 
                                                   body: {
@@ -127,8 +126,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                     prefs.setString('pfp', avatar.last);
                                                     pfp = prefs.getString('pfp');
                                                   });
-                                                  print('sugsegs');
-                                                  print(response.data);
+                                                  // print('sugsegs');
+                                                  // print(response.data);
                                                 }
                                               }
                                             }, 
@@ -158,7 +157,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                 }
                                                 Uint8List imageBytes = await pickedImage.readAsBytes();
                                                 String result = base64.encode(imageBytes);
-                                                print(result);
+                                                // print(result);
                                                 var response = await http_test.put(
                                                   url: urlChangePicture, 
                                                   body: {
@@ -488,7 +487,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                       }
                                     );
                                     var name = response.data['fullName'];
-                                    print(name);
+                                    // print(name);
                                     setState(() {
                                       prefs.setString('name', name);
                                       displayName = prefs.getString('name');

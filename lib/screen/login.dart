@@ -1,6 +1,4 @@
 import 'dart:async';
-import 'dart:io';
-import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -10,7 +8,6 @@ import 'package:projectb2b/screen/register.dart';
 import 'package:projectb2b/screen/forgotpassword.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:rounded_loading_button/rounded_loading_button.dart';
-import 'package:http/http.dart' as http;
 import 'package:projectb2b/http.dart' as http_test;
 
 class Login extends StatefulWidget {
@@ -62,7 +59,7 @@ class _LoginState extends State<Login> {
                       var displayName = response.data["fullName"];
                       var email = response.data["email"];
                       List avatar = response.data['avatar'];
-                      print(avatar.last);
+                      // print(avatar.last);
                       prefs.setString('name', displayName);
                       prefs.setString('token', token);
                       prefs.setString('email', email);

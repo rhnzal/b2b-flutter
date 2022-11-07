@@ -27,14 +27,25 @@ class _ChangePasswordState extends State<ChangePassword> {
 
   void enter (RoundedLoadingButtonController controller, String check) async{
     if(formKey.currentState!.validate()){
-      var response = await http_test.put(
-        url: urlChangePassword, 
-        body: {
-          "email" : widget.email,
-          "otp" : widget.otp,
-          "password": newPass
-        }
-      );
+      http_test.HTTPResponse response;
+      if(check.contains('otp')){
+        response = await http_test.put(
+          url: urlForgotPassword, 
+          body: {
+            "email" : widget.email,
+            "otp" : widget.otp,
+            "password": newPass
+          }
+        );
+
+      }else{
+        response = await http_test.put(
+          url: urlChangePassword, 
+          body: {
+            "password": newPass
+          }
+        );
+      }
       // print(response.status);
       if(response.isSuccess){
         controller.success();

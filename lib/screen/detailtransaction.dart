@@ -21,6 +21,7 @@ class _DetailTransactionState extends State<DetailTransaction> {
   bool status = false;
   String price = '';
   String date = '';
+  String payUrl = '';
 
   @override
   void initState(){
@@ -37,6 +38,7 @@ class _DetailTransactionState extends State<DetailTransaction> {
       orderId = data[widget.index]['orderId'].toString();
       product = data[widget.index]['product']['title'].toString();
       status = data[widget.index]['isPaid'];
+      payUrl = data[widget.index]['paymentUrl'];
 
       price = NumberFormat.simpleCurrency(locale:'in', decimalDigits: 0).format(data[widget.index]['product']['price']);
       date = DateFormat.yMMMd().format(DateTime.parse(data[widget.index]["createdAt"]));
@@ -284,9 +286,9 @@ class _DetailTransactionState extends State<DetailTransaction> {
                         backgroundColor: const Color.fromARGB(255, 23, 22, 29),
                         automaticallyImplyLeading: false,
                       ),
-                      body: const WebView(
+                      body: WebView(
                         javascriptMode: JavascriptMode.unrestricted,
-                        initialUrl: 'https://checkout-staging.xendit.co/web/6322943cd0a17dc369f34252',
+                        initialUrl: payUrl,
                       ),
                     );
                   })));

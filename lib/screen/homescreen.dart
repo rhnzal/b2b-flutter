@@ -28,6 +28,7 @@ class _HomeScreenState extends State<HomeScreen> {
   String? displayName;
   String? pfp;
   // String? username = '';
+
   @override
   void initState() {
     super.initState();
@@ -42,28 +43,100 @@ class _HomeScreenState extends State<HomeScreen> {
     setState(() {});
   }
 
-  // Future<void> getActivity() async {
-  //   var token = prefs.getString('token');
-  //   final response = await http.get(Uri.parse(urlDocument),
-  //       headers: {HttpHeaders.authorizationHeader: 'Bearer $token'});
-  //   // print(response.body);
-  //   activity = json.decode(response.body)["data"];
-  //   // print(activity);
-  //   if(mounted){
-  //     setState(() {
-  //       isLoad = false;
-  //     });
-  //   }
-  // }
+
   Future<void> getActivity() async {
     var response = await http_test.get(url: urlDocument);
     // print(response.body);
     // print(response.status);
-    if(response.isSuccess){
+    if (response.isSuccess) {
       activity = response.data;
-    }else{
-      if(mounted){
-        showDialog(context: context, builder: ((context) {
+    } else {
+      if (mounted) {
+        showDialog(
+          context: context, 
+          builder: (context) {
+            return AlertDialog(
+              shape: RoundedRectangleBorder(
+                borderRadius:BorderRadius.circular(10)
+              ),
+              backgroundColor: const Color.fromARGB(255, 224, 232, 235),
+              title: const Text('Error'),
+              content: Text(response.message.toString()),
+            );
+          }
+        );
+      }
+    }
+
+    // print(activity);
+    if (mounted) {
+      setState(() {
+        isLoad = false;
+      });
+    }
+  }
+
+  Future<void> refreshList() async {
+    setState(() {
+      isLoad = true;
+      getActivity();
+    });
+  }
+
+  trimUrl (String trim) {
+    // for( var i = 0 ; i < activity.length; i++){
+    //   var trim = activity[i]['url'];
+    // }
+    if (trim.contains('https://')) {
+      if (trim.contains('www.tradewheel.com')) {
+        return trim.toString().substring(27);
+      } else {
+        return trim.toString().substring(8);
+      }
+    }else if (trim.contains('http://')) {
+    return trim.toString().substring(7);
+    }
+  }
+
+  confirm() async {
+    showDialog(
+      barrierDismissible: false,
+      context: context, 
+      builder: (context) {
+        return Center(
+          child: Container(
+            decoration: const BoxDecoration(
+                color: Color.fromARGB(255, 224, 232, 235),
+                borderRadius: BorderRadius.all(Radius.circular(10))
+              ),
+            padding: const EdgeInsets.all(20),
+            child: const CircularProgressIndicator(
+              color: Color.fromARGB(255, 23, 22, 29),
+            )
+          ),
+        );
+      }
+    );          
+  // ignore: unused_local_variable
+  var response = await http_test.post(
+    url: urlInput, 
+    body: {"url": url}
+  );
+
+  if (response.isSuccess) {
+    if (mounted) {
+      Navigator.pop(context);
+    }
+    await getActivity();
+    urlCon.clear();
+    isActive = false;
+  } else {
+    if (mounted) {
+      Navigator.pop(context);
+      urlCon.clear;
+      showDialog(
+        context: context, 
+        builder: (context) {
           return AlertDialog(
             shape: RoundedRectangleBorder(
                 borderRadius:BorderRadius.circular(10)),
@@ -71,85 +144,10 @@ class _HomeScreenState extends State<HomeScreen> {
             title: const Text('Error'),
             content: Text(response.message.toString()),
           );
-        }));
-      }
-    }
-    // print(activity);
-    if(mounted){
-      setState(() {
-        isLoad = false;
-      });
+        }
+      );
     }
   }
-
-  Future<void> refreshList() async{
-    setState(() {
-      isLoad = true;
-      getActivity();
-    });
-  }
-
-  trimUrl(String trim){
-    // for( var i = 0 ; i < activity.length; i++){
-    //   var trim = activity[i]['url'];
-    // }
-    if (trim.contains('https://')){
-      if(trim.contains('www.tradewheel.com')){
-        return trim.toString().substring(27);
-      }else{
-        return trim.toString().substring(8);
-      }
-    }else if(trim.contains('http://')){
-    return trim.toString().substring(7);
-    }
-  }
-
-  confirm() async {
-    showDialog(
-    barrierDismissible: false,
-        context: context, 
-        builder: ((context) {
-          return Center(
-            child: Container(
-              decoration: const BoxDecoration(
-                  color: Color.fromARGB(255, 224, 232, 235),
-                  borderRadius: BorderRadius.all(Radius.circular(10))
-                ),
-              padding: const EdgeInsets.all(20),
-              child: const CircularProgressIndicator(
-                color: Color.fromARGB(255, 23, 22, 29),
-              )),
-          );
-      }));          
-  // ignore: unused_local_variable
-  var response = await http_test.post(
-    url: urlInput, 
-    body: {"url": url}
-  );
-
-  if(response.isSuccess){
-    if(mounted){
-      Navigator.pop(context);
-    }
-    await getActivity();
-    urlCon.clear();
-    isActive = false;
-  }else{
-    if(mounted){
-      Navigator.pop(context);
-      urlCon.clear;
-      showDialog(context: context, builder: ((context) {
-        return AlertDialog(
-          shape: RoundedRectangleBorder(
-              borderRadius:BorderRadius.circular(10)),
-          backgroundColor: const Color.fromARGB(255, 224, 232, 235),
-          title: const Text('Error'),
-          content: Text(response.message.toString()),
-        );
-      }));
-      }
-  }
-  // print(response.body);
 }
 
   @override
@@ -317,9 +315,9 @@ class _HomeScreenState extends State<HomeScreen> {
     );
 
     Widget listActivity = isLoad ? Container(
-          padding: const EdgeInsets.only(top: 100),
-          child: const CircularProgressIndicator(color: Color.fromARGB(255, 23, 22, 29))
-          )
+      padding: const EdgeInsets.only(top: 100),
+      child: const CircularProgressIndicator(color: Color.fromARGB(255, 23, 22, 29))
+      )
         : activity.isEmpty ? Expanded(
           child: RefreshIndicator(
             displacement: 10,
@@ -334,10 +332,10 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: ListView(
                   padding:const  EdgeInsets.only(top: 100),
                   children: const [Icon(Icons.folder_off_outlined, size: 60, color: Color.fromARGB(255, 26, 25, 32),),]
-                ),
-              ),
+                )
+              )
             )
-          ),
+          )
         )
         : Expanded(
             child: ScrollConfiguration(
@@ -476,10 +474,11 @@ class _HomeScreenState extends State<HomeScreen> {
 
     return Builder(
       builder: (context) {
-         SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
+        SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
           statusBarColor: Colors.transparent,
           statusBarIconBrightness: Brightness.dark
-        ));
+        )
+      );
         return Scaffold(
           resizeToAvoidBottomInset: false,
           backgroundColor: const Color.fromARGB(255, 224, 232, 235),
@@ -491,12 +490,3 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 }
-        // child: ElevatedButton(onPressed: () {  
-        //   prefs.remove('token');
-        //   Navigator.pushReplacement(context, MaterialPageRoute(builder: (context){
-        //     return Login();
-        //   }));
-        // }, 
-        // child: Text("tes"),
-
-        // ),

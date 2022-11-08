@@ -20,8 +20,12 @@ class _PreviewScreenState extends State<PreviewScreen> {
         backgroundColor: const Color.fromARGB(255, 23, 22, 29),
         title: const Text('Preview'),
       ),
-      // body: Center(child: Text('Tes')),
-      body: PhotoView(imageProvider: NetworkImage(widget.url))
+      body: PhotoView(
+        imageProvider: NetworkImage(widget.url),
+        backgroundDecoration: const BoxDecoration(
+          color:Color.fromARGB(255, 224, 232, 235)
+        ),
+      )
     );
   }
 }

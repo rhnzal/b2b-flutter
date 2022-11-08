@@ -111,9 +111,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
         }));  
     var response = await http_test.post(
       url: urlBuyProduct, 
-      body: {
-        "product": grid[selectedIndex]['id']
-      }
+      body: grid[selectedIndex]
     );
     if(response.isSuccess){
       if(mounted){

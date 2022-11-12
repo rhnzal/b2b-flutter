@@ -9,18 +9,20 @@ import 'package:shared_preferences/shared_preferences.dart';
 enum HTTPResponseStatus { success, failed, timeout, error, noInternet }
 
 class HTTPResponse<T> {
-  HTTPResponse({
-    required this.status,
-    this.data,
-    this.statusCode,
-    this.additionalData,
-    this.message,
-  });
+  HTTPResponse(
+    {
+      required this.status,
+      this.data,
+      this.statusCode,
+      // this.additionalData,
+      this.message,
+    }
+  );
 
   final HTTPResponseStatus status;
   final T? data;
   final int? statusCode;
-  final dynamic additionalData;
+  // final dynamic additionalData;
   final String? message;
 
   get isSuccess => status == HTTPResponseStatus.success;
@@ -36,105 +38,117 @@ Future<HTTPResponse> post({@required url, @required body, Duration timeout = con
   await initpreference();
   try{
     var token = prefs.getString('token');
-    var response = await http.post(Uri.parse(url),
+    var response = await http.post(
+      Uri.parse(url),
       headers: {
         HttpHeaders.contentTypeHeader : 'application/json',
         HttpHeaders.authorizationHeader : 'Bearer $token'
-        },
+      },
       body: json.encode(body)
     ).timeout(timeout);
-    var data = json.decode(response.body);
-    if(response.statusCode == 200){
+
+    var data = json.decode(response.body); //insert response body to data
+
+    if ([200,201].contains(response.statusCode) && data['isSuccess']) {
       return HTTPResponse(
         status: HTTPResponseStatus.success,
         data: data['data'],
-        additionalData: data['isSuccess'],
         message: data['message']
-        );
-    }else {
+      );
+    } else {
       return HTTPResponse(
         status: HTTPResponseStatus.failed,
         message: json.decode(response.body)['message'] ?? 'Something Went Wrong'
       );
     }
-    } on TimeoutException {
-      return HTTPResponse(
-        status: HTTPResponseStatus.timeout,
-        message: 'Timeout'
-        );
-    } on Exception {
-      return HTTPResponse(
-        status: HTTPResponseStatus.error,
-        message: 'Something Went Wrong'
-        );
-    }
+  } on TimeoutException {
+    return HTTPResponse(
+      status: HTTPResponseStatus.timeout,
+      message: 'Timeout'
+    );
+  } on Exception {
+    return HTTPResponse(
+      status: HTTPResponseStatus.error,
+      message: 'Something Went Wrong'
+    );
+  }
 }
 
 Future<HTTPResponse> get({@required url, Duration timeout = const Duration(seconds: 20)}) async{
   await initpreference(); 
   try{
     var token = prefs.getString('token');
-    var response = await http.get(Uri.parse(url),
+    var response = await http.get(
+      Uri.parse(url),
       headers: {
         HttpHeaders.contentTypeHeader : 'application/json',
         HttpHeaders.authorizationHeader : 'Bearer $token'
       },
     ).timeout(timeout);
     // print(json.decode(response.body));
+
     var data = json.decode(response.body)["data"];
+
     if (response.statusCode == 200 ){
       return HTTPResponse (
         status: HTTPResponseStatus.success,
         data : data
       );
-    }else {
+    } else {
       return HTTPResponse(
-        status: HTTPResponseStatus.error,
+        status: HTTPResponseStatus.failed,
         message: json.decode(response.body)['message'] ?? 'Something Went Wrong' 
-        );
-        
+      );
     }
-    } on TimeoutException {
-      return HTTPResponse(
-        status: HTTPResponseStatus.timeout,
-        message: 'Timeout'
-        );
-    } on Exception {
-      return HTTPResponse(
-        status: HTTPResponseStatus.error,
-        message: 'Something Went Wrong'
-        );
-    }
+  } on TimeoutException {
+    return HTTPResponse(
+      status: HTTPResponseStatus.timeout,
+      message: 'Timeout'
+    );
+  } on Exception {
+    return HTTPResponse(
+      status: HTTPResponseStatus.error,
+      message: 'Something Went Wrong'
+    );
+  }
 }
 
 Future<HTTPResponse> put({@required url, @required body, Duration timeout = const Duration(seconds: 20)}) async{
   await initpreference();
   try{
     var token =  prefs.getString('token');
-    var response = await http.put(Uri.parse(url),
+    var response = await http.put(
+      Uri.parse(url),
       headers: {
         HttpHeaders.contentTypeHeader : 'application/json',
         HttpHeaders.authorizationHeader : 'Bearer $token'
       },
       body: json.encode(body)
     ).timeout(timeout);
+
     var res = json.decode(response.body)['data'];
-    if(response.statusCode == 200){
+    
+    if (response.statusCode == 200) {
       return HTTPResponse(
         status: HTTPResponseStatus.success,
         data: res
-        );
-    }else{
+      );
+    } else {
       return HTTPResponse(
-        status: HTTPResponseStatus.error,
-        additionalData: 'Something Went Wrong'
-        );
+        status: HTTPResponseStatus.failed,
+        message: 'Something Went Wrong'
+      );
     }
-  }catch (e){
+  } on TimeoutException {
     return HTTPResponse(
       status: HTTPResponseStatus.timeout,
       message: 'Timeout'
-      );
+    );
+  } on Exception {
+    return HTTPResponse(
+      status: HTTPResponseStatus.error,
+      message: 'Something Went Wrong'
+    );
   }
 }
 
@@ -142,29 +156,31 @@ Future<HTTPResponse> delete({@required url, Duration timeout = const Duration(se
   await initpreference();
   try{
     var token = prefs.getString('token');
-    var response = await http.delete(Uri.parse(url),
+    var response = await http.delete(
+      Uri.parse(url),
       headers: {
         HttpHeaders.contentTypeHeader: 'application/json',
         HttpHeaders.authorizationHeader: 'Bearer $token'
       }
     ).timeout(timeout);
-    if(response.statusCode == 200){
+    
+    if (response.statusCode == 200) {
       return HTTPResponse(
         status: HTTPResponseStatus.success,
         message: 'Success'
       );
-    }else{
+    } else {
       return HTTPResponse(
         status: HTTPResponseStatus.failed,
         message: 'Something Went Wrong'
       );
     }
-  }on TimeoutException {
+  } on TimeoutException {
     return HTTPResponse(
       status: HTTPResponseStatus.timeout,
       message: 'Timeout'
     );
-  }on Exception {
+  } on Exception {
     return HTTPResponse(
       status: HTTPResponseStatus.error,
       message: 'Something Went Wrong'

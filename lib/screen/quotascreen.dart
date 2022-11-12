@@ -4,8 +4,10 @@ import 'package:intl/intl.dart';
 import 'package:projectb2b/endpoints.dart';
 import 'package:projectb2b/screen/detailtransaction.dart';
 import 'package:projectb2b/screen/paymentscreen.dart';
+import 'package:projectb2b/widget/welcome.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:projectb2b/http.dart' as http_test;
+import 'package:projectb2b/widget/indicator.dart';
 
 class QuotaScreen extends StatefulWidget {
   const QuotaScreen({Key? key}) : super(key: key);
@@ -39,7 +41,7 @@ class _QuotaScreenState extends State<QuotaScreen> {
     getHistory();
   }
 
-  getQuota()async{
+  getQuota() async {
     var response = await http_test.get(url: urlQuota);
     quota = response.data['quota'].toString();
     subs = response.data['subs'].toString();
@@ -48,9 +50,9 @@ class _QuotaScreenState extends State<QuotaScreen> {
     }
   }
 
-  getHistory()async{
+  getHistory() async {
     var response = await http_test.get(url: urlHistory);
-    if(response.isSuccess){
+    if (response.isSuccess) {
       list = response.data;
       if(mounted){
         setState(() {
@@ -61,347 +63,267 @@ class _QuotaScreenState extends State<QuotaScreen> {
       var error = response.message;
       if(mounted){
         showDialog(
-            context: context,
-            builder: ((context) => AlertDialog(
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10)),
-                  backgroundColor:const Color.fromARGB(255, 224, 232, 235),
-                  title: const Text('Error'),
-                  titleTextStyle: const TextStyle(
-                      color: Color.fromARGB(255, 23, 22, 29),
-                      fontFamily: 'Inter',
-                      fontWeight: FontWeight.w600),
-                  content: Text('$error'),
-                  contentTextStyle: const TextStyle(color: Color.fromARGB(255, 23, 22, 29)),
-                  actions: [
-                    TextButton(
-                        style: ButtonStyle(
-                            overlayColor: MaterialStateProperty.all(
-                                Colors.transparent),
-                            minimumSize: MaterialStateProperty.all(
-                                Size.zero),
-                            tapTargetSize:
-                                MaterialTapTargetSize.shrinkWrap,
-                            padding: MaterialStateProperty.all(
-                                const EdgeInsets.fromLTRB(0, 0, 10, 10))),
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                        child: const Text(
-                          'OK',
-                          style: TextStyle(color: Color.fromARGB(255, 23, 22, 29),),
-                        )),
-                  ],
-                )));
-
+          context: context,
+          builder: (context) => AlertDialog(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10)
+            ),
+            backgroundColor:const Color.fromARGB(255, 224, 232, 235),
+            title: const Text('Error'),
+            titleTextStyle: const TextStyle(
+              color: Color.fromARGB(255, 23, 22, 29),
+              fontFamily: 'Inter',
+              fontWeight: FontWeight.w600
+            ),
+            content: Text('$error'),
+            contentTextStyle: const TextStyle(
+              color: Color.fromARGB(255, 23, 22, 29)
+            ),
+            actions: [
+              TextButton(
+                style: ButtonStyle(
+                  overlayColor: MaterialStateProperty.all(Colors.transparent),
+                  minimumSize: MaterialStateProperty.all(Size.zero),
+                  tapTargetSize:MaterialTapTargetSize.shrinkWrap,
+                  padding: MaterialStateProperty.all(
+                    const EdgeInsets.fromLTRB(0, 0, 10, 10)
+                  )
+                ),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: const Text(
+                  'OK',
+                  style: TextStyle(
+                    color: Color.fromARGB(255, 23, 22, 29)
+                  ),
+                )
+              ),
+            ],
+          )
+        );
       }
     }
   }
 
-  // Future<void> getActivity() async {
-  //   var token = prefs.getString('token');
-  //   final response = await http.get(
-  //       Uri.parse("https://sija-b2b.ronisetiawan.id/api/document"),
-  //       headers: {HttpHeaders.authorizationHeader: 'Bearer $token'});
-  //   // print(response.body);
-  //   list = json.decode(response.body)["data"];
-  //   // print(activity);
-  //   setState(() {
-  //     isLoad = false;
-  //   });
-  // }
-
-  // trimUrl(String trim){
-  //   // for( var i = 0 ; i < activity.length; i++){
-  //   //   var trim = activity[i]['url'];
-  //   // }
-  //   if (trim.contains('https://')){
-  //   return trim.toString().substring(8);
-  //   }else if(trim.contains('http://')){
-  //   return trim.toString().substring(7);
-  //   }
-  // }
-
   @override
   Widget build(BuildContext context) {
-    Widget welcomeUser = Container(
-    margin: const EdgeInsets.fromLTRB(20, 40, 10, 5),
-    child: Row(
-      children: [
-        CircleAvatar(
-          backgroundColor: Colors.white,
-          backgroundImage: NetworkImage(pfp ?? 'https://img.icons8.com/windows/344/guest-male--v1.png'),
-          radius: 20,
-        ),
-        Padding(
-          padding: const EdgeInsets.only(left: 10),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Text('Welcome,',
-                  style: TextStyle(
-                      fontFamily: 'Inter',
-                      fontWeight: FontWeight.w300,
-                      fontSize: 10)),
-              Text(
-                '$displayName',
-                style: const TextStyle(
-                    fontFamily: 'Inter',
-                    fontWeight: FontWeight.w500,
-                    fontSize: 12),
-              )
-            ],
-          ),
-        )
-      ],
-    ),
-  );
-
-  Widget wishlist = Container(
-      margin: const EdgeInsets.fromLTRB(20, 0, 10, 0),
+    Widget wishlist = Container(
+      margin: const EdgeInsets.fromLTRB(20, 5, 10, 0),
       child: Row(
         children: const [
           Icon(Icons.list_rounded),
           SizedBox( width: 5,),
-          Text('Transaction History',
-            style: TextStyle(fontFamily: 'Inter', fontWeight: FontWeight.w800, fontSize: 12),
+          Text(
+            'Transaction History',
+            style: TextStyle(
+              fontFamily: 'Inter', 
+              fontWeight: FontWeight.w800, 
+              fontSize: 12
+            ),
           )
         ],
       ),
     );
 
-  Widget favoriteList =  Padding(
-    padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
-    child: Card(
-      elevation: 10,
-      shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(15)),
-      margin: const EdgeInsets.only(bottom: 20),
-      child: Padding(
-        padding:const EdgeInsets.fromLTRB(15, 20, 15, 20),
-        child: Column(
-          children: [
-            Row(
-              children: [
-                const Text('Your Subscription : '),
-                //nama paket
-                Text(subs,
-                  style: const TextStyle(
-                            fontFamily: 'Inter',
-                            fontWeight: FontWeight.w700,
-                            fontSize: 18),
-                )
-              ],
-            ),
-            const Divider(
-              thickness: 2,
-              color: Color.fromARGB(255, 224, 232, 235),
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text(
-                          'Remaining Quota :',
-                        // DateFormat.yMMMd().format(DateTime.parse(activity[index]["createdAt"])),
-                          style: TextStyle(
-                              fontFamily: 'Inter',
-                              fontWeight: FontWeight.w400,
-                              fontSize: 10)),
-                      const SizedBox(
-                        height: 5,
-                      ),
-                      Text(
-                        // getUrl().toString(),
-                        quota,
-                        style: const TextStyle(
-                            fontFamily: 'Inter',
-                            fontWeight: FontWeight.w700,
-                            fontSize: 18),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                      // Text(activity[index]["createdAt"])
-                    ],
-                  ),
-                ),
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                        onSurface: const Color.fromARGB(255, 255, 255, 255),
-                        primary: const Color.fromARGB(255, 217, 217, 217),
-                        shape: const StadiumBorder(),
-                        elevation: 10),
-                  onPressed: (){
-                    Navigator.of(context).push(MaterialPageRoute(builder: (_) {
-                      return const PaymentScreen();
-                    },
-                      settings: const RouteSettings(name: 'quota')
-                    ));
-                  }, 
-                  child: const Text('Add', 
-                  style: TextStyle(
-                            fontFamily: 'Inter',
-                            fontWeight: FontWeight.w500,
-                            color: Color.fromARGB(255, 27, 26, 32),
-                            fontSize: 12)))
-              ],
-            ),
-          ],
+    Widget favoriteList =  Padding(
+      padding: const EdgeInsets.fromLTRB(20, 10, 20, 0),
+      child: Card(
+        elevation: 10,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(15)
         ),
-      )
-    )
-  );
-
-// Widget transactionList = Padding(
-//     padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
-//     child: Card(
-//       elevation: 2,
-//       shape: RoundedRectangleBorder(
-//           borderRadius: BorderRadius.circular(15)),
-//       margin: const EdgeInsets.only(bottom: 20),
-//       child: Padding(
-//         padding:const EdgeInsets.fromLTRB(15, 15, 15, 15),
-//         child: Row(
-//           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//           children: [
-//             Expanded(
-//               child: Column(
-//                 crossAxisAlignment: CrossAxisAlignment.start,
-//                 children: const [
-//                   Text(
-//                     // getUrl().toString(),
-//                     'Judul',
-//                     style: TextStyle(
-//                         fontFamily: 'Inter',
-//                         fontWeight: FontWeight.w700,
-//                         fontSize: 18),
-//                     maxLines: 1,
-//                     overflow: TextOverflow.ellipsis,
-//                   ),
-//                   Text(
-//                       'Tanggal',
-//                     // DateFormat.yMMMd().format(DateTime.parse(activity[index]["createdAt"])),
-//                       style: TextStyle(
-//                           fontFamily: 'Inter',
-//                           fontWeight: FontWeight.w400,
-//                           fontSize: 10)),
-//                   // Text(activity[index]["createdAt"])
-//                 ],
-//               ),
-//             ),
-//             const Text(
-//                     // getUrl().toString(),
-//                     'Status',
-//                     style: TextStyle(
-//                         fontFamily: 'Inter',
-//                         fontWeight: FontWeight.w700,
-//                         fontSize: 18),
-//                     maxLines: 1,
-//                     overflow: TextOverflow.ellipsis,
-//                   )
-//           ],
-//         ),
-//       )
-//     )
-//   );
-
-Widget transactionList= isLoad ? Container(
-          padding: const EdgeInsets.only(top: 70),
-          child:const CircularProgressIndicator(color: Color.fromARGB(255, 23, 22, 29),)) 
-        : list.isEmpty ? Container(
-          padding: const EdgeInsets.only(top: 70),
-          child: const Icon(Icons.folder_off_outlined, size: 60, color: Color.fromARGB(255, 26, 25, 32),),
-        )
-        : Expanded(
-            child: ScrollConfiguration(
-              behavior: const ScrollBehavior(),
-              child: GlowingOverscrollIndicator(
-                axisDirection: AxisDirection.down,
-                color: Colors.white,
-                child: ListView.builder(
-                  physics: const BouncingScrollPhysics(),
-                    itemCount: list.length,
-                    itemBuilder: (context, index) => Padding(
-                      padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
-                      child: Card(
-                        elevation: 2,
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(15)),
-                        margin: const EdgeInsets.only(bottom: 10),
-                        child: InkWell(
-                          borderRadius: BorderRadius.circular(15),
-                          onTap: () {
-                            Navigator.push(context, MaterialPageRoute(builder: ((context) {
-                              return DetailTransaction(index: index);
-                            })));
-                          },
-                          child: Padding(
-                            padding:const EdgeInsets.fromLTRB(15, 20, 15, 20),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Expanded(
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        // getUrl().toString(),
-                                        list[index]['product']['title'],
-                                        style: const TextStyle(
-                                            fontFamily: 'Inter',
-                                            fontWeight: FontWeight.w700,
-                                            fontSize: 18),
-                                        maxLines: 1,
-                                        overflow: TextOverflow.ellipsis,
-                                      ),
-                                      Text(
-                                          // 'Tanggal',
-                                        DateFormat.yMMMd().format(DateTime.parse(list[index]["createdAt"])),
-                                          style: const TextStyle(
-                                              fontFamily: 'Inter',
-                                              fontWeight: FontWeight.w400,
-                                              fontSize: 10)),
-                                      // Text(activity[index]["createdAt"])
-                                    ],
-                                  ),
-                                ),
-                                Text(
-                                        // getUrl().toString(),
-                                        NumberFormat.simpleCurrency(locale:'in', decimalDigits: 0).format(list[index]['product']['price']),
-                                        style: const TextStyle(
-                                            fontFamily: 'Inter',
-                                            fontWeight: FontWeight.w700,
-                                            fontSize: 18),
-                                        maxLines: 1,
-                                        overflow: TextOverflow.ellipsis,
-                                      ),
-                                const Icon(Icons.navigate_next_outlined)
-                              ],
-                            ),
+        margin: const EdgeInsets.only(bottom: 20),
+        child: Padding(
+          padding:const EdgeInsets.fromLTRB(15, 20, 15, 20),
+          child: Column(
+            children: [
+              Row(
+                children: [
+                  const Text('Your Subscription : '),
+                  //nama paket
+                  Text(
+                    subs,
+                    style: const TextStyle(
+                      fontFamily: 'Inter',
+                      fontWeight: FontWeight.w700,
+                      fontSize: 18
+                    ),
+                  )
+                ],
+              ),
+              const Divider(
+                thickness: 2,
+                color: Color.fromARGB(255, 224, 232, 235),
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text(
+                          'Remaining Quota :',
+                          style: TextStyle(
+                            fontFamily: 'Inter',
+                            fontWeight: FontWeight.w400,
+                            fontSize: 10
+                          )
+                        ),
+                        const SizedBox(height: 5),
+                        Text(
+                          quota,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: const TextStyle(
+                            fontFamily: 'Inter',
+                            fontWeight: FontWeight.w700,
+                            fontSize: 18
                           ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      onSurface: const Color.fromARGB(255, 255, 255, 255),
+                      primary: const Color.fromARGB(255, 217, 217, 217),
+                      shape: const StadiumBorder(),
+                      elevation: 10
+                    ),
+                    onPressed: (){
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (_) {
+                            return const PaymentScreen();
+                          },
                         )
+                      );
+                    }, 
+                    child: const Text(
+                      'Add', 
+                      style: TextStyle(
+                        fontFamily: 'Inter',
+                        fontWeight: FontWeight.w500,
+                        color: Color.fromARGB(255, 27, 26, 32),
+                        fontSize: 12
                       )
                     )
+                  )
+                ],
+              ),
+            ],
+          ),
+        )
+      )
+    );
+
+    Widget transactionList= isLoad ? const Loading(pad: 70)
+      : list.isEmpty ? const Empty(pad: 70)
+      : Expanded(
+          child: ScrollConfiguration(
+            behavior: const ScrollBehavior(),
+            child: GlowingOverscrollIndicator(
+              axisDirection: AxisDirection.down,
+              color: Colors.white,
+              child: ListView.builder(
+                physics: const BouncingScrollPhysics(),
+                itemCount: list.length,
+                itemBuilder: (context, index) => Padding(
+                  padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
+                  child: Card(
+                    elevation: 2,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(15)
+                    ),
+                    margin: const EdgeInsets.only(bottom: 10),
+                    child: InkWell(
+                      borderRadius: BorderRadius.circular(15),
+                      onTap: () {
+                        Navigator.push(
+                          context, 
+                          MaterialPageRoute(
+                            builder: (context) {
+                              return DetailTransaction(index: index);
+                            }
+                          )
+                        );
+                      },
+                      child: Padding(
+                        padding:const EdgeInsets.fromLTRB(15, 20, 15, 20),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    list[index]['product']['title'],
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: const TextStyle(
+                                      fontFamily: 'Inter',
+                                      fontWeight: FontWeight.w700,
+                                      fontSize: 18
+                                    ),
+                                  ),
+                                  Text(
+                                    DateFormat.yMMMd().format(DateTime.parse(list[index]["createdAt"])),
+                                    style: const TextStyle(
+                                      fontFamily: 'Inter',
+                                      fontWeight: FontWeight.w400,
+                                      fontSize: 10
+                                    )
+                                  ),
+                                ],
+                              ),
+                            ),
+
+                            Text(
+                              NumberFormat.simpleCurrency(locale:'in', decimalDigits: 0).format(list[index]['product']['price']),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: const TextStyle(
+                                fontFamily: 'Inter',
+                                fontWeight: FontWeight.w700,
+                                fontSize: 18
+                              ),
+                            ),
+                            const Icon(Icons.navigate_next_outlined)
+                          ],
+                        ),
                       ),
+                    )
+                  )
+                )
               ),
             ),
-          );
+          ),
+        );
 
-    return Builder(builder: (context) {
-      SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
-        statusBarColor: Colors.transparent,
-        statusBarIconBrightness: Brightness.dark
-      ));
-      return Scaffold(
-        resizeToAvoidBottomInset: false,
-        backgroundColor: const Color.fromARGB(255, 224, 232, 235),
-        body: Column(
-          children: [welcomeUser,favoriteList, wishlist, transactionList],
-        ),
+    return Builder(
+      builder: (context) {
+        SystemChrome.setSystemUIOverlayStyle(
+          const SystemUiOverlayStyle(
+            statusBarColor: Colors.transparent,
+            statusBarIconBrightness: Brightness.dark
+          )
+        );
+        return Scaffold(
+          resizeToAvoidBottomInset: false,
+          backgroundColor: const Color.fromARGB(255, 224, 232, 235),
+          body: Column(
+            children: [
+              WelcomeUser(),
+              favoriteList, 
+              wishlist, 
+              transactionList
+            ],
+          ),
+        );
+      }
     );
-    });
   }
 }

@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:projectb2b/screen/login.dart';
+import 'package:projectb2b/widget/alertdialog.dart';
 import 'package:rounded_loading_button/rounded_loading_button.dart';
 import 'package:projectb2b/http.dart' as http_test;
 import 'package:projectb2b/endpoints.dart';
@@ -28,7 +29,7 @@ class _ChangePasswordState extends State<ChangePassword> {
   void enter (RoundedLoadingButtonController controller, String check) async{
     if(formKey.currentState!.validate()){
       http_test.HTTPResponse response;
-      if(check.contains('otp')){
+      if (check.contains('otp')) {
         response = await http_test.put(
           url: urlForgotPassword, 
           body: {
@@ -38,7 +39,7 @@ class _ChangePasswordState extends State<ChangePassword> {
           }
         );
 
-      }else{
+      } else {
         response = await http_test.put(
           url: urlChangePassword, 
           body: {
@@ -46,61 +47,69 @@ class _ChangePasswordState extends State<ChangePassword> {
           }
         );
       }
-      // print(response.status);
-      if(response.isSuccess){
+      if (response.isSuccess) {
         controller.success();
-        Timer(const Duration(seconds: 1), (){
-          showDialog(barrierDismissible: false,context: context, builder: ((context) => AlertDialog(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10)),
-            backgroundColor:const Color.fromARGB(255, 224, 232, 235),
-            title: const Text('Password has been changed'),
-            titleTextStyle: const TextStyle(
-              color: Color.fromARGB(255, 23, 22, 29),
-              fontFamily: 'Inter',
-              fontWeight: FontWeight.w600),
-            actions: [
-              TextButton(
-                onPressed: (){
-                  var count = 0;
-                  check.contains('profile') ?
-                  Navigator.popUntil(context, ((route) {
-                    return count++ == 2;
-                  }))
-                  : Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: ((context) {
-                    return const Login();
-                  })), (route) => false); 
-                }, 
-                child: const Text('Ok',
-                  style:TextStyle(color: Color.fromARGB(255, 23, 22, 29)))
-                )
-            ],
-          )));
-        });
+        Timer(
+          const Duration(seconds: 1), 
+          (){
+            showDialog(
+              context: context, 
+              builder: (context) =>  MengDialog(
+                title: 'Success', 
+                content: 'Password has been changed', 
+                buttons: [
+                  MengDialogButton(
+                    text: 'OK', 
+                    onPressed: (){
+                      var count = 0;
+
+                      //check
+                      check.contains('profile') ?
+
+                      //back to profile
+                      Navigator.popUntil(
+                        context, 
+                        (route) {
+                          return count++ == 2;
+                        }
+                      )
+
+                      //back to login
+                      : Navigator.pushAndRemoveUntil(
+                        context, 
+                        MaterialPageRoute(
+                          builder: (context) {
+                            return const Login();
+                          }
+                        ), 
+                        (route) => false
+                      ); 
+                    }
+                  )
+                ]
+              )
+            );
+          }
+        );
       }else{
+        var error = response.message;
         controller.reset();
-        showDialog(context: context, builder: ((context) => AlertDialog(
-          shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10)),
-            backgroundColor:const Color.fromARGB(255, 224, 232, 235),
-            title: const Text('Error'),
-            titleTextStyle: const TextStyle(
-              color: Color.fromARGB(255, 23, 22, 29),
-              fontFamily: 'Inter',
-              fontWeight: FontWeight.w600),
-            content: Text(response.message!),
-            contentTextStyle: const TextStyle(
-              color: Color.fromARGB(255, 23, 22, 29)),
-            actions: [
-              TextButton(
+
+        showDialog(
+          context: context, 
+          builder: (context) => MengDialog(
+            title: 'Error', 
+            content: error ?? 'Something went wrong', 
+            buttons: [
+              MengDialogButton(
+                text: 'OK', 
                 onPressed: (){
                   Navigator.pop(context);
-                }, 
-                child: const Text('Ok',
-                  style:TextStyle(color: Color.fromARGB(255, 23, 22, 29)))
-                )
-            ],
-          )));
+                }
+              )
+            ]
+          )
+        );
       }
     }
   }
@@ -112,16 +121,24 @@ class _ChangePasswordState extends State<ChangePassword> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: const [
-          Text('Change Password', style: TextStyle(
-                    fontFamily: 'Inter',
-                    fontWeight: FontWeight.w600,
-                    color: Color.fromARGB(255, 255, 255, 255),
-                    fontSize: 24)),
-          Text('Enter new password', style: TextStyle(
-                    fontFamily: 'Inter',
-                    fontWeight: FontWeight.w400,
-                    color: Color.fromARGB(255, 255, 255, 255),
-                    fontSize: 20))
+          Text(
+            'Change Password', 
+            style: TextStyle(
+              fontFamily: 'Inter',
+              fontWeight: FontWeight.w600,
+              color: Color.fromARGB(255, 255, 255, 255),
+              fontSize: 24
+            )
+          ),
+          Text(
+            'Enter new password', 
+            style: TextStyle(
+              fontFamily: 'Inter',
+              fontWeight: FontWeight.w400,
+              color: Color.fromARGB(255, 255, 255, 255),
+              fontSize: 20
+            )
+          )
         ],
       ),
     );
@@ -134,7 +151,6 @@ class _ChangePasswordState extends State<ChangePassword> {
         style: const TextStyle(color: Colors.white),
         obscureText: _isObscure,
         decoration: InputDecoration(
-          // prefixIcon: Image.asset('icons/email.png',height: 4 ),
           prefixIcon: const Icon(
             Icons.key,
             color: Colors.white,
@@ -144,10 +160,11 @@ class _ChangePasswordState extends State<ChangePassword> {
           contentPadding: const EdgeInsets.fromLTRB(30, 10, 20, 10),
           hintText: 'Enter New Password',
           hintStyle:const TextStyle(
-              fontFamily: 'Inter',
-              fontWeight: FontWeight.w200,
-              color: Colors.white,
-              fontSize: 12),
+            fontFamily: 'Inter',
+            fontWeight: FontWeight.w200,
+            color: Colors.white,
+            fontSize: 12
+          ),
           suffixIcon: IconButton(
             onPressed: (){
               setState(() {
@@ -155,31 +172,33 @@ class _ChangePasswordState extends State<ChangePassword> {
               });
             }, 
             icon: Icon(
-              _isObscure ? Icons.visibility_outlined
-                : Icons.visibility_off_outlined,
+              _isObscure ? Icons.visibility_outlined : Icons.visibility_off_outlined,
               color: Colors.white
             ),
-              splashColor: Colors.transparent,
-              highlightColor: Colors.transparent,
-            ),
+            splashColor: Colors.transparent,
+            highlightColor: Colors.transparent,
+          ),
+
           border: OutlineInputBorder(
-              borderSide: BorderSide.none,
-              borderRadius: BorderRadius.circular(20)),
-      ),
-      onChanged: (value) {
-        newPass = value;
-      },
-      validator: (value){
-        if(value!.isEmpty){
-          return 'Please enter your new password';
-        }else if (value.length < 8) {
-          _buttonController.reset();
-          return "Password must be 8 character or more";
-        }else{
-          return null;
-        }
-      },
-    ));
+            borderSide: BorderSide.none,
+            borderRadius: BorderRadius.circular(20)
+          ),
+        ),
+        onChanged: (value) {
+          newPass = value;
+        },
+        validator: (value) {
+          if (value!.isEmpty) {
+            return 'Please enter your new password';
+          } else if (value.length < 8) {
+            _buttonController.reset();
+            return "Password must be 8 character or more";
+          } else {
+            return null;
+          }
+        },
+      )
+    );
 
     Widget confirmPassword = Container(
       padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
@@ -188,7 +207,6 @@ class _ChangePasswordState extends State<ChangePassword> {
         style: const TextStyle(color: Colors.white),
         obscureText: _confirmObsecure,
         decoration: InputDecoration(
-          // prefixIcon: Image.asset('icons/email.png',height: 4 ),
           prefixIcon: const Icon(
             Icons.lock,
             color: Colors.white,
@@ -198,10 +216,11 @@ class _ChangePasswordState extends State<ChangePassword> {
           contentPadding: const EdgeInsets.fromLTRB(30, 10, 20, 10),
           hintText: 'Confirm New Password',
           hintStyle:const TextStyle(
-              fontFamily: 'Inter',
-              fontWeight: FontWeight.w200,
-              color: Colors.white,
-              fontSize: 12),
+            fontFamily: 'Inter',
+            fontWeight: FontWeight.w200,
+            color: Colors.white,
+            fontSize: 12
+          ),
           suffixIcon: IconButton(
             onPressed: (){
               setState(() {
@@ -209,52 +228,55 @@ class _ChangePasswordState extends State<ChangePassword> {
               });
             }, 
             icon: Icon(
-              _confirmObsecure ? Icons.visibility_outlined
-                : Icons.visibility_off_outlined,
+              _confirmObsecure ? Icons.visibility_outlined : Icons.visibility_off_outlined,
               color: Colors.white
             ),
             splashColor: Colors.transparent,
             highlightColor: Colors.transparent,
           ),
+
           border: OutlineInputBorder(
-              borderSide: BorderSide.none,
-              borderRadius: BorderRadius.circular(20)),
-      ),
-      validator: ((value) {
-        if(value!.isEmpty){
-          _buttonController.reset();
-          return 'Please confirm your new password';
-        }else if(value != passCon.text){
-          _buttonController.reset();
-          return 'Pasword not match';
-        }else {
-          return null;
-        }
-      }),
-    )
+            borderSide: BorderSide.none,
+            borderRadius: BorderRadius.circular(20)
+          ),
+        ),
+        validator: (value) {
+          if (value!.isEmpty) {
+            _buttonController.reset();
+            return 'Please confirm your new password';
+          } else if (value != passCon.text){
+            _buttonController.reset();
+            return 'Pasword not match';
+          } else {
+            return null;
+          }
+        },
+      )
     );
 
     Widget submit = Container(
       margin: const EdgeInsets.only(top: 40),
-        child: RoundedLoadingButton(
-          height: 35,
-          width: 150,
-          loaderSize: 20,
-          color: const Color.fromARGB(255, 217, 217, 217),
-          successColor:const Color.fromARGB(255, 217, 217, 217),
-          valueColor: const Color.fromARGB(255, 27, 26, 32),
-          controller: _buttonController,
-          onPressed: () => enter(_buttonController, widget.check),
-          child: const Padding(
-              padding: EdgeInsets.fromLTRB(40, 0, 40, 0),
-              child: Text('Submit',
-                  style: TextStyle(
-                      fontFamily: 'Inter',
-                      fontWeight: FontWeight.w700,
-                      color: Color.fromARGB(255, 27, 26, 32),
-                      fontSize: 14)),
+      child: RoundedLoadingButton(
+        height: 35,
+        width: 150,
+        loaderSize: 20,
+        color: const Color.fromARGB(255, 217, 217, 217),
+        successColor:const Color.fromARGB(255, 217, 217, 217),
+        valueColor: const Color.fromARGB(255, 27, 26, 32),
+        controller: _buttonController,
+        onPressed: () => enter(_buttonController, widget.check),
+        child: const Padding(
+          padding: EdgeInsets.fromLTRB(40, 0, 40, 0),
+          child: Text('Submit',
+            style: TextStyle(
+              fontFamily: 'Inter',
+              fontWeight: FontWeight.w700,
+              color: Color.fromARGB(255, 27, 26, 32),
+              fontSize: 14
+            )
+          ),
         ),
-        )
+      )
     );
 
     return Scaffold(
@@ -275,6 +297,6 @@ class _ChangePasswordState extends State<ChangePassword> {
           ],
         ),
       ),
-      );
+    );
   }
 }

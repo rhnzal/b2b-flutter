@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:projectb2b/endpoints.dart';
 import 'package:projectb2b/screen/changepassword.dart';
+import 'package:projectb2b/widget/alertdialog.dart';
 import 'package:rounded_loading_button/rounded_loading_button.dart';
 import 'package:projectb2b/http.dart' as http_test;
 
@@ -21,7 +22,7 @@ class _OtpState extends State<Otp> {
   final formKey = GlobalKey<FormState>();
 
   void otpsend (RoundedLoadingButtonController controller) async{
-    if(formKey.currentState!.validate()){
+    if (formKey.currentState!.validate()) {
       var response = await http_test.post(
         url: urlCheckOTP, 
         body: {
@@ -29,38 +30,46 @@ class _OtpState extends State<Otp> {
           "otp": otp
         }
       );
-      if(response.isSuccess){
+
+      if (response.isSuccess) {
         controller.success();
-          Timer(const Duration(seconds: 1), (){
-            Navigator.push(context, MaterialPageRoute(builder: ((context) {
-              return ChangePassword(check: 'otp', email: widget.email, otp: otp);
-            })));
-            controller.reset();
-          });
-      }else{
+          Timer(
+            const Duration(seconds: 1), 
+            (){
+              Navigator.push(
+                context, 
+                MaterialPageRoute(
+                  builder: (context) {
+                    return ChangePassword(
+                      check: 'otp', 
+                      email: widget.email, 
+                      otp: otp
+                    );
+                  }
+                )
+              );
+              controller.reset();
+            }
+          );
+          
+      } else {
+        var error = response.message;
         controller.reset();
-        showDialog(context: context, builder: ((context) => AlertDialog(
-          shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10)),
-            backgroundColor:const Color.fromARGB(255, 224, 232, 235),
-            title: const Text('Error'),
-            titleTextStyle: const TextStyle(
-              color: Color.fromARGB(255, 23, 22, 29),
-              fontFamily: 'Inter',
-              fontWeight: FontWeight.w600),
-            content: Text(response.message!),
-            contentTextStyle: const TextStyle(
-              color: Color.fromARGB(255, 23, 22, 29)),
-            actions: [
-              TextButton(
+        showDialog(
+          context: context, 
+          builder: (context) => MengDialog(
+            title: 'Error', 
+            content: error ?? 'Something went wrong', 
+            buttons: [
+              MengDialogButton(
+                text: 'OK', 
                 onPressed: (){
                   Navigator.pop(context);
-                }, 
-                child: const Text('Ok',
-                  style:TextStyle(color: Color.fromARGB(255, 23, 22, 29)))
-                )
-            ],
-          )));
+                }
+              )
+            ]
+          )
+        );
       }
     }
   }
@@ -72,16 +81,24 @@ class _OtpState extends State<Otp> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: const [
-          Text('Submit OTP', style: TextStyle(
-                    fontFamily: 'Inter',
-                    fontWeight: FontWeight.w600,
-                    color: Color.fromARGB(255, 255, 255, 255),
-                    fontSize: 24)),
-          Text('Check your email for OTP', style: TextStyle(
-                    fontFamily: 'Inter',
-                    fontWeight: FontWeight.w400,
-                    color: Color.fromARGB(255, 255, 255, 255),
-                    fontSize: 20))
+          Text(
+            'Submit OTP', 
+            style: TextStyle(
+              fontFamily: 'Inter',
+              fontWeight: FontWeight.w600,
+              color: Color.fromARGB(255, 255, 255, 255),
+              fontSize: 24
+            )
+          ),
+          Text(
+            'Check your email for OTP', 
+            style: TextStyle(
+              fontFamily: 'Inter',
+              fontWeight: FontWeight.w400,
+              color: Color.fromARGB(255, 255, 255, 255),
+              fontSize: 20
+            )
+          )
         ],
       ),
     );
@@ -92,7 +109,6 @@ class _OtpState extends State<Otp> {
         cursorColor: Colors.white,
         style: const TextStyle(color: Colors.white),
         decoration: InputDecoration(
-          // prefixIcon: Image.asset('icons/email.png',height: 4 ),
           prefixIcon: const Icon(
             Icons.key,
             color: Colors.white,
@@ -102,41 +118,45 @@ class _OtpState extends State<Otp> {
           contentPadding: const EdgeInsets.fromLTRB(30, 10, 20, 10),
           hintText: 'Enter OTP',
           hintStyle:const TextStyle(
-              fontFamily: 'Inter',
-              fontWeight: FontWeight.w200,
-              color: Colors.white,
-              fontSize: 12),
+            fontFamily: 'Inter',
+            fontWeight: FontWeight.w200,
+            color: Colors.white,
+            fontSize: 12
+          ),
           border: OutlineInputBorder(
-              borderSide: BorderSide.none,
-              borderRadius: BorderRadius.circular(20)),
-      ),
-      onChanged: ((value) {
-        otp = value;
-      }),
-
-    ));
+            borderSide: BorderSide.none,
+            borderRadius: BorderRadius.circular(20)
+          ),
+        ),
+        onChanged: (value) {
+          otp = value;
+        },
+      )
+    );
 
     Widget submitOtp = Container(
       margin: const EdgeInsets.only(top: 40),
-        child: RoundedLoadingButton(
-          height: 35,
-          width: 150,
-          loaderSize: 20,
-          color: const Color.fromARGB(255, 217, 217, 217),
-          successColor:const Color.fromARGB(255, 217, 217, 217),
-          valueColor: const Color.fromARGB(255, 27, 26, 32),
-          controller: _buttonController,
-          onPressed: () => otpsend(_buttonController),
-          child: const Padding(
-              padding: EdgeInsets.fromLTRB(40, 0, 40, 0),
-              child: Text('Submit',
-                  style: TextStyle(
-                      fontFamily: 'Inter',
-                      fontWeight: FontWeight.w700,
-                      color: Color.fromARGB(255, 27, 26, 32),
-                      fontSize: 14)),
+      child: RoundedLoadingButton(
+        height: 35,
+        width: 150,
+        loaderSize: 20,
+        color: const Color.fromARGB(255, 217, 217, 217),
+        successColor:const Color.fromARGB(255, 217, 217, 217),
+        valueColor: const Color.fromARGB(255, 27, 26, 32),
+        controller: _buttonController,
+        onPressed: () => otpsend(_buttonController),
+        child: const Padding(
+          padding: EdgeInsets.fromLTRB(40, 0, 40, 0),
+          child: Text('Submit',
+            style: TextStyle(
+              fontFamily: 'Inter',
+              fontWeight: FontWeight.w700,
+              color: Color.fromARGB(255, 27, 26, 32),
+              fontSize: 14
+            )
+          ),
         ),
-        )
+      )
     );
 
     return Scaffold(
@@ -144,8 +164,8 @@ class _OtpState extends State<Otp> {
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
-
-    ),
+      ),
+      
       body: Form(
         key: formKey,
         child: ListView(

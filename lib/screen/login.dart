@@ -6,6 +6,8 @@ import 'package:projectb2b/endpoints.dart';
 import 'package:projectb2b/home.dart';
 import 'package:projectb2b/screen/register.dart';
 import 'package:projectb2b/screen/forgotpassword.dart';
+import 'package:projectb2b/user.dart';
+import 'package:projectb2b/widget/alertdialog.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:rounded_loading_button/rounded_loading_button.dart';
 import 'package:projectb2b/http.dart' as http_test;
@@ -41,151 +43,90 @@ class _LoginState extends State<Login> {
   }
 
   void login (RoundedLoadingButtonController controller) async{
-                // ignore: empty_statements
-                if (formKey.currentState!.validate()) {
-                  var response = await http_test.post(
-                    url: urlLogin, 
-                    body: {
-                      "email": email,
-                      "password": password
-                    }
-                  );
-                  if (response.isSuccess) {
-                    // var username = json.decode(response.body)['data']['fullName'];
-                    // prefs.setString('username', username);
-                    // print(username);
-                    if(response.additionalData){
-                      var token = response.data["token"];
-                      var displayName = response.data["fullName"];
-                      var email = response.data["email"];
-                      List avatar = response.data['avatar'];
-                      // print(avatar.last);
-                      prefs.setString('name', displayName);
-                      prefs.setString('token', token);
-                      prefs.setString('email', email);
-                      prefs.setString('pfp', avatar.last);
-                      controller.success();
-                      Timer(const Duration(seconds: 1), (){
-                      Navigator.pushReplacement(context,
-                          MaterialPageRoute(builder: ((context) {
-                        return const Home();
-                      })));
-                      });
-                    }else{
-                      _buttonController.reset();
-                      var error = response.message;
-                       showDialog(
-
-                        context: context,
-                        builder: ((context) => AlertDialog(
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10)),
-                              backgroundColor:const Color.fromARGB(255, 224, 232, 235),
-                              title: const Text('Error'),
-                              titleTextStyle: const TextStyle(
-                                  color: Color.fromARGB(255, 23, 22, 29),
-                                  fontFamily: 'Inter',
-                                  fontWeight: FontWeight.w600),
-                              content: Text('$error'),
-                              contentTextStyle: const TextStyle(color: Color.fromARGB(255, 23, 22, 29)),
-                              actions: [
-                                TextButton(
-                                    style: ButtonStyle(
-                                        overlayColor: MaterialStateProperty.all(
-                                            Colors.transparent),
-                                        minimumSize: MaterialStateProperty.all(
-                                            Size.zero),
-                                        tapTargetSize:
-                                            MaterialTapTargetSize.shrinkWrap,
-                                        padding: MaterialStateProperty.all(
-                                            const EdgeInsets.fromLTRB(0, 0, 10, 10))),
-                                    onPressed: () {
-                                      passCon.clear();
-                                      Navigator.pop(context);
-                                    },
-                                    child: const Text(
-                                      'OK',
-                                      style: TextStyle(color: Color.fromARGB(255, 23, 22, 29),),
-                                    )),
-                              ],
-                            )));
-                    }
-                    // ignore: use_build_context_synchronously
-                    //circular progress indicator
-                  } else {
-                    _buttonController.reset();
-                    var error = response.message;
-                    // print(error);
-                    if(mounted){
-                      showDialog(
-                          context: context,
-                          builder: ((context) => AlertDialog(
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(10)),
-                                backgroundColor:const Color.fromARGB(255, 224, 232, 235),
-                                title: const Text('Error'),
-                                titleTextStyle: const TextStyle(
-                                    color: Color.fromARGB(255, 23, 22, 29),
-                                    fontFamily: 'Inter',
-                                    fontWeight: FontWeight.w600),
-                                content: Text('$error'),
-                                contentTextStyle: const TextStyle(color: Color.fromARGB(255, 23, 22, 29)),
-                                actions: [
-                                  TextButton(
-                                      style: ButtonStyle(
-                                          overlayColor: MaterialStateProperty.all(
-                                              Colors.transparent),
-                                          minimumSize: MaterialStateProperty.all(
-                                              Size.zero),
-                                          tapTargetSize:
-                                              MaterialTapTargetSize.shrinkWrap,
-                                          padding: MaterialStateProperty.all(
-                                              const EdgeInsets.fromLTRB(0, 0, 10, 10))),
-                                      onPressed: () {
-                                        passCon.clear();
-                                        Navigator.pop(context);
-                                      },
-                                      child: const Text(
-                                        'OK',
-                                        style: TextStyle(color: Color.fromARGB(255, 23, 22, 29),),
-                                      )),
-                                ],
-                              )));
-
-                    }
-                  }
-                  // print(response.body);
-                  // print(isSuccess);
-
-                  // print(mengege);
-                  // print(loginStat);
-                  // // print(loginStat);
+    if (formKey.currentState!.validate()) {
+      var response = await http_test.post(
+        url: urlLogin, 
+        body: {
+          "email": email,
+          "password": password
+        }
+      );
+      
+      if (response.isSuccess) {
+        User user = User.fromJson(response.data);
+        var token = response.data["token"];
+        var displayName = user.fullName;
+        var email = user.email;
+        // print(avatar.last);
+        prefs.setString('name', displayName);
+        prefs.setString('token', token);
+        prefs.setString('email', email);
+        prefs.setString('pfp', user.avatar);
+        
+        controller.success();
+        Timer(
+          const Duration(seconds: 1), () {
+            Navigator.pushReplacement(
+              context, 
+              MaterialPageRoute(
+                builder: (context) {
+                  return const Home();
                 }
-                //buat login
-              
+              )
+            );
+          }
+        );
+
+      } else {
+        _buttonController.reset();
+        var error = response.message;
+
+        // Dialog
+        showDialog(
+          context: context,
+          builder: (context) => MengDialog(
+            title: 'Error', 
+            content: error ?? 'error', 
+            buttons: [
+              MengDialogButton(
+                text: 'OK', 
+                onPressed: () {
+                  passCon.clear();
+                  Navigator.pop(context);
+                }
+              )
+            ]
+          )
+        );
+      }
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    // ignore: unused_local_variable, avoid_unnecessary_containers
     Widget welcomeText = Row(
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
         const Padding(padding: EdgeInsets.fromLTRB(15, 150, 15, 40)),
         Column(
           children: const[
-            Text('Welcome,',
-                style: TextStyle(
-                    fontFamily: 'Inter',
-                    fontWeight: FontWeight.w600,
-                    color: Color.fromARGB(255, 255, 255, 255),
-                    fontSize: 24)),
-            Text('Sign In First',
-                style: TextStyle(
-                    fontFamily: 'Inter',
-                    fontWeight: FontWeight.w400,
-                    color: Color.fromARGB(255, 255, 255, 255),
-                    fontSize: 20))
+            Text(
+              'Welcome,',
+              style: TextStyle(
+                fontFamily: 'Inter',
+                fontWeight: FontWeight.w600,
+                color: Color.fromARGB(255, 255, 255, 255),
+                fontSize: 24)
+            ),
+            Text(
+              'Sign In First',
+              style: TextStyle(
+                fontFamily: 'Inter',
+                fontWeight: FontWeight.w400,
+                color: Color.fromARGB(255, 255, 255, 255),
+                fontSize: 20
+              )
+            )
           ],
         ),
       ],
@@ -247,37 +188,40 @@ class _LoginState extends State<Login> {
         style: const TextStyle(color: Colors.white),
         obscureText: _isObscure,
         decoration: InputDecoration(
-            prefixIcon: const Icon(
-              Icons.key,
+          prefixIcon: const Icon(
+            Icons.key,
+            color: Colors.white,
+          ),
+          filled: true,
+          fillColor: const Color.fromARGB(31, 217, 217, 217),
+          contentPadding: const EdgeInsets.fromLTRB(30, 10, 0, 0),
+          hintText: 'Password',
+          hintStyle: const TextStyle(
+            fontFamily: 'Inter',
+            fontWeight: FontWeight.w200,
+            color: Colors.white,
+            fontSize: 12
+          ),
+          suffixIcon: IconButton(
+            onPressed: () {
+              setState(() {
+                _isObscure = !_isObscure;
+              });
+            },
+            icon: Icon(
+              _isObscure
+                  ? Icons.visibility_outlined
+                  : Icons.visibility_off_outlined,
               color: Colors.white,
             ),
-            filled: true,
-            fillColor: const Color.fromARGB(31, 217, 217, 217),
-            contentPadding: const EdgeInsets.fromLTRB(30, 10, 0, 0),
-            hintText: 'Password',
-            hintStyle: const TextStyle(
-                fontFamily: 'Inter',
-                fontWeight: FontWeight.w200,
-                color: Colors.white,
-                fontSize: 12),
-            suffixIcon: IconButton(
-              onPressed: () {
-                setState(() {
-                  _isObscure = !_isObscure;
-                });
-              },
-              icon: Icon(
-                _isObscure
-                    ? Icons.visibility_outlined
-                    : Icons.visibility_off_outlined,
-                color: Colors.white,
-              ),
-              splashColor: Colors.transparent,
-              highlightColor: Colors.transparent,
-            ),
-            border: OutlineInputBorder(
-                borderSide: BorderSide.none,
-                borderRadius: BorderRadius.circular(20))),
+            splashColor: Colors.transparent,
+            highlightColor: Colors.transparent,
+          ),
+          border: OutlineInputBorder(
+            borderSide: BorderSide.none,
+            borderRadius: BorderRadius.circular(20)
+          )
+        ),
         onChanged: (value) {
           setState(() {
             password = value;
@@ -303,118 +247,36 @@ class _LoginState extends State<Login> {
           width: 180,
           child: TextButton(
             style: ButtonStyle(
-                overlayColor: MaterialStateProperty.all(Colors.transparent),
-                minimumSize: MaterialStateProperty.all(Size.zero),
-                tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                padding: MaterialStateProperty.all(EdgeInsets.zero)),
-            // style: TextButton.styleFrom(
-            //   padding: EdgeInsets.zero,
-            //   minimumSize: Size.zero,
-            //   tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-            // ),
+              overlayColor: MaterialStateProperty.all(Colors.transparent),
+              minimumSize: MaterialStateProperty.all(Size.zero),
+              tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+              padding: MaterialStateProperty.all(EdgeInsets.zero)
+            ),
             onPressed: () {
-              Navigator.push(context, MaterialPageRoute(builder: ((context) {
-                return const ForgotPassword();
-              })));
+              Navigator.push(
+                context, 
+                MaterialPageRoute(
+                  builder: (context) {
+                    return const ForgotPassword();
+                  }
+                )
+              );
               emailCon.clear();
               passCon.clear();
             },
             child: const Text(
               'Forgot Your Password ?',
               style: TextStyle(
-                  fontFamily: 'Inter',
-                  fontWeight: FontWeight.w500,
-                  fontSize: 11,
-                  color: Colors.white),
+                fontFamily: 'Inter',
+                fontWeight: FontWeight.w500,
+                fontSize: 11,
+                color: Colors.white
+              ),
             ),
           ),
         ),
       ],
     );
-    // ElevatedButton(
-    //           style: ElevatedButton.styleFrom(
-    //               primary: Color.fromARGB(255, 217, 217, 217),
-    //               shape: StadiumBorder()),
-    //           onPressed: () async {
-    //             // ignore: empty_statements
-    //             if (formKey.currentState!.validate()) {
-    //               var response = await http.post(
-    //                   Uri.parse("https://sija-b2b.ronisetiawan.id/api/auth/login"),
-    //                   headers: {
-    //                     HttpHeaders.contentTypeHeader: 'application/json'
-    //                   },
-    //                   body:
-    //                       json.encode({"email": email, "password": password}));
-    //               isSuccess = json.decode(response.body)['isSuccess'];
-    //               if (isSuccess) {
-    //                 // var username = json.decode(response.body)['data']['fullName'];
-    //                 // prefs.setString('username', username);
-    //                 // print(username);
-    //                 var token = json.decode(response.body)['data']['token'];
-    //                 var displayName = json.decode(response.body)['data']['fullName'];
-    //                 prefs.setString('name', displayName);
-    //                 prefs.setString('token', token);
-    //                 // ignore: use_build_context_synchronously
-    //                 //circular progress indicator
-    //                 Navigator.pushReplacement(context,
-    //                     MaterialPageRoute(builder: ((context) {
-    //                   return Home();
-    //                 })));
-    //               } else {
-    //                 var error = json.decode(response.body)['message'];
-    //                 print(error);
-    //                 showDialog(
-    //                     context: context,
-    //                     builder: ((context) => AlertDialog(
-    //                           shape: RoundedRectangleBorder(
-    //                               borderRadius: BorderRadius.circular(10)),
-    //                           backgroundColor: Color.fromARGB(255, 23, 22, 29),
-    //                           title: Text('Error'),
-    //                           titleTextStyle: TextStyle(
-    //                               color: Colors.white,
-    //                               fontFamily: 'Inter',
-    //                               fontWeight: FontWeight.w600),
-    //                           content: Text('$error'),
-    //                           contentTextStyle: TextStyle(color: Colors.white),
-    //                           actions: [
-    //                             TextButton(
-    //                                 style: ButtonStyle(
-    //                                     overlayColor: MaterialStateProperty.all(
-    //                                         Colors.transparent),
-    //                                     minimumSize: MaterialStateProperty.all(
-    //                                         Size.zero),
-    //                                     tapTargetSize:
-    //                                         MaterialTapTargetSize.shrinkWrap,
-    //                                     padding: MaterialStateProperty.all(
-    //                                         EdgeInsets.fromLTRB(0, 0, 10, 10))),
-    //                                 onPressed: () {
-    //                                   Navigator.pop(context);
-    //                                 },
-    //                                 child: Text(
-    //                                   'OK',
-    //                                   style: TextStyle(color: Colors.white),
-    //                                 )),
-    //                           ],
-    //                         )));
-    //               }
-    //               print(response.body);
-    //               print(isSuccess);
-
-    //               // print(mengege);
-    //               // print(loginStat);
-    //               // // print(loginStat);
-    //             }
-    //             //buat login
-    //           },
-    //           child: Padding(
-    //             padding: EdgeInsets.fromLTRB(40, 0, 40, 0),
-    //             child: Text('Sign In',
-    //                 style: TextStyle(
-    //                     fontFamily: 'Inter',
-    //                     fontWeight: FontWeight.w700,
-    //                     color: Color.fromARGB(255, 27, 26, 32),
-    //                     fontSize: 14)),
-    //           )),
 
     Widget loginButton = Container(
         margin: const EdgeInsets.only(top: 40),
@@ -487,10 +349,12 @@ class _LoginState extends State<Login> {
 
     return Builder(
       builder: (context) {
-        SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
-          statusBarColor: Colors.transparent,
-          statusBarIconBrightness: Brightness.light
-        ));
+        SystemChrome.setSystemUIOverlayStyle(
+          const SystemUiOverlayStyle(
+            statusBarColor: Colors.transparent,
+            statusBarIconBrightness: Brightness.light
+          )
+        );
         return Scaffold(
           // appBar: AppBar(backgroundColor: Colors.transparent, elevation: 0),
           backgroundColor: const Color.fromARGB(255, 23, 22, 29),

@@ -18,7 +18,7 @@ class _DetailTransactionState extends State<DetailTransaction> {
   List data = [];
   String orderId = '';
   String product = '';
-  bool status = false;
+  String status = '';
   String price = '';
   String date = '';
   String payUrl = '';
@@ -37,7 +37,7 @@ class _DetailTransactionState extends State<DetailTransaction> {
       data = response.data;
       orderId = data[widget.index]['orderId'].toString();
       product = data[widget.index]['product']['title'].toString();
-      status = data[widget.index]['isPaid'];
+      status = data[widget.index]['status'];
       payUrl = data[widget.index]['paymentUrl'];
 
       price = NumberFormat.simpleCurrency(locale:'in', decimalDigits: 0).format(data[widget.index]['product']['price']);
@@ -326,7 +326,7 @@ class _DetailTransactionState extends State<DetailTransaction> {
         children: [
           card,
           detail,
-          if(!status)...[payButton]
+          if(status == 'UNPAID')...[payButton]
         ],
       ),
     );

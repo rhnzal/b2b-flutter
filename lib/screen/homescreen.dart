@@ -3,6 +3,8 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:projectb2b/endpoints.dart';
+import 'package:projectb2b/widget/alertdialog.dart';
+import 'package:projectb2b/widget/loadingoverlay.dart';
 import 'package:projectb2b/widget/welcome.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:projectb2b/http.dart' as http_test;
@@ -44,31 +46,25 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
 
-  Future<void> getActivity() async {
+  Future<void> getActivity () async {
     var response = await http_test.get(url: urlDocument);
-    // print(response.body);
-    // print(response.status);
+
     if (response.isSuccess) {
       activity = response.data;
     } else {
+      var error = response.message;
       if (mounted) {
         showDialog(
           context: context, 
-          builder: (context) {
-            return AlertDialog(
-              shape: RoundedRectangleBorder(
-                borderRadius:BorderRadius.circular(10)
-              ),
-              backgroundColor: const Color.fromARGB(255, 224, 232, 235),
-              title: const Text('Error'),
-              content: Text(response.message.toString()),
-            );
-          }
+          builder: (context) => MengDialog(
+            title: 'Error', 
+            content: error ?? 'Something was wrong', 
+            buttons: const []
+          )
         );
       }
     }
 
-    // print(activity);
     if (mounted) {
       setState(() {
         isLoad = false;
@@ -84,9 +80,6 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   trimUrl (String trim) {
-    // for( var i = 0 ; i < activity.length; i++){
-    //   var trim = activity[i]['url'];
-    // }
     if (trim.contains('https://')) {
       if (trim.contains('www.tradewheel.com')) {
         return trim.toString().substring(27);
@@ -99,22 +92,12 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   confirm() async {
+    //post the url while showing loading overlay
     showDialog(
       barrierDismissible: false,
       context: context, 
       builder: (context) {
-        return Center(
-          child: Container(
-            decoration: const BoxDecoration(
-              color: Color.fromARGB(255, 224, 232, 235),
-              borderRadius: BorderRadius.all(Radius.circular(10))
-            ),
-            padding: const EdgeInsets.all(20),
-            child: const CircularProgressIndicator(
-              color: Color.fromARGB(255, 23, 22, 29),
-            )
-          ),
-        );
+        return const LoadingOverlay();
       }
     );          
     var response = await http_test.post(
@@ -122,6 +105,7 @@ class _HomeScreenState extends State<HomeScreen> {
       body: {"url": url}
     );
 
+    // if posting the url success loading overlay will pop and refresh the list
     if (response.isSuccess) {
       if (mounted) {
         Navigator.pop(context);
@@ -130,6 +114,7 @@ class _HomeScreenState extends State<HomeScreen> {
       await getActivity();
       urlCon.clear();
       isActive = false;
+
     } else {
       if (mounted) {
         Navigator.pop(context);

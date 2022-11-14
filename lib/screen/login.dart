@@ -4,9 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:projectb2b/endpoints.dart';
 import 'package:projectb2b/home.dart';
+import 'package:projectb2b/model/user.dart';
 import 'package:projectb2b/screen/register.dart';
 import 'package:projectb2b/screen/forgotpassword.dart';
-import 'package:projectb2b/user.dart';
 import 'package:projectb2b/widget/alertdialog.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:rounded_loading_button/rounded_loading_button.dart';
@@ -42,7 +42,7 @@ class _LoginState extends State<Login> {
     setState(() {});
   }
 
-  void login (RoundedLoadingButtonController controller) async{
+  void login (RoundedLoadingButtonController controller) async {
     if (formKey.currentState!.validate()) {
       var response = await http_test.post(
         url: urlLogin, 
@@ -279,26 +279,29 @@ class _LoginState extends State<Login> {
     );
 
     Widget loginButton = Container(
-        margin: const EdgeInsets.only(top: 40),
-        child: RoundedLoadingButton(
-          height: 35,
-          width: 150,
-          loaderSize: 20,
-          color: const Color.fromARGB(255, 217, 217, 217),
-          successColor: const Color.fromARGB(255, 217, 217, 217),
-          valueColor: const Color.fromARGB(255, 27, 26, 32),
-          controller: _buttonController,
-          onPressed: () => login(_buttonController),
-          child: const Padding(
-              padding: EdgeInsets.fromLTRB(40, 0, 40, 0),
-              child: Text('Sign In',
-                  style: TextStyle(
-                      fontFamily: 'Inter',
-                      fontWeight: FontWeight.w700,
-                      color: Color.fromARGB(255, 27, 26, 32),
-                      fontSize: 14)),
+      margin: const EdgeInsets.only(top: 40),
+      child: RoundedLoadingButton(
+        height: 35,
+        width: 150,
+        loaderSize: 20,
+        color: const Color.fromARGB(255, 217, 217, 217),
+        successColor: const Color.fromARGB(255, 217, 217, 217),
+        valueColor: const Color.fromARGB(255, 27, 26, 32),
+        controller: _buttonController,
+        onPressed: () => login(_buttonController),
+        child: const Padding(
+          padding: EdgeInsets.fromLTRB(40, 0, 40, 0),
+          child: Text('Sign In',
+            style: TextStyle(
+              fontFamily: 'Inter',
+              fontWeight: FontWeight.w700,
+              color: Color.fromARGB(255, 27, 26, 32),
+              fontSize: 14
+            )
+          ),
         ),
-        ));
+      )
+    );
 
     Widget registerButton = Container(
       margin: const EdgeInsets.fromLTRB(0, 60, 0, 20),
@@ -308,39 +311,43 @@ class _LoginState extends State<Login> {
           const Text(
             'Don\'t Have an Account ? ',
             style: TextStyle(
-                fontFamily: 'Inter',
-                fontWeight: FontWeight.w500,
-                fontSize: 11,
-                color: Colors.white),
+              fontFamily: 'Inter',
+              fontWeight: FontWeight.w500,
+              fontSize: 11,
+              color: Colors.white
+            ),
           ),
+
           TextButton(
             style: ButtonStyle(
-                overlayColor: MaterialStateProperty.all(Colors.transparent),
-                minimumSize: MaterialStateProperty.all(Size.zero),
-                tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                padding: MaterialStateProperty.all(EdgeInsets.zero)),
-            // style: TextButton.styleFrom(
-            //   padding: EdgeInsets.zero,
-            //   minimumSize: Size.zero,
-            //   tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-            // ),
+              overlayColor: MaterialStateProperty.all(Colors.transparent),
+              minimumSize: MaterialStateProperty.all(Size.zero),
+              tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+              padding: MaterialStateProperty.all(EdgeInsets.zero)
+            ),
             onPressed: () {
-              Navigator.push(context,
-                MaterialPageRoute(builder: (context) {
-              //api/users/login
-                return const Register();
-                }));
-                _buttonController.reset();
-                emailCon.clear();
-                passCon.clear();
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) {
+                  //api/users/login
+                  return const Register();
+                  }
+                )
+              );
+
+              _buttonController.reset();
+              emailCon.clear();
+              passCon.clear();
             },
             child: const Text(
               'Sign Up',
               style: TextStyle(
-                  fontFamily: 'Inter',
-                  fontWeight: FontWeight.w700,
-                  fontSize: 11,
-                  color: Colors.white),
+                fontFamily: 'Inter',
+                fontWeight: FontWeight.w700,
+                fontSize: 11,
+                color: Colors.white
+              ),
             ),
           ),
         ],

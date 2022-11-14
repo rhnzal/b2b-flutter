@@ -193,12 +193,20 @@ class _QuotaScreenState extends State<QuotaScreen> {
                       elevation: 10
                     ),
                     onPressed: (){
+                      // push quota product screen
                       Navigator.of(context).push(
                         MaterialPageRoute(
                           builder: (_) {
                             return const PaymentScreen();
                           },
                         )
+                      ).then (              // then refresh the list and quota when pop to this screen
+                        (value) {
+                          setState(() {
+                            getQuota();
+                            getHistory();
+                          });
+                        }
                       );
                     }, 
                     child: const Text(

@@ -87,12 +87,12 @@ Future<HTTPResponse> get({@required url, Duration timeout = const Duration(secon
     ).timeout(timeout);
     // print(json.decode(response.body));
 
-    var data = json.decode(response.body)["data"];
+    var data = json.decode(response.body);
 
-    if (response.statusCode == 200 ){
+    if (response.statusCode == 200 && data['isSuccess']){
       return HTTPResponse (
         status: HTTPResponseStatus.success,
-        data : data
+        data : data["data"]
       );
     } else {
       return HTTPResponse(
@@ -163,8 +163,10 @@ Future<HTTPResponse> delete({@required url, Duration timeout = const Duration(se
         HttpHeaders.authorizationHeader: 'Bearer $token'
       }
     ).timeout(timeout);
+
+    var data = json.decode(response.body);
     
-    if (response.statusCode == 200) {
+    if ([200, 100].contains(response.statusCode) && data['isSucces']) {
       return HTTPResponse(
         status: HTTPResponseStatus.success,
         message: 'Success'

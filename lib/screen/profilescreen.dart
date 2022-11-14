@@ -6,6 +6,8 @@ import 'package:projectb2b/endpoints.dart';
 import 'package:projectb2b/screen/login.dart';
 import 'package:projectb2b/screen/changepassword.dart';
 import 'package:projectb2b/screen/paymentscreen.dart';
+import 'package:projectb2b/widget/alertdialog.dart';
+import 'package:projectb2b/widget/loadingoverlay.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:projectb2b/http.dart' as  http_test;
@@ -28,6 +30,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
   String? displayName = '';
   String? email = '';
   var activity = [];
+  
+  BuildContext get overlayContext => context;
+  BuildContext get dialogContext => context;
 
   @override
   void initState() {
@@ -53,6 +58,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
     if(mounted){
       setState(() {});
     }
+  }
+
+  void logout() async {
+    prefs.clear();
+    Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(
+        builder: (context) {
+          return const Login();
+        }
+      ), 
+      (Route<dynamic> route) => false
+    );
   }
 
   @override
@@ -85,127 +103,208 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     height: 30,
                     width: 109,
                     child: ElevatedButton(
-                      onPressed: () {
+                      onPressed: () async {
                         showDialog(
-                          context: context,
-                          builder: (context) => AlertDialog(
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10)
-                            ),
-                            backgroundColor:
-                              const Color.fromARGB(255, 224, 232, 235),
-                            title: const Text('Confirmation'),
-                            titleTextStyle: const TextStyle(
-                              color: Color.fromARGB(255, 23, 22, 29),
-                              fontFamily: 'Inter',
-                              fontWeight: FontWeight.w600
-                            ),
-                            content:
-                              const Text('Are you sure want to Sign Out ?'),
-                            contentTextStyle:
-                              const TextStyle(color: Color.fromARGB(255, 23, 22, 29)),
-                            actions: [
-                              TextButton(
-                                style: ButtonStyle(
-                                  overlayColor: MaterialStateProperty.all(
-                                    Colors.transparent
-                                  ),
-                                  minimumSize: MaterialStateProperty.all(Size.zero),
-                                  tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                                  padding: MaterialStateProperty.all(
-                                    const EdgeInsets.fromLTRB(0, 0, 10, 10))
-                                  ),
-                                onPressed: () {
-                                  Navigator.pop(context);
-                                },
-                                child: const Text(
-                                  'No',
-                                  style: TextStyle(color: Color.fromARGB(255, 23, 22, 29))
-                                )
-                              ),
-                              TextButton(
-                                style: ButtonStyle(
-                                  overlayColor: MaterialStateProperty.all(
-                                    Colors.transparent
-                                  ),
-                                  minimumSize: MaterialStateProperty.all(Size.zero),
-                                  tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                                  padding: MaterialStateProperty.all(
-                                    const EdgeInsets.fromLTRB(0, 0, 10, 10)
-                                  )
+                          context: context, 
+                          builder: (context) {
+                            return MengDialog(
+                              title: 'Confirmation', 
+                              content: 'Are you sure want to Sign Out ?', 
+                              buttons: [
+                                MengDialogButton(
+                                  text: 'NO', 
+                                  onPressed: (){
+                                    Navigator.pop(context);
+                                  }
                                 ),
-                                onPressed: () async{
-                                  var response = await http_test.delete(url: urlLogout);
-                                  if (response.isSuccess) {
-                                    if (mounted) {
-                                      prefs.clear();
-                                      Navigator.pushAndRemoveUntil(context,
-                                        MaterialPageRoute(
-                                          builder: (context) {
-                                            return const Login();
-                                          }
-                                        ), 
-                                        (Route<dynamic> route) => false
+                                MengDialogButton(
+                                  text: 'OK', 
+                                  onPressed: () async {
+                                    Navigator.pop(context);
+                                    showDialog(
+                                      barrierDismissible: false,
+                                      context: overlayContext, 
+                                      builder: (overlayContext) {
+                                        return const LoadingOverlay();
+                                      }
+                                    );
+
+                                    var response = await http_test.delete(url: urlLogout);
+                                    
+                                    if (response.isSuccess) {
+                                      if (mounted) {
+                                        Navigator.pop(overlayContext);
+                                      }
+                                      logout();
+                                        
+                                    } else {
+                                      if (mounted) {
+                                        Navigator.pop(overlayContext);
+                                      }
+                                      var error = response.message;
+                                      showDialog(
+                                        context: dialogContext, 
+                                        builder: (dialogContext) {
+                                          return MengDialog(
+                                            title: 'Error', 
+                                            content: error ?? 'Something was wrong', 
+                                            buttons: [
+                                              MengDialogButton(
+                                                text: 'OK', 
+                                                onPressed: (){
+                                                  Navigator.pop(dialogContext);
+                                                }
+                                              )
+                                            ]
+                                          );
+                                        }
                                       );
                                     }
-                                  } else {
-                                    if (mounted) {
-                                      Navigator.pop(context);
-                                    }
-                                    var error = response.message;
-                                    showDialog(
-                                      context: context,
-                                      builder: (context) => AlertDialog(
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(10)
-                                        ),
-                                        backgroundColor:const Color.fromARGB(255, 224, 232, 235),
-                                        title: const Text('Error'),
-                                        titleTextStyle: const TextStyle(
-                                          color: Color.fromARGB(255, 23, 22, 29),
-                                          fontFamily: 'Inter',
-                                          fontWeight: FontWeight.w600
-                                        ),
-                                        content: Text('$error'),
-                                        contentTextStyle: const TextStyle(color: Color.fromARGB(255, 23, 22, 29)),
-                                        actions: [
-                                          TextButton(
-                                            style: ButtonStyle(
-                                              overlayColor: MaterialStateProperty.all(
-                                                Colors.transparent
-                                              ),
-                                              minimumSize: MaterialStateProperty.all(Size.zero),
-                                              tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                                              padding: MaterialStateProperty.all(
-                                                const EdgeInsets.fromLTRB(0, 0, 10, 10)
-                                              )
-                                            ),
-                                            onPressed: () {
-                                              Navigator.pop(context);
-                                            },
-                                            child: const Text(
-                                              'OK',
-                                              style: TextStyle(
-                                                color: Color.fromARGB(255, 23, 22, 29)
-                                              ),
-                                            )
-                                          ),
-                                        ],
-                                      )
-                                    );
                                   }
-                                  // print(prefs.getString('token'));
-                                },
-                                child: const Text(
-                                  'Yes',
-                                  style: TextStyle(
-                                    color: Color.fromARGB(255, 23, 22, 29)
-                                  )
                                 )
-                              )
-                            ],
-                          )
+                              ]
+                            );
+                          }
                         );
+
+                        // showDialog(
+                        //   context: context,
+                        //   builder: (context) => AlertDialog(
+                        //     shape: RoundedRectangleBorder(
+                        //       borderRadius: BorderRadius.circular(10)
+                        //     ),
+                        //     backgroundColor:
+                        //       const Color.fromARGB(255, 224, 232, 235),
+                        //     title: const Text('Confirmation'),
+                        //     titleTextStyle: const TextStyle(
+                        //       color: Color.fromARGB(255, 23, 22, 29),
+                        //       fontFamily: 'Inter',
+                        //       fontWeight: FontWeight.w600
+                        //     ),
+                        //     content:
+                        //       const Text('Are you sure want to Sign Out ?'),
+                        //     contentTextStyle:
+                        //       const TextStyle(color: Color.fromARGB(255, 23, 22, 29)),
+                        //     actions: [
+                        //       TextButton(
+                        //         style: ButtonStyle(
+                        //           overlayColor: MaterialStateProperty.all(
+                        //             Colors.transparent
+                        //           ),
+                        //           minimumSize: MaterialStateProperty.all(Size.zero),
+                        //           tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                        //           padding: MaterialStateProperty.all(
+                        //             const EdgeInsets.fromLTRB(0, 0, 10, 10))
+                        //           ),
+                        //         onPressed: () {
+                        //           Navigator.pop(context);
+                        //         },
+                        //         child: const Text(
+                        //           'No',
+                        //           style: TextStyle(color: Color.fromARGB(255, 23, 22, 29))
+                        //         )
+                        //       ),
+                        //       TextButton(
+                        //         style: ButtonStyle(
+                        //           overlayColor: MaterialStateProperty.all(
+                        //             Colors.transparent
+                        //           ),
+                        //           minimumSize: MaterialStateProperty.all(Size.zero),
+                        //           tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                        //           padding: MaterialStateProperty.all(
+                        //             const EdgeInsets.fromLTRB(0, 0, 10, 10)
+                        //           )
+                        //         ),
+                        //         onPressed: () async{
+                        //           var response = await http_test.delete(url: urlLogout);
+                        //           if (response.isSuccess) {
+                        //             if (mounted) {
+                        //               prefs.clear();
+                        //               Navigator.pushAndRemoveUntil(context,
+                        //                 MaterialPageRoute(
+                        //                   builder: (context) {
+                        //                     return const Login();
+                        //                   }
+                        //                 ), 
+                        //                 (Route<dynamic> route) => false
+                        //               );
+                        //             }
+                        //           } else {
+                        //             if (mounted) {
+                        //               Navigator.pop(context);
+                        //             }
+                        //             var error = response.message;
+                        //             showDialog(
+                        //               context: context, 
+                        //               builder: (context) {
+                        //                 return MengDialog(
+                        //                   title: 'Error', 
+                        //                   content: error ?? 'Something was wrong', 
+                        //                   buttons: [
+                        //                     MengDialogButton(
+                        //                       text: 'OK', 
+                        //                       onPressed: (){
+                        //                         Navigator.pop(context);
+                        //                       }
+                        //                     )
+                        //                   ]
+                        //                 );
+                        //               }
+                        //             );
+
+                        //           }
+                        //           // print(prefs.getString('token'));
+                        //         },
+                        //             // showDialog(
+                        //             //   context: context,
+                        //             //   builder: (context) => AlertDialog(
+                        //             //     shape: RoundedRectangleBorder(
+                        //             //       borderRadius: BorderRadius.circular(10)
+                        //             //     ),
+                        //             //     backgroundColor:const Color.fromARGB(255, 224, 232, 235),
+                        //             //     title: const Text('Error'),
+                        //             //     titleTextStyle: const TextStyle(
+                        //             //       color: Color.fromARGB(255, 23, 22, 29),
+                        //             //       fontFamily: 'Inter',
+                        //             //       fontWeight: FontWeight.w600
+                        //             //     ),
+                        //             //     content: Text('$error'),
+                        //             //     contentTextStyle: const TextStyle(color: Color.fromARGB(255, 23, 22, 29)),
+                        //             //     actions: [
+                        //             //       TextButton(
+                        //             //         style: ButtonStyle(
+                        //             //           overlayColor: MaterialStateProperty.all(
+                        //             //             Colors.transparent
+                        //             //           ),
+                        //             //           minimumSize: MaterialStateProperty.all(Size.zero),
+                        //             //           tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                        //             //           padding: MaterialStateProperty.all(
+                        //             //             const EdgeInsets.fromLTRB(0, 0, 10, 10)
+                        //             //           )
+                        //             //         ),
+                        //             //         onPressed: () {
+                        //             //           Navigator.pop(context);
+                        //             //         },
+                        //             //         child: const Text(
+                        //             //           'OK',
+                        //             //           style: TextStyle(
+                        //             //             color: Color.fromARGB(255, 23, 22, 29)
+                        //             //           ),
+                        //             //         )
+                        //             //       ),
+                        //             //     ],
+                        //             //   )
+                        //             // );
+                        //         child: const Text(
+                        //           'Yes',
+                        //           style: TextStyle(
+                        //             color: Color.fromARGB(255, 23, 22, 29)
+                        //           )
+                        //         )
+                        //       )
+                        //     ],
+                        //   )
+                        // );
                       },
                       style: ElevatedButton.styleFrom(
                         primary: Colors.white,
@@ -381,21 +480,33 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                                   padding: MaterialStateProperty.all(const EdgeInsets.fromLTRB(0, 0, 20, 10))
                                 ),
-                                onPressed: () async{
+                                onPressed: () async {
+                                  Navigator.pop(context);
+
+                                  showDialog(
+                                    barrierDismissible: false,
+                                    context: overlayContext, 
+                                    builder: (overlaycontext) {
+                                      return const LoadingOverlay();
+                                    }
+                                  );
+
                                   var response = await http_test.put(
                                     url: urlEditName, 
                                     body: {
                                       "fullName" : editName
                                     }
                                   );
-                                  var name = response.data['fullName'];
-                                  // print(name);
-                                  setState(() {
-                                    prefs.setString('name', name);
-                                    displayName = prefs.getString('name');
-                                  });
-                                  if(mounted){
-                                    Navigator.pop(context);
+                                  if (response.isSuccess){
+                                    if (mounted) {
+                                      Navigator.pop(overlayContext);
+                                    }
+
+                                    var name = response.data['fullName'];
+                                    setState(() {
+                                      prefs.setString('name', name);
+                                      displayName = prefs.getString('name');
+                                    });
                                   }
                                 }, 
                                 child: const Text(
@@ -656,7 +767,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           color: Colors.white,
           child: SingleChildScrollView(
             child: Column(
-              children: [profilePreview, editProfile, quota],
+              children: [ profilePreview, editProfile, quota ],
             ),
           ),
         ),

@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:projectb2b/endpoints.dart';
 import 'package:projectb2b/http.dart' as http_test;
+import 'package:projectb2b/widget/loadingoverlay.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ProfilePicture extends StatefulWidget {
@@ -18,6 +19,8 @@ class _ProfilePictureState extends State<ProfilePicture> {
   final ImagePicker _picker = ImagePicker();
   late SharedPreferences prefs;
   String? pfp;
+  
+  BuildContext get overlayContext => context;
 
   @override
   void initState() {
@@ -88,7 +91,7 @@ class _ProfilePictureState extends State<ProfilePicture> {
                                   primary: const Color.fromARGB(255, 23, 22, 29),
                                   onPrimary: const Color.fromARGB(255, 224, 232, 235)
                                 ),
-                                onPressed: () async{
+                                onPressed: () async {
                                   XFile? pickedImage = await _picker.pickImage(source: ImageSource.camera);
                                   if (pickedImage != null) {
                                     if (mounted) {
@@ -96,7 +99,15 @@ class _ProfilePictureState extends State<ProfilePicture> {
                                     }
                                     Uint8List imageBytes = await pickedImage.readAsBytes();
                                     String result = base64.encode(imageBytes);
+                                    
                                     // print(result);
+                                    showDialog(
+                                      barrierDismissible: false,
+                                      context: overlayContext, 
+                                      builder: (overlayContext){
+                                        return const LoadingOverlay();
+                                      }
+                                    );
 
                                     var response = await http_test.put(
                                       url: urlChangePicture, 
@@ -106,6 +117,10 @@ class _ProfilePictureState extends State<ProfilePicture> {
                                     );
 
                                     if (response.isSuccess) {
+                                      if (mounted) {
+                                        Navigator.pop(overlayContext);
+                                      }
+
                                       setState(() {
                                         var avatar = response.data['avatar'];
                                         prefs.setString('pfp', avatar);
@@ -150,6 +165,14 @@ class _ProfilePictureState extends State<ProfilePicture> {
                                     String result = base64.encode(imageBytes);
                                     
                                     // print(result);
+                                    showDialog(
+                                      barrierDismissible: false,
+                                      context: overlayContext, 
+                                      builder: (overlayContext){
+                                        return const LoadingOverlay();
+                                      }
+                                    );
+
                                     var response = await http_test.put(
                                       url: urlChangePicture, 
                                       body: {
@@ -158,6 +181,10 @@ class _ProfilePictureState extends State<ProfilePicture> {
                                     );
 
                                     if (response.isSuccess) {
+                                      if (mounted) {
+                                        Navigator.pop(overlayContext);
+                                      }
+
                                       setState(() {
                                         var avatar = response.data['avatar'];
                                         prefs.setString('pfp', avatar);

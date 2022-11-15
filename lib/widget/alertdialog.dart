@@ -20,7 +20,8 @@ class MengDialog extends StatelessWidget {
       titleTextStyle: const TextStyle(
         color: Color.fromARGB(255, 23, 22, 29),
         fontFamily: 'Inter',
-        fontWeight: FontWeight.w600
+        fontWeight: FontWeight.w600,
+        fontSize: 20
       ),
       
       // content

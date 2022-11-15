@@ -89,7 +89,8 @@ Future<HTTPResponse> get({@required url, Duration timeout = const Duration(secon
 
     var data = json.decode(response.body);
 
-    if (response.statusCode == 200 && data['isSuccess']){
+    // if (response.statusCode == 200 && data['isSuccess']){
+    if (response.statusCode == 200){
       return HTTPResponse (
         status: HTTPResponseStatus.success,
         data : data["data"]

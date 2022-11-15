@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:projectb2b/screen/previewscreen.dart';
+import 'package:projectb2b/widget/alertdialog.dart';
 
 class ListDoc extends StatefulWidget {
   const ListDoc({Key? key, required this.activity, required this.index}) : super(key: key);
@@ -56,34 +57,23 @@ class _ListDocState extends State<ListDoc> {
           } else {
             // loading
             showDialog(
-                context: context,
-                builder: (context) {
-                  return AlertDialog(
-                    shape: RoundedRectangleBorder(
-                      borderRadius:BorderRadius.circular(10)
-                    ),
-                    backgroundColor: const Color.fromARGB(255, 224, 232, 235),
-                    title: (widget.activity[widget.index]['status'] == "LOADING") 
-                      ? const Text('Your request is in queue') 
-                      : const Text('URL Invalid'),
-                    content: (widget.activity[widget.index]['status'] == "LOADING") 
-                      ? const Text('Please Wait') 
-                      : const Text('Try using another URL'),
-                    actions: [
-                      TextButton(
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                        child: const Text(
-                          'Ok',
-                          style: TextStyle(
-                            color: Color.fromARGB(255, 23, 22, 29)
-                          ),
-                        )
-                      )
-                    ],
-                  );
-                }
+              context: context, 
+              builder: (context) => MengDialog(
+                title: widget.activity[widget.index]["status"] == 'LOADING'
+                  ? 'Your request is in queue'
+                  : 'URL Invalid', 
+                content: widget.activity[widget.index]["status"] == 'LOADING'
+                  ? 'Please Wait'
+                  : 'Try using another URL', 
+                buttons: [
+                  MengDialogButton(
+                    text: 'OK', 
+                    onPressed: (){
+                      Navigator.pop(context);
+                    }
+                  )
+                ]
+              )
             );
           }
         },

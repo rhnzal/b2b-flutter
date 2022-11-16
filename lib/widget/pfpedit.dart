@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
@@ -99,7 +100,10 @@ class _ProfilePictureState extends State<ProfilePicture> {
                                     }
                                     Uint8List imageBytes = await pickedImage.readAsBytes();
                                     String result = base64.encode(imageBytes);
-                                    
+
+                                    File file = File(pickedImage.path);
+                                    await file.delete();
+
                                     // print(result);
                                     showDialog(
                                       barrierDismissible: false,
@@ -163,6 +167,9 @@ class _ProfilePictureState extends State<ProfilePicture> {
                                     }
                                     Uint8List imageBytes = await pickedImage.readAsBytes();
                                     String result = base64.encode(imageBytes);
+
+                                    File file = File(pickedImage.path);
+                                    await file.delete();
                                     
                                     // print(result);
                                     showDialog(

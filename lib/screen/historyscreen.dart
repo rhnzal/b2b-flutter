@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:projectb2b/endpoints.dart';
 import 'package:projectb2b/widget/welcome.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -141,12 +142,15 @@ class _HistoryScreenState extends State<HistoryScreen> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: const Color.fromARGB(255, 224, 232, 235),
-      body: Column(
-        children: [
-          WelcomeUser(),
-          history,
-          listHistory
-        ]
+      body: AnnotatedRegion(
+        value: SystemUiOverlayStyle.dark,
+        child: Column(
+          children: [
+            WelcomeUser(),
+            history,
+            listHistory
+          ]
+        ),
       ),
     );
   }

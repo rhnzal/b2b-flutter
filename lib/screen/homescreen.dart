@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:projectb2b/endpoints.dart';
+import 'package:projectb2b/screen/paymentscreen.dart';
 import 'package:projectb2b/widget/alertdialog.dart';
 import 'package:projectb2b/widget/loadingoverlay.dart';
 import 'package:projectb2b/widget/welcome.dart';
@@ -116,6 +117,7 @@ class _HomeScreenState extends State<HomeScreen> {
       isActive = false;
 
     } else {
+      var error = response.message;
       if (mounted) {
         Navigator.pop(context);
         urlCon.clear;
@@ -123,13 +125,27 @@ class _HomeScreenState extends State<HomeScreen> {
         showDialog(
           context: context, 
           builder: (context) {
-            return AlertDialog(
-              shape: RoundedRectangleBorder(
-                borderRadius:BorderRadius.circular(10)
-              ),
-              backgroundColor: const Color.fromARGB(255, 224, 232, 235),
-              title: const Text('Error'),
-              content: Text(response.message.toString()),
+            return MengDialog(
+              title: 'Error', 
+              content: error ?? 'Something went wrong', 
+              buttons: error!.contains('quota') 
+                ? [
+                  MengDialogButton(
+                    text: 'BUY', 
+                    onPressed: (){
+                      Navigator.pop(context);
+                      Navigator.push(
+                        context, 
+                        MaterialPageRoute(
+                          builder: (context) {
+                            return const PaymentScreen();
+                          }
+                        )
+                      );
+                    }
+                  )
+                ]
+                : []
             );
           }
         );
@@ -193,58 +209,28 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
               onPressed: isActive ? () {
                 showDialog(
-                  context: context,
-                  builder: (context) => AlertDialog(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10)
-                    ),
-                    backgroundColor:const Color.fromARGB(255, 224, 232, 235),
-                    title: const Text('Confirmation'),
-                    titleTextStyle: const TextStyle(
-                      color: Color.fromARGB(255, 23, 22, 29),
-                      fontFamily: 'Inter',
-                      fontWeight: FontWeight.w600
-                    ),
-                    content: const Text('Are You Sure ?'),
-                    contentTextStyle: const TextStyle(
-                      color: Color.fromARGB(255, 23, 22, 29)
-                    ),
-                    actions: [
-                      TextButton(
-                        style: ButtonStyle(
-                          overlayColor: MaterialStateProperty.all(Colors.transparent),
-                          minimumSize: MaterialStateProperty.all(Size.zero),
-                          tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                          padding: MaterialStateProperty.all(const EdgeInsets.fromLTRB(0, 0, 10, 10))
+                  context: context, 
+                  builder: (context) {
+                    return MengDialog(
+                      title: 'Confirmation', 
+                      content: 'Are you sure ?', 
+                      buttons: [
+                        MengDialogButton(
+                          text: 'NO', 
+                          onPressed: () {
+                            Navigator.pop(context);
+                          }
                         ),
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                        child: const Text(
-                          'No',
-                          style: TextStyle(
-                            color: Color.fromARGB(255, 23, 22, 29)
-                          )
+                        MengDialogButton(
+                          text: 'YES', 
+                          onPressed: () {
+                            Navigator.pop(context);
+                            confirm();
+                          }
                         )
-                      ),
-                      TextButton(
-                        style: ButtonStyle(
-                          overlayColor: MaterialStateProperty.all(Colors.transparent),
-                          minimumSize: MaterialStateProperty.all(Size.zero),
-                          tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                          padding: MaterialStateProperty.all(const EdgeInsets.fromLTRB(0, 0, 10, 10))
-                        ),
-                        onPressed: () async {
-                          Navigator.pop(context);                               
-                          confirm();
-                        },
-                        child: const Text(
-                          'Yes',
-                          style: TextStyle(color: Color.fromARGB(255, 23, 22, 29))
-                        )
-                      )
-                    ],
-                  )
+                      ]
+                    );
+                  }
                 );
               }: null,
               child: const Text(

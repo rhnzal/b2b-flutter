@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
@@ -18,6 +19,7 @@ class _PreviewScreenState extends State<PreviewScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        systemOverlayStyle: SystemUiOverlayStyle.light,
         backgroundColor: const Color.fromARGB(255, 23, 22, 29),
         title: const Text('Preview'),
       ),

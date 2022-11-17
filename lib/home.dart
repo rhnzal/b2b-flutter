@@ -28,19 +28,26 @@ class _HomeState extends State<Home> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: const Color.fromARGB(255, 224, 232, 235),
-      body: PageView(
-        controller: pageController,
-        onPageChanged: (index){
-          setState(() {
-            currentIndex = index;
-          });
-        },
-        children: const[
-          HomeScreen(),
-          HistoryScreen(),
-          QuotaScreen(),
-          ProfileScreen()
-        ],
+      body: ScrollConfiguration(
+        behavior: const ScrollBehavior(),
+        child: GlowingOverscrollIndicator(
+          axisDirection: AxisDirection.right,
+          color: Colors.white,
+          child: PageView(
+            controller: pageController,
+            onPageChanged: (index){
+              setState(() {
+                currentIndex = index;
+              });
+            },
+            children: const [
+              HomeScreen(),
+              HistoryScreen(),
+              QuotaScreen(),
+              ProfileScreen()
+            ],
+          ),
+        ),
       ), 
       bottomNavigationBar: Theme(
         data: ThemeData(
@@ -56,7 +63,15 @@ class _HomeState extends State<Home> {
           selectedItemColor: const Color.fromARGB(255, 26, 25, 32),
           unselectedItemColor: Colors.white,
           backgroundColor: const Color.fromARGB(255, 23, 22, 29),
-          onTap: (index) => setState(() => currentIndex = index),
+          onTap: (index) {
+            setState(() {
+              pageController.animateToPage(
+                index, 
+                duration: const Duration(milliseconds: 500), 
+                curve: Curves.ease
+              );
+            });
+          },
           items: [
             BottomNavigationBarItem(
               icon: const Icon(Icons.home_outlined),

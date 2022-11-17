@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:projectb2b/endpoints.dart';
 import 'package:projectb2b/http.dart' as http_test;
@@ -308,6 +309,7 @@ class _DetailTransactionState extends State<DetailTransaction> {
 
     return Scaffold(
       appBar: AppBar(
+        systemOverlayStyle: SystemUiOverlayStyle.light,
         backgroundColor: const Color.fromARGB(255, 23, 22, 29),
         centerTitle: true,
         title: const Text(

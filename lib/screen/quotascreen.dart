@@ -108,6 +108,7 @@ class _QuotaScreenState extends State<QuotaScreen> {
 
   @override
   Widget build(BuildContext context) {
+    SystemUiOverlayStyle _currentStyle = SystemUiOverlayStyle.dark;
     Widget wishlist = Container(
       margin: const EdgeInsets.fromLTRB(20, 5, 10, 0),
       child: Row(
@@ -311,27 +312,20 @@ class _QuotaScreenState extends State<QuotaScreen> {
           ),
         );
 
-    return Builder(
-      builder: (context) {
-        SystemChrome.setSystemUIOverlayStyle(
-          const SystemUiOverlayStyle(
-            statusBarColor: Colors.transparent,
-            statusBarIconBrightness: Brightness.dark
-          )
-        );
-        return Scaffold(
-          resizeToAvoidBottomInset: false,
-          backgroundColor: const Color.fromARGB(255, 224, 232, 235),
-          body: Column(
-            children: [
-              WelcomeUser(),
-              favoriteList, 
-              wishlist, 
-              transactionList
-            ],
-          ),
-        );
-      }
+    return Scaffold(
+      resizeToAvoidBottomInset: false,
+      backgroundColor: const Color.fromARGB(255, 224, 232, 235),
+      body: AnnotatedRegion(
+        value: _currentStyle,
+        child: Column(
+          children: [
+            WelcomeUser(),
+            favoriteList, 
+            wishlist, 
+            transactionList
+          ],
+        ),
+      ),
     );
   }
 }

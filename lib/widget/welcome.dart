@@ -30,7 +30,7 @@ class _WelcomeUserState extends State<WelcomeUser> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.fromLTRB(20, 40, 10, 20),
+      padding: const EdgeInsets.all(20),
       child: Row(
         children: [
           // ignore: prefer_const_constructors
@@ -51,7 +51,7 @@ class _WelcomeUserState extends State<WelcomeUser> {
                   style: TextStyle(
                     fontFamily: 'Inter',
                     fontWeight: FontWeight.w300,
-                    fontSize: 10
+                    fontSize: 12
                   )
                 ),
                 Text(
@@ -59,7 +59,7 @@ class _WelcomeUserState extends State<WelcomeUser> {
                   style: const TextStyle(
                     fontFamily: 'Inter',
                     fontWeight: FontWeight.w500,
-                    fontSize: 12
+                    fontSize: 14
                   )
                 )
               ],

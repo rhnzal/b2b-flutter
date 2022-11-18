@@ -108,9 +108,8 @@ class _QuotaScreenState extends State<QuotaScreen> {
 
   @override
   Widget build(BuildContext context) {
-    SystemUiOverlayStyle _currentStyle = SystemUiOverlayStyle.dark;
     Widget wishlist = Container(
-      margin: const EdgeInsets.fromLTRB(20, 5, 10, 0),
+      padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
       child: Row(
         children: const [
           Icon(Icons.list_rounded),
@@ -120,7 +119,7 @@ class _QuotaScreenState extends State<QuotaScreen> {
             style: TextStyle(
               fontFamily: 'Inter', 
               fontWeight: FontWeight.w800, 
-              fontSize: 12
+              fontSize: 14
             ),
           )
         ],
@@ -169,7 +168,7 @@ class _QuotaScreenState extends State<QuotaScreen> {
                           style: TextStyle(
                             fontFamily: 'Inter',
                             fontWeight: FontWeight.w400,
-                            fontSize: 10
+                            fontSize: 12
                           )
                         ),
                         const SizedBox(height: 5),
@@ -231,99 +230,94 @@ class _QuotaScreenState extends State<QuotaScreen> {
     Widget transactionList= isLoad ? const Loading(pad: 70)
       : list.isEmpty ? const Empty(pad: 70)
       : Expanded(
-          child: ScrollConfiguration(
-            behavior: const ScrollBehavior(),
-            child: GlowingOverscrollIndicator(
-              axisDirection: AxisDirection.down,
-              color: Colors.white,
-              child: ListView.builder(
-                physics: const BouncingScrollPhysics(),
-                itemCount: list.length,
-                itemBuilder: (context, index) => Padding(
-                  padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
-                  child: Card(
-                    elevation: 2,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(15)
-                    ),
-                    margin: const EdgeInsets.only(bottom: 10),
-                    child: InkWell(
-                      borderRadius: BorderRadius.circular(15),
-                      onTap: () {
-                        Navigator.push(
-                          context, 
-                          MaterialPageRoute(
-                            builder: (context) {
-                              return DetailTransaction(index: index);
-                            }
-                          )
-                        );
-                      },
-                      child: Padding(
-                        padding:const EdgeInsets.fromLTRB(15, 20, 15, 20),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    list[index]['product']['title'],
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: const TextStyle(
-                                      fontFamily: 'Inter',
-                                      fontWeight: FontWeight.w700,
-                                      fontSize: 18
-                                    ),
-                                  ),
-                                  Text(
-                                    DateFormat.yMMMd().format(DateTime.parse(list[index]["createdAt"])),
-                                    style: const TextStyle(
-                                      fontFamily: 'Inter',
-                                      fontWeight: FontWeight.w400,
-                                      fontSize: 10
-                                    )
-                                  ),
-                                ],
+          child: ListView.builder(
+            physics: const BouncingScrollPhysics(),
+            itemCount: list.length,
+            itemBuilder: (context, index) => Padding(
+              padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
+              child: Card(
+                elevation: 2,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(15)
+                ),
+                margin: const EdgeInsets.only(bottom: 10),
+                child: InkWell(
+                  borderRadius: BorderRadius.circular(15),
+                  onTap: () {
+                    Navigator.push(
+                      context, 
+                      MaterialPageRoute(
+                        builder: (context) {
+                          return DetailTransaction(index: index);
+                        }
+                      )
+                    );
+                  },
+                  child: Padding(
+                    padding:const EdgeInsets.fromLTRB(15, 20, 15, 20),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                list[index]['product']['title'],
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: const TextStyle(
+                                  fontFamily: 'Inter',
+                                  fontWeight: FontWeight.w700,
+                                  fontSize: 18
+                                ),
                               ),
-                            ),
-
-                            Text(
-                              NumberFormat.simpleCurrency(locale:'in', decimalDigits: 0).format(list[index]['product']['price']),
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              style: const TextStyle(
-                                fontFamily: 'Inter',
-                                fontWeight: FontWeight.w700,
-                                fontSize: 18
+                              Text(
+                                DateFormat.yMMMd().format(DateTime.parse(list[index]["createdAt"])),
+                                style: const TextStyle(
+                                  fontFamily: 'Inter',
+                                  fontWeight: FontWeight.w400,
+                                  fontSize: 10
+                                )
                               ),
-                            ),
-                            const Icon(Icons.navigate_next_outlined)
-                          ],
+                            ],
+                          ),
                         ),
-                      ),
-                    )
-                  )
+
+                        Text(
+                          NumberFormat.simpleCurrency(locale:'in', decimalDigits: 0).format(list[index]['product']['price']),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: const TextStyle(
+                            fontFamily: 'Inter',
+                            fontWeight: FontWeight.w700,
+                            fontSize: 18
+                          ),
+                        ),
+                        const Icon(Icons.navigate_next_outlined)
+                      ],
+                    ),
+                  ),
                 )
-              ),
-            ),
+              )
+            )
           ),
         );
 
-    return Scaffold(
-      resizeToAvoidBottomInset: false,
-      backgroundColor: const Color.fromARGB(255, 224, 232, 235),
-      body: AnnotatedRegion(
-        value: _currentStyle,
-        child: Column(
-          children: [
-            WelcomeUser(),
-            favoriteList, 
-            wishlist, 
-            transactionList
-          ],
+    return SafeArea(
+      child: Scaffold(
+        resizeToAvoidBottomInset: false,
+        backgroundColor: const Color.fromARGB(255, 224, 232, 235),
+        body: AnnotatedRegion(
+          value: SystemUiOverlayStyle.dark,
+          child: Column(
+            children: [
+              WelcomeUser(),
+              favoriteList, 
+              wishlist, 
+              transactionList
+            ],
+          ),
         ),
       ),
     );

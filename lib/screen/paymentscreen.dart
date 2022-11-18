@@ -64,7 +64,8 @@ class _PaymentScreenState extends State<PaymentScreen> {
             titleTextStyle: const TextStyle(
               color: Color.fromARGB(255, 23, 22, 29),
               fontFamily: 'Inter',
-              fontWeight: FontWeight.w600),
+              fontWeight: FontWeight.w600
+            ),
             content: Text('$error'),
             contentTextStyle: const TextStyle(color: Color.fromARGB(255, 23, 22, 29)),
             actions: [

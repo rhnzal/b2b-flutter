@@ -366,22 +366,25 @@ class _LoginState extends State<Login> {
           // appBar: AppBar(backgroundColor: Colors.transparent, elevation: 0),
           backgroundColor: const Color.fromARGB(255, 23, 22, 29),
           // ignore: prefer_const_literals_to_create_immutables
-          body: Form(
-            key: formKey,
-            child: ScrollConfiguration(
-              behavior: const ScrollBehavior(),
-              child: GlowingOverscrollIndicator(
-                axisDirection: AxisDirection.down,
-                color: Colors.white,
-                child: ListView(
-                  children: [
-                    welcomeText,
-                    inputEmail,
-                    inputPassword,
-                    forgorPassword,
-                    loginButton,
-                    registerButton
-                  ],
+          body: AnnotatedRegion(
+            value: SystemUiOverlayStyle.light,
+            child: Form(
+              key: formKey,
+              child: ScrollConfiguration(
+                behavior: const ScrollBehavior(),
+                child: GlowingOverscrollIndicator(
+                  axisDirection: AxisDirection.down,
+                  color: Colors.white,
+                  child: ListView(
+                    children: [
+                      welcomeText,
+                      inputEmail,
+                      inputPassword,
+                      forgorPassword,
+                      loginButton,
+                      registerButton
+                    ],
+                  ),
                 ),
               ),
             ),

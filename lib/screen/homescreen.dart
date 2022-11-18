@@ -249,7 +249,7 @@ class _HomeScreenState extends State<HomeScreen> {
     );
 
     Widget recentActivity = Container(
-      margin: const EdgeInsets.fromLTRB(20, 15, 10, 0),
+      padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
       child: Row(
         children: const [
           Icon(Icons.list_rounded),
@@ -259,7 +259,7 @@ class _HomeScreenState extends State<HomeScreen> {
             style: TextStyle(
               fontFamily: 'Inter', 
               fontWeight: FontWeight.w800, 
-              fontSize: 12
+              fontSize: 14
             ),
           )
         ],
@@ -304,19 +304,13 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       );
 
-    return Builder(
-      builder: (context) {
-        SystemChrome.setSystemUIOverlayStyle(
-          const SystemUiOverlayStyle(
-            statusBarColor: Colors.transparent,
-            statusBarIconBrightness: Brightness.dark
-          )
-        );
-
-        return Scaffold(
-          resizeToAvoidBottomInset: false,
-          backgroundColor: const Color.fromARGB(255, 224, 232, 235),
-          body: Column(
+    return SafeArea(
+      child: Scaffold(
+        resizeToAvoidBottomInset: false,
+        backgroundColor: const Color.fromARGB(255, 224, 232, 235),
+        body: AnnotatedRegion(
+          value: SystemUiOverlayStyle.dark,
+          child: Column(
             children: 
             [
               WelcomeUser(),
@@ -325,8 +319,8 @@ class _HomeScreenState extends State<HomeScreen> {
               listActivity
             ]
           ),
-        );
-      }
+        ),
+      ),
     );
   }
 }

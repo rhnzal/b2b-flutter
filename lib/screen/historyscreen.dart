@@ -99,7 +99,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
   Widget build(BuildContext context) {
 
     Widget history = Container(
-      margin: const EdgeInsets.fromLTRB(20, 0, 10, 0),
+      padding: const EdgeInsets.fromLTRB(20, 0, 10, 10),
       child: Row(
         children: const [
           Icon(Icons.list_rounded),
@@ -109,7 +109,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
             style: TextStyle(
               fontFamily: 'Inter', 
               fontWeight: FontWeight.w800, 
-              fontSize: 12
+              fontSize: 14
             ),
           )
         ],
@@ -139,17 +139,19 @@ class _HistoryScreenState extends State<HistoryScreen> {
           ),
         );
 
-    return Scaffold(
-      resizeToAvoidBottomInset: false,
-      backgroundColor: const Color.fromARGB(255, 224, 232, 235),
-      body: AnnotatedRegion(
-        value: SystemUiOverlayStyle.dark,
-        child: Column(
-          children: [
-            WelcomeUser(),
-            history,
-            listHistory
-          ]
+    return SafeArea(
+      child: Scaffold(
+        resizeToAvoidBottomInset: false,
+        backgroundColor: const Color.fromARGB(255, 224, 232, 235),
+        body: AnnotatedRegion(
+          value: SystemUiOverlayStyle.dark,
+          child: Column(
+            children: [
+              WelcomeUser(),
+              history,
+              listHistory
+            ]
+          ),
         ),
       ),
     );

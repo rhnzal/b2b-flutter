@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:projectb2b/screen/quotascreen.dart';
 import 'package:projectb2b/screen/historyscreen.dart';
 import 'package:projectb2b/screen/homescreen.dart';
@@ -28,24 +29,27 @@ class _HomeState extends State<Home> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: const Color.fromARGB(255, 224, 232, 235),
-      body: ScrollConfiguration(
-        behavior: const ScrollBehavior(),
-        child: GlowingOverscrollIndicator(
-          axisDirection: AxisDirection.right,
-          color: Colors.white,
-          child: PageView(
-            controller: pageController,
-            onPageChanged: (index){
-              setState(() {
-                currentIndex = index;
-              });
-            },
-            children: const [
-              HomeScreen(),
-              HistoryScreen(),
-              QuotaScreen(),
-              ProfileScreen()
-            ],
+      body: AnnotatedRegion(
+        value: SystemUiOverlayStyle.dark,
+        child: ScrollConfiguration(
+          behavior: const ScrollBehavior(),
+          child: GlowingOverscrollIndicator(
+            axisDirection: AxisDirection.right,
+            color: Colors.white,
+            child: PageView(
+              controller: pageController,
+              onPageChanged: (index){
+                setState(() {
+                  currentIndex = index;
+                });
+              },
+              children: const [
+                HomeScreen(),
+                HistoryScreen(),
+                QuotaScreen(),
+                ProfileScreen()
+              ],
+            ),
           ),
         ),
       ), 

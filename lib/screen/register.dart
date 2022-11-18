@@ -402,23 +402,26 @@ class _RegisterState extends State<Register> {
             elevation: 0,
 
         ),
-          body: Form(
-            key: formKey,
-            child: ScrollConfiguration(
-              behavior: const ScrollBehavior(),
-              child: GlowingOverscrollIndicator(
-                axisDirection: AxisDirection.down,
-                color: Colors.white,
-                child: ListView(
-                  children: [
-                    welcomeRegister,
-                    inputName,
-                    regEmail,
-                    regPassword,
-                    confirmPassword,
-                    regButton,
-                    loginButton
-                  ],
+          body: AnnotatedRegion(
+            value: SystemUiOverlayStyle.light,
+            child: Form(
+              key: formKey,
+              child: ScrollConfiguration(
+                behavior: const ScrollBehavior(),
+                child: GlowingOverscrollIndicator(
+                  axisDirection: AxisDirection.down,
+                  color: Colors.white,
+                  child: ListView(
+                    children: [
+                      welcomeRegister,
+                      inputName,
+                      regEmail,
+                      regPassword,
+                      confirmPassword,
+                      regButton,
+                      loginButton
+                    ],
+                  ),
                 ),
               ),
             ),

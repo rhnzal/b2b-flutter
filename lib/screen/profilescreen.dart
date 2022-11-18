@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:projectb2b/endpoints.dart';
 import 'package:projectb2b/screen/login.dart';
 import 'package:projectb2b/screen/changepassword.dart';
@@ -68,7 +69,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
     Widget profilePreview = Container(
-      margin: const EdgeInsets.fromLTRB(40, 50, 40, 0),
+      padding: const EdgeInsets.fromLTRB(40, 20, 40, 20),
       child: Row(
         children: [
           ProfilePicture(),
@@ -193,7 +194,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
     Widget editProfile = Container(
       height: 220,
-      margin: const EdgeInsets.fromLTRB(20, 40, 20, 20),
+      margin: const EdgeInsets.all(20),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(15),
         color: const Color.fromARGB(255, 23, 22, 29),
@@ -612,15 +613,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: const Color.fromARGB(255, 224, 232, 235),
-      body: ScrollConfiguration(
-        behavior: const ScrollBehavior(),
-        child: GlowingOverscrollIndicator(
-          axisDirection: AxisDirection.down,
-          color: Colors.white,
-          child: SingleChildScrollView(
-            child: Column(
-              children: [ profilePreview, editProfile, quota ],
-            ),
+      body: AnnotatedRegion(
+        value: SystemUiOverlayStyle.dark,
+        child: SingleChildScrollView(
+          padding: EdgeInsets.only(top: MediaQuery.of(context).viewPadding.top),
+          physics: const BouncingScrollPhysics(),
+          child: Column(
+            children: [ profilePreview, editProfile, quota ],
           ),
         ),
       ),

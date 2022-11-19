@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:projectb2b/endpoints.dart';
 import 'package:projectb2b/http.dart' as http_test;
+import 'package:projectb2b/style.dart';
 import 'package:projectb2b/widget/alertdialog.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
@@ -91,32 +92,22 @@ class _DetailTransactionState extends State<DetailTransaction> {
                     Text(
                       // getUrl().toString(),
                       product,
-                      style: const TextStyle(
-                          fontFamily: 'Inter',
-                          fontWeight: FontWeight.w700,
-                          fontSize: 18),
+                      style: MengStyle().mengBig,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                     ),
                     Text(
                         // 'Tanggal',
                       date,
-                        style: const TextStyle(
-                            fontFamily: 'Inter',
-                            fontWeight: FontWeight.w400,
-                            fontSize: 10)),
+                      style: MengStyle().mengSmall
+                    ),
                     // Text(activity[index]["createdAt"])
                   ],
                 ),
               ),
               Text(
-                // getUrl().toString(),
                 price,
-                style: const TextStyle(
-                  fontFamily: 'Inter',
-                  fontWeight: FontWeight.w700,
-                  fontSize: 18
-                ),
+                style: MengStyle().mengBig,
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
               ),
@@ -132,94 +123,69 @@ class _DetailTransactionState extends State<DetailTransaction> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           //order date
-          const Text(
+          Text(
             'Order Date',
-            style: TextStyle(
-              fontFamily: 'Inter',
-              fontWeight: FontWeight.w400,
-              fontSize: 12
-            ),
+            style: MengStyle().mengSmall,
           ),
           const SizedBox(
             height: 5,
           ),
           Text(
             date,
-            style: const TextStyle(
-              fontFamily: 'Inter',
-              fontWeight: FontWeight.w700,
-              fontSize: 18
-            ),
+            style: MengStyle().mengBig,
           ),
           const SizedBox(
             height: 15,
           ),
           //order id
-          const Text(
+          Text(
             'Order ID',
-            style: TextStyle(
-              fontFamily: 'Inter',
-              fontWeight: FontWeight.w400,
-              fontSize: 12
-            ),
+            style: MengStyle().mengSmall,
           ),
           const SizedBox(
             height: 5,
           ),
           Text(
             orderId,
-            style: const TextStyle(
-              fontFamily: 'Inter',
-              fontWeight: FontWeight.w700,
-              fontSize: 18
-            ),
+            style: MengStyle().mengBig,
           ),
           const SizedBox(
             height: 15,
           ),
           //product title
-          const Text(
+          Text(
             'Product',
-            style: TextStyle(
-              fontFamily: 'Inter',
-              fontWeight: FontWeight.w400,
-              fontSize: 12
-            ),
+            style: MengStyle().mengSmall,
           ),
           const SizedBox(
             height: 5,
           ),
           Text(
             product,
-            style: const TextStyle(
-              fontFamily: 'Inter',
-              fontWeight: FontWeight.w700,
-              fontSize: 18
-            ),
+            style: MengStyle().mengBig,
           ),
           const SizedBox(
             height: 15,
           ),
+          
           //status
-          const Text(
+          Text(
             'Status',
-            style: TextStyle(
-              fontFamily: 'Inter',
-              fontWeight: FontWeight.w400,
-              fontSize: 12
-            ),
+            style: MengStyle().mengSmall,
           ),
           const SizedBox(
             height: 5,
           ),
+
           Text(
-            status.toString(),
-            style: const TextStyle(
-              fontFamily: 'Inter',
-              fontWeight: FontWeight.w700,
-              fontSize: 18
-            ),
+            status,
+            style: MengStyle(
+              colors: status == "PAID" ? Colors.green
+                : status == "UNPAID" ? Colors.amber.shade900 
+                :Colors.red
+            ).mengBig,
           ),
+
           const SizedBox(
             height: 15,
           ),
@@ -290,16 +256,14 @@ class _DetailTransactionState extends State<DetailTransaction> {
                 )
               );
             },
-            child: const SizedBox(
+            child: SizedBox(
               width: 100,
               child: Text(
                 'Pay',
                 textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontFamily: 'Inter',
-                  fontWeight: FontWeight.w700,
-                  color: Color.fromARGB(255, 224, 232, 235)
-                ),
+                style: MengStyle(
+                  colors: Color.fromARGB(255, 224, 232, 235)
+                ).mengBig,
               )
             )
           ),

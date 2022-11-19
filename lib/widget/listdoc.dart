@@ -138,19 +138,19 @@ class _ListDocState extends State<ListDoc> {
                   )
                 ],
               ),
-              if (widget.activity[widget.index]['status'] == 'SUCCESS')...[
-                if (widget.activity[widget.index]['url'].toString().contains('tradewheel') ||widget.activity[widget.index]['url'].toString().contains('go4worldbusiness') )...[
-                  const SizedBox(height: 10),
-                  SizedBox(
-                    height: 200,
-                    child: FadeInImage(
-                      image: NetworkImage(widget.activity[widget.index]['result']),
-                      placeholder: const AssetImage('./images/folder.png'),
-                    )
-                  )
-                ]
+              // if (widget.activity[widget.index]['status'] == 'SUCCESS')...[
+              //   if (widget.activity[widget.index]['url'].toString().contains('tradewheel') ||widget.activity[widget.index]['url'].toString().contains('go4worldbusiness') )...[
+              //     const SizedBox(height: 10),
+              //     SizedBox(
+              //       height: 200,
+              //       child: FadeInImage(
+              //         image: NetworkImage(widget.activity[widget.index]['result']),
+              //         placeholder: const AssetImage('./images/folder.png'),
+              //       )
+              //     )
+              //   ]
 
-              ]
+              // ]
             ],
           ),
         ),

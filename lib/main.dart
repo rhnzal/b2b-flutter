@@ -9,11 +9,7 @@ Future<void> main() async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   var token = prefs.getString('token');
   SystemChrome.setPreferredOrientations(
-      [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
-  SystemChrome.setSystemUIOverlayStyle(
-    const SystemUiOverlayStyle(
-      systemNavigationBarColor: Colors.transparent
-    )
+    [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]
   );
   runApp(MyApp(
     token: token,
@@ -29,9 +25,6 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  // void autoLogin() async{
-  //   final SharedPreferences prefs = await SharedPreferences.getInstance();
-  // }
 
   @override
   Widget build(BuildContext context) {

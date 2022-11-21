@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:projectb2b/screen/quotascreen.dart';
 import 'package:projectb2b/screen/historyscreen.dart';
 import 'package:projectb2b/screen/homescreen.dart';
 import 'package:projectb2b/screen/profilescreen.dart';
+import 'package:projectb2b/style.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -30,12 +30,12 @@ class _HomeState extends State<Home> {
       resizeToAvoidBottomInset: false,
       backgroundColor: const Color.fromARGB(255, 224, 232, 235),
       body: AnnotatedRegion(
-        value: SystemUiOverlayStyle.dark,
+        value: dark,
         child: ScrollConfiguration(
           behavior: const ScrollBehavior(),
           child: GlowingOverscrollIndicator(
             axisDirection: AxisDirection.right,
-            color: Colors.white,
+            color: Colors.white10,
             child: PageView(
               controller: pageController,
               onPageChanged: (index){

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:projectb2b/endpoints.dart';
 import 'package:projectb2b/screen/paymentscreen.dart';
+import 'package:projectb2b/style.dart';
 import 'package:projectb2b/widget/alertdialog.dart';
 import 'package:projectb2b/widget/loadingoverlay.dart';
 import 'package:projectb2b/widget/welcome.dart';
@@ -291,7 +292,7 @@ class _HomeScreenState extends State<HomeScreen> {
             color: Colors.white,
             child: ListView.builder(
               physics: const BouncingScrollPhysics(),
-              itemCount: 1,
+              itemCount: 3,
               itemBuilder: (context, index) => Padding(
                 padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
                 child: ListDoc(
@@ -309,7 +310,7 @@ class _HomeScreenState extends State<HomeScreen> {
         resizeToAvoidBottomInset: false,
         backgroundColor: const Color.fromARGB(255, 224, 232, 235),
         body: AnnotatedRegion(
-          value: SystemUiOverlayStyle.dark,
+          value: dark,
           child: Column(
             children: 
             [

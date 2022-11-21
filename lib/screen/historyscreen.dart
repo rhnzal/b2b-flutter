@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:projectb2b/endpoints.dart';
+import 'package:projectb2b/style.dart';
 import 'package:projectb2b/widget/welcome.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:projectb2b/http.dart' as http_test;
@@ -144,7 +145,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
         resizeToAvoidBottomInset: false,
         backgroundColor: const Color.fromARGB(255, 224, 232, 235),
         body: AnnotatedRegion(
-          value: SystemUiOverlayStyle.dark,
+          value: dark,
           child: Column(
             children: [
               WelcomeUser(),

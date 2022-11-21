@@ -73,144 +73,229 @@ class _DetailTransactionState extends State<DetailTransaction> {
 
   @override
   Widget build(BuildContext context) {
-    Widget card = Padding(
-      padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
-      child: Card(
-        elevation: 2,
-        shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(15)),
-        margin: const EdgeInsets.only(bottom: 20),
-        child: Padding(
-          padding:const EdgeInsets.fromLTRB(15, 20, 15, 20),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      // getUrl().toString(),
-                      product,
-                      style: MengStyle().mengBig,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    Text(
-                        // 'Tanggal',
-                      date,
-                      style: MengStyle().mengSmall
-                    ),
-                    // Text(activity[index]["createdAt"])
-                  ],
-                ),
-              ),
-              Text(
-                price,
-                style: MengStyle().mengBig,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-              ),
-            ],
-          ),
-        )
-      )
-    );
+    // Widget card = Padding(
+    //   padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
+    //   child: Card(
+    //     elevation: 2,
+    //     shape: RoundedRectangleBorder(
+    //         borderRadius: BorderRadius.circular(15)),
+    //     margin: const EdgeInsets.only(bottom: 20),
+    //     child: Padding(
+    //       padding:const EdgeInsets.fromLTRB(15, 20, 15, 20),
+    //       child: Row(
+    //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    //         children: [
+    //           Expanded(
+    //             child: Column(
+    //               crossAxisAlignment: CrossAxisAlignment.start,
+    //               children: [
+    //                 Text(
+    //                   // getUrl().toString(),
+    //                   product,
+    //                   style: MengStyle().mengBig,
+    //                   maxLines: 1,
+    //                   overflow: TextOverflow.ellipsis,
+    //                 ),
+    //                 Text(
+    //                     // 'Tanggal',
+    //                   date,
+    //                   style: MengStyle().mengSmall
+    //                 ),
+    //                 // Text(activity[index]["createdAt"])
+    //               ],
+    //             ),
+    //           ),
+    //           Text(
+    //             price,
+    //             style: MengStyle().mengBig,
+    //             maxLines: 1,
+    //             overflow: TextOverflow.ellipsis,
+    //           ),
+    //         ],
+    //       ),
+    //     )
+    //   )
+    // );
 
-    Widget detail = Container(
-      margin: const EdgeInsets.fromLTRB(30, 5, 30, 10),
+    // Widget detail = Container(
+    //   margin: const EdgeInsets.fromLTRB(30, 5, 30, 10),
+    //   child: Column(
+    //     crossAxisAlignment: CrossAxisAlignment.start,
+    //     children: [
+    //       //order date
+    //       Text(
+    //         'Order Date',
+    //         style: MengStyle().mengSmall,
+    //       ),
+    //       const SizedBox(
+    //         height: 5,
+    //       ),
+    //       Text(
+    //         date,
+    //         style: MengStyle().mengBig,
+    //       ),
+    //       const SizedBox(
+    //         height: 15,
+    //       ),
+    //       //order id
+    //       Text(
+    //         'Order ID',
+    //         style: MengStyle().mengSmall,
+    //       ),
+    //       const SizedBox(
+    //         height: 5,
+    //       ),
+    //       Text(
+    //         orderId,
+    //         style: MengStyle().mengBig,
+    //       ),
+    //       const SizedBox(
+    //         height: 15,
+    //       ),
+    //       //product title
+    //       Text(
+    //         'Product',
+    //         style: MengStyle().mengSmall,
+    //       ),
+    //       const SizedBox(
+    //         height: 5,
+    //       ),
+    //       Text(
+    //         product,
+    //         style: MengStyle().mengBig,
+    //       ),
+    //       const SizedBox(
+    //         height: 15,
+    //       ),
+          
+    //       //status
+    //       Text(
+    //         'Status',
+    //         style: MengStyle().mengSmall,
+    //       ),
+    //       const SizedBox(
+    //         height: 5,
+    //       ),
+
+    //       Text(
+    //         status,
+    //         style: MengStyle(
+    //           colors: status == "PAID" ? Colors.green
+    //             : status == "UNPAID" ? Colors.amber.shade900 
+    //             :Colors.red
+    //         ).mengBig,
+    //       ),
+
+    //       const SizedBox(
+    //         height: 15,
+    //       ),
+    //       // price
+    //       const Text(
+    //         'Price',
+    //         style: TextStyle(
+    //           fontFamily: 'Inter',
+    //           fontWeight: FontWeight.w400,
+    //           fontSize: 12
+    //         ),
+    //       ),
+    //       const SizedBox(
+    //         height: 5,
+    //       ),
+    //       Text(
+    //         price,
+    //         style: const TextStyle(
+    //           fontFamily: 'Inter',
+    //           fontWeight: FontWeight.w700,
+    //           fontSize: 18
+    //         ),
+    //       ),
+    //     ],
+    //   ),
+    // );
+
+    Widget title = Padding(
+      padding: const EdgeInsets.all(20),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          //order date
-          Text(
-            'Order Date',
-            style: MengStyle().mengSmall,
-          ),
-          const SizedBox(
-            height: 5,
-          ),
-          Text(
-            date,
-            style: MengStyle().mengBig,
-          ),
-          const SizedBox(
-            height: 15,
-          ),
-          //order id
-          Text(
-            'Order ID',
-            style: MengStyle().mengSmall,
-          ),
-          const SizedBox(
-            height: 5,
-          ),
-          Text(
-            orderId,
-            style: MengStyle().mengBig,
-          ),
-          const SizedBox(
-            height: 15,
-          ),
-          //product title
           Text(
             'Product',
             style: MengStyle().mengSmall,
           ),
-          const SizedBox(
-            height: 5,
-          ),
           Text(
             product,
             style: MengStyle().mengBig,
+            textAlign: TextAlign.center,
           ),
-          const SizedBox(
-            height: 15,
-          ),
-          
-          //status
-          Text(
-            'Status',
-            style: MengStyle().mengSmall,
-          ),
-          const SizedBox(
-            height: 5,
-          ),
+        ]
+      )
+    );
 
-          Text(
-            status,
-            style: MengStyle(
-              colors: status == "PAID" ? Colors.green
-                : status == "UNPAID" ? Colors.amber.shade900 
-                :Colors.red
-            ).mengBig,
+    Widget card = Padding(
+      padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
+      child: Card(
+        elevation: 5,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12)
+        ),
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(20,15,20,15),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Text(
+                'Order Date',
+                style: MengStyle().mengSmall,
+              ),
+              const SizedBox(height: 5),
+              Text(
+                date,
+                style: MengStyle().mengBig,
+              ),
+              const SizedBox(height: 20),
+      
+              // Country
+              Text(
+                'Order ID',
+                style: MengStyle().mengSmall,
+              ),
+              const SizedBox(height: 5),
+              Text(
+                orderId,
+                style: MengStyle().mengBig,
+              ),
+              const SizedBox(height: 20),
+      
+              //posted
+              Text(
+                'Status',
+                style: MengStyle().mengSmall,
+              ),
+              const SizedBox(height: 5),
+              Text(
+                status,
+                style: MengStyle(
+                  colors: status == "PAID" ? Colors.green
+                    : status == "UNPAID" ? Colors.amber.shade900 
+                    :Colors.red
+                ).mengBig,
+              ),
+              const SizedBox(height: 20),
+      
+              // Description
+              Text(
+                'Price',
+                style: MengStyle().mengSmall,
+              ),
+              const SizedBox(height: 5),
+              Text(
+                price,
+                style: MengStyle().mengBig,
+                overflow: TextOverflow.clip,
+              ),
+            ],
           ),
-
-          const SizedBox(
-            height: 15,
-          ),
-          // price
-          const Text(
-            'Price',
-            style: TextStyle(
-              fontFamily: 'Inter',
-              fontWeight: FontWeight.w400,
-              fontSize: 12
-            ),
-          ),
-          const SizedBox(
-            height: 5,
-          ),
-          Text(
-            price,
-            style: const TextStyle(
-              fontFamily: 'Inter',
-              fontWeight: FontWeight.w700,
-              fontSize: 18
-            ),
-          ),
-        ],
-      ),
+        ),
+      )
     );
 
     Widget payButton = Expanded(
@@ -261,8 +346,10 @@ class _DetailTransactionState extends State<DetailTransaction> {
               child: Text(
                 'Pay',
                 textAlign: TextAlign.center,
+                // tidak gege
                 style: MengStyle(
-                  colors: Color.fromARGB(255, 224, 232, 235)
+                  size: 14,
+                  colors: const Color.fromARGB(255, 224, 232, 235)
                 ).mengBig,
               )
             )
@@ -288,10 +375,11 @@ class _DetailTransactionState extends State<DetailTransaction> {
         child: CircularProgressIndicator(color: Color.fromARGB(255, 23, 22, 29),),
       )
       : Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          // card,
+          // detail,
+          title,
           card,
-          detail,
           if (status == 'UNPAID')...[payButton]
         ],
       ),

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:projectb2b/endpoints.dart';
 import 'package:projectb2b/screen/detailtransaction.dart';
 import 'package:projectb2b/screen/paymentscreen.dart';
+import 'package:projectb2b/style.dart';
 import 'package:projectb2b/widget/welcome.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:projectb2b/http.dart' as http_test;
@@ -109,7 +109,7 @@ class _QuotaScreenState extends State<QuotaScreen> {
   @override
   Widget build(BuildContext context) {
     Widget wishlist = Container(
-      padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
+      padding: const EdgeInsets.fromLTRB(20, 0, 20, 10),
       child: Row(
         children: const [
           Icon(Icons.list_rounded),
@@ -129,7 +129,7 @@ class _QuotaScreenState extends State<QuotaScreen> {
     Widget favoriteList =  Padding(
       padding: const EdgeInsets.fromLTRB(20, 10, 20, 0),
       child: Card(
-        elevation: 10,
+        elevation: 5,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(15)
         ),
@@ -190,7 +190,7 @@ class _QuotaScreenState extends State<QuotaScreen> {
                       onSurface: const Color.fromARGB(255, 255, 255, 255),
                       primary: const Color.fromARGB(255, 217, 217, 217),
                       shape: const StadiumBorder(),
-                      elevation: 10
+                      elevation: 5
                     ),
                     onPressed: (){
                       // push quota product screen
@@ -309,7 +309,7 @@ class _QuotaScreenState extends State<QuotaScreen> {
         resizeToAvoidBottomInset: false,
         backgroundColor: const Color.fromARGB(255, 224, 232, 235),
         body: AnnotatedRegion(
-          value: SystemUiOverlayStyle.dark,
+          value: dark,
           child: Column(
             children: [
               WelcomeUser(),

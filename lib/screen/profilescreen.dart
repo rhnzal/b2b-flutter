@@ -4,6 +4,7 @@ import 'package:projectb2b/endpoints.dart';
 import 'package:projectb2b/screen/login.dart';
 import 'package:projectb2b/screen/changepassword.dart';
 import 'package:projectb2b/screen/paymentscreen.dart';
+import 'package:projectb2b/style.dart';
 import 'package:projectb2b/widget/alertdialog.dart';
 import 'package:projectb2b/widget/loadingoverlay.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -614,7 +615,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       resizeToAvoidBottomInset: false,
       backgroundColor: const Color.fromARGB(255, 224, 232, 235),
       body: AnnotatedRegion(
-        value: SystemUiOverlayStyle.dark,
+        value: dark,
         child: SingleChildScrollView(
           padding: EdgeInsets.only(top: MediaQuery.of(context).viewPadding.top),
           physics: const BouncingScrollPhysics(),

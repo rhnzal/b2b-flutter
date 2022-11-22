@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:projectb2b/style.dart';
+import 'package:projectb2b/widget/copy.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class PreviewScreen extends StatefulWidget {
@@ -15,24 +16,9 @@ class PreviewScreen extends StatefulWidget {
 
 class _PreviewScreenState extends State<PreviewScreen> {
   late WebViewController controller ;
+  String contactNumber = '205-200-0203';
+  String companyName = 'Master Pipe';
   
-  // @override
-  // Widget build(BuildContext context) {
-  //   return Scaffold(
-  //     appBar: AppBar(
-  //       systemOverlayStyle: SystemUiOverlayStyle.light,
-  //       backgroundColor: const Color.fromARGB(255, 23, 22, 29),
-  //       title: const Text('Preview'),
-  //     ),
-  //     body: PhotoView(
-  //       imageProvider: NetworkImage(widget.url),
-  //       backgroundDecoration: const BoxDecoration(
-  //         color:Color.fromARGB(255, 224, 232, 235)
-  //       ),
-  //     )
-  //   );
-  // }
-
   @override
   Widget build(BuildContext context) {
     Widget title = Padding(
@@ -97,16 +83,13 @@ class _PreviewScreenState extends State<PreviewScreen> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    '205-200-0203',
+                    contactNumber,
                     style: MengStyle().mengBig,
                   ),
-                  IconButton(
-                    padding: EdgeInsets.zero,
-                    constraints: const BoxConstraints(),
-                    splashRadius: 25,
-                    onPressed: (){}, 
-                    icon: const Icon(Icons.content_copy)
-                  ),
+                  CopyWidget(
+                    text: contactNumber, 
+                    string: 'Contact Number'
+                  )
                 ],
               ),
               const SizedBox(height: 20),
@@ -121,16 +104,13 @@ class _PreviewScreenState extends State<PreviewScreen> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    'Master Pipe',
+                    companyName,
                     style: MengStyle().mengBig,
                   ),
-                  IconButton(
-                    padding: EdgeInsets.zero,
-                    constraints: const BoxConstraints(),
-                    splashRadius: 25,
-                    onPressed: (){}, 
-                    icon: const Icon(Icons.content_copy)
-                  ),
+                  CopyWidget(
+                    text: companyName, 
+                    string: 'Company Name'
+                  )
                 ],
               ),
               const SizedBox(height: 20),

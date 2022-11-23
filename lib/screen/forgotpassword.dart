@@ -1,13 +1,11 @@
 import 'dart:async';
-import 'dart:convert';
-import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:projectb2b/endpoints.dart';
 import 'package:projectb2b/screen/otpscreen.dart';
 import 'package:projectb2b/widget/alertdialog.dart';
 import 'package:rounded_loading_button/rounded_loading_button.dart';
-import 'package:http/http.dart' as http;
 import 'package:projectb2b/http.dart' as http_test;
 
 class ForgotPassword extends StatefulWidget {
@@ -50,10 +48,10 @@ class _ForgotPasswordState extends State<ForgotPassword> {
           const Duration(seconds: 1), 
           (){
             Navigator.push(
-              context, MaterialPageRoute(
-                builder: (context) {
-                  return  Otp(email: email);
-                }
+              context, 
+              PageTransition(
+                child: Otp(email: email), 
+                type: PageTransitionType.rightToLeftWithFade
               )
             );
             controller.reset();

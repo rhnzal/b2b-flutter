@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:projectb2b/endpoints.dart';
 import 'package:projectb2b/screen/login.dart';
 import 'package:projectb2b/http.dart' as http_test;
@@ -54,11 +55,11 @@ class _RegisterState extends State<Register> {
                     onPressed: () {
                       Navigator.pushAndRemoveUntil(
                         context, 
-                        MaterialPageRoute(
-                          builder: (context) {
-                            return const Login();
-                          }
-                        ), 
+                        PageTransition(
+                          child: const Login(), 
+                          type: PageTransitionType.rightToLeftWithFade,
+                          isIos: true
+                        ),
                         (route) => false
                       );
                     } 

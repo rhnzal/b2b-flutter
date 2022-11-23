@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:projectb2b/endpoints.dart';
 import 'package:projectb2b/home.dart';
 import 'package:projectb2b/model/user.dart';
@@ -68,10 +69,10 @@ class _LoginState extends State<Login> {
           const Duration(seconds: 1), () {
             Navigator.pushReplacement(
               context, 
-              MaterialPageRoute(
-                builder: (context) {
-                  return const Home();
-                }
+              PageTransition(
+                child: const Home(), 
+                type: PageTransitionType.rightToLeftWithFade,
+                isIos: true
               )
             );
           }
@@ -255,10 +256,10 @@ class _LoginState extends State<Login> {
             onPressed: () {
               Navigator.push(
                 context, 
-                MaterialPageRoute(
-                  builder: (context) {
-                    return const ForgotPassword();
-                  }
+                PageTransition(
+                  child: const ForgotPassword(), 
+                  type: PageTransitionType.rightToLeftWithFade,
+                  isIos: true
                 )
               );
               emailCon.clear();
@@ -328,11 +329,10 @@ class _LoginState extends State<Login> {
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(
-                  builder: (context) {
-                  //api/users/login
-                  return const Register();
-                  }
+                PageTransition(
+                  child: const Register(), 
+                  type: PageTransitionType.rightToLeftWithFade,
+                  isIos: true
                 )
               );
 

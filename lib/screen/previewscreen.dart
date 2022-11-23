@@ -1,14 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:photo_view/photo_view.dart';
 import 'package:projectb2b/style.dart';
 import 'package:projectb2b/widget/copy.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class PreviewScreen extends StatefulWidget {
-  const PreviewScreen({Key? key, required this.url}) : super(key: key);
-
-  final String url;
+  const PreviewScreen({Key? key}) : super(key: key);
 
   @override
   State<PreviewScreen> createState() => _PreviewScreenState();

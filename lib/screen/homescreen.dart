@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:projectb2b/endpoints.dart';
 import 'package:projectb2b/screen/paymentscreen.dart';
 import 'package:projectb2b/style.dart';
@@ -274,32 +273,40 @@ class _HomeScreenState extends State<HomeScreen> {
           backgroundColor: const Color.fromARGB(255, 224, 232, 235),
           color: const Color.fromARGB(255, 23, 22, 29),
           onRefresh: refreshList,
-          child: const ScrollConfiguration(
-            behavior: ScrollBehavior(),
+          child: ScrollConfiguration(
+            behavior: const ScrollBehavior(),
             child: GlowingOverscrollIndicator(
               color: Colors.white,
               axisDirection: AxisDirection.down,
-              child: Empty(pad: 100)
+              child: ListView(
+                children: const [Empty(pad: 100)]
+              )
             )
           )
         )
       )
       : Expanded(
-        child: ScrollConfiguration(
-          behavior: const ScrollBehavior(),
-          child: GlowingOverscrollIndicator(
-            axisDirection: AxisDirection.down,
-            color: Colors.white,
-            child: ListView.builder(
-              physics: const BouncingScrollPhysics(),
-              itemCount: 3,
-              itemBuilder: (context, index) => Padding(
-                padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
-                child: ListDoc(
-                  activity: activity,
-                  index: index
+        child: RefreshIndicator(
+          displacement: 10,
+          backgroundColor: const Color.fromARGB(255, 224, 232, 235),
+          color: const Color.fromARGB(255, 23, 22, 29),
+          onRefresh: refreshList,
+          child: ScrollConfiguration(
+            behavior: const ScrollBehavior(),
+            child: GlowingOverscrollIndicator(
+              axisDirection: AxisDirection.down,
+              color: Colors.white,
+              child: ListView.builder(
+                physics: const BouncingScrollPhysics(),
+                itemCount: 3,
+                itemBuilder: (context, index) => Padding(
+                  padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
+                  child: ListDoc(
+                    activity: activity,
+                    index: index
+                  )
                 )
-              )
+              ),
             ),
           ),
         ),

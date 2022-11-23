@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:projectb2b/endpoints.dart';
 import 'package:projectb2b/screen/detailtransaction.dart';
 import 'package:projectb2b/screen/paymentscreen.dart';
@@ -195,10 +196,9 @@ class _QuotaScreenState extends State<QuotaScreen> {
                     onPressed: (){
                       // push quota product screen
                       Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (_) {
-                            return const PaymentScreen();
-                          },
+                        PageTransition(
+                          child: const PaymentScreen() , 
+                          type: PageTransitionType.rightToLeftWithFade
                         )
                       ).then (              // then refresh the list and quota when pop to this screen
                         (value) {
@@ -246,10 +246,10 @@ class _QuotaScreenState extends State<QuotaScreen> {
                   onTap: () {
                     Navigator.push(
                       context, 
-                      MaterialPageRoute(
-                        builder: (context) {
-                          return DetailTransaction(index: index);
-                        }
+                      PageTransition(
+                        child: DetailTransaction(index: index), 
+                        type: PageTransitionType.rightToLeftWithFade,
+                        isIos: true
                       )
                     );
                   },

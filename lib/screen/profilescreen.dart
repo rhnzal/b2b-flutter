@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:projectb2b/endpoints.dart';
 import 'package:projectb2b/screen/login.dart';
 import 'package:projectb2b/screen/changepassword.dart';
@@ -58,11 +58,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
     prefs.clear();
     Navigator.pushAndRemoveUntil(
       context,
-      MaterialPageRoute(
-        builder: (context) {
-          return const Login();
-        }
-      ), 
+      PageTransition(
+        child: const Login(),
+        type: PageTransitionType.rightToLeftWithFade
+      ),
       (Route<dynamic> route) => false
     );
   }
@@ -468,12 +467,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       ),
                       onPressed: () {
                         Navigator.push(
-                          context, 
-                          MaterialPageRoute(
-                            builder: (context) {
-                              return const ChangePassword(check: 'profile');
-                            }
-                          )
+                          context,
+                          PageTransition(
+                            child: const ChangePassword(check: 'profile'), 
+                            type: PageTransitionType.rightToLeftWithFade,
+                            isIos: true
+                          ) 
                         );
                       },
                       child: const Text(
@@ -583,10 +582,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           onPressed: () {
                             Navigator.push(
                               context,
-                              MaterialPageRoute(
-                                builder: (context) {
-                                  return const PaymentScreen();
-                                }
+                              PageTransition(
+                                child: const PaymentScreen(), 
+                                type: PageTransitionType.rightToLeftWithFade,
+                                isIos: true
                               )
                             );
                           },

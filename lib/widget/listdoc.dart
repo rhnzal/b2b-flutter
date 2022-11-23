@@ -45,15 +45,26 @@ class _ListDocState extends State<ListDoc> {
         onTap: () {
           if (widget.activity[widget.index]['status'] == "SUCCESS") {
             Navigator.push(
-              context,
-              MaterialPageRoute(
+              context, 
+              CupertinoPageRoute(
                 builder: (context) {
-                  return PreviewScreen(
-                    url: widget.activity[widget.index]["result"]
-                  );
+                  return const PreviewScreen();
                 }
               )
             );
+            
+            // Navigator.push(
+            //   context,
+            //   MaterialPageRoute(
+            //     builder: (context) {
+            //       return PreviewScreen(
+            //         url: widget.activity[widget.index]["result"]
+            //       );
+            //     }
+            //   )
+            // );
+
+
           } else {
             // loading
             showDialog(

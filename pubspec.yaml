@@ -41,10 +41,8 @@ dependencies:
   rounded_loading_button: ^2.1.0
   http: ^0.13.5
   flutter_lints: ^2.0.0
-  photo_view: ^0.14.0
   image_picker: ^0.8.6
   json_annotation: ^4.7.0
-  page_transition: ^2.0.9
 
 
 dev_dependencies:
@@ -71,10 +69,7 @@ flutter:
   uses-material-design: true
 
   # To add assets to your application, add an assets section, like this:
-  assets:
-    - icons/
-    - images/user.png
-    - images/folder.png
+  # assets:
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

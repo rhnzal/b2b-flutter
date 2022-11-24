@@ -38,21 +38,6 @@ class _HistoryScreenState extends State<HistoryScreen> {
     setState(() {});
   }
 
-  // Future<void> getActivity() async {
-  //   var token = prefs.getString('token');
-  //   final response = await http.get(
-  //       Uri.parse(urlDocument),
-  //       headers: {HttpHeaders.authorizationHeader: 'Bearer $token'});
-  //   // print(response.body);
-  //   activity = json.decode(response.body)["data"];
-  //   // print(activity);
-  //   if(mounted){
-  //     setState(() {
-  //       isLoad = false;
-  //     });
-  //   }
-  // }
-
   Future<void> getActivity() async {
     var response = await http_test.get(url: urlDocument);
     if (response.isSuccess) {
@@ -95,6 +80,13 @@ class _HistoryScreenState extends State<HistoryScreen> {
     }
   }
 
+  Future<void> refreshList() async {
+    setState(() {
+      isLoad = true;
+      getActivity();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
 
@@ -119,21 +111,27 @@ class _HistoryScreenState extends State<HistoryScreen> {
     Widget listHistory = isLoad ? const Loading()
       : activity.isEmpty ? const Empty()
       : Expanded(
-          child: ScrollConfiguration(
-            behavior: const ScrollBehavior(),
-            child: GlowingOverscrollIndicator(
-              axisDirection: AxisDirection.down,
-              color: Colors.white,
-              child: ListView.builder(
-                physics: const BouncingScrollPhysics(),
-                itemCount: activity.length,
-                itemBuilder: (context, index) => Padding(
-                  padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
-                  child: ListDoc(
-                    activity: activity, 
-                    index: index
+          child: RefreshIndicator(
+            displacement: 10,
+            backgroundColor: const Color.fromARGB(255, 224, 232, 235),
+            color: const Color.fromARGB(255, 23, 22, 29),
+            onRefresh: refreshList,
+            child: ScrollConfiguration(
+              behavior: const ScrollBehavior(),
+              child: GlowingOverscrollIndicator(
+                axisDirection: AxisDirection.down,
+                color: Colors.white,
+                child: ListView.builder(
+                  physics: const BouncingScrollPhysics(),
+                  itemCount: activity.length,
+                  itemBuilder: (context, index) => Padding(
+                    padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
+                    child: ListDoc(
+                      activity: activity, 
+                      index: index
+                    )
                   )
-                )
+                ),
               ),
             ),
           ),

@@ -1,7 +1,7 @@
 import 'dart:async';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:page_transition/page_transition.dart';
 import 'package:projectb2b/screen/login.dart';
 import 'package:projectb2b/widget/alertdialog.dart';
 import 'package:rounded_loading_button/rounded_loading_button.dart';
@@ -78,16 +78,11 @@ class _ChangePasswordState extends State<ChangePassword> {
                       //back to login
                       : Navigator.pushAndRemoveUntil(
                         context, 
-                        PageTransition(
-                          child: const Login(), 
-                          type: PageTransitionType.rightToLeftWithFade
-                        ),
-
-                        // MaterialPageRoute(
-                        //   builder: (context) {
-                        //     return const Login();
-                        //   }
-                        // ), 
+                        CupertinoPageRoute(
+                          builder: (context) {
+                            return const Login();
+                          }
+                        ), 
                         (route) => false
                       ); 
                     }

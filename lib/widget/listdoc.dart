@@ -43,12 +43,21 @@ class _ListDocState extends State<ListDoc> {
           borderRadius: BorderRadius.circular(15)
         ),
         onTap: () {
+          String date = DateFormat.yMMMd().format(
+            DateTime.parse(
+              widget.activity[widget.index]["createdAt"]
+            )
+          );
           if (widget.activity[widget.index]['status'] == "SUCCESS") {
             Navigator.push(
               context, 
               CupertinoPageRoute(
                 builder: (context) {
-                  return const PreviewScreen();
+                  return PreviewScreen(
+                    activity: widget.activity,
+                    index: widget.index,
+                    date: date,
+                  );
                 }
               )
             );

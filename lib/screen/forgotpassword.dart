@@ -1,7 +1,7 @@
 import 'dart:async';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:page_transition/page_transition.dart';
 import 'package:projectb2b/endpoints.dart';
 import 'package:projectb2b/screen/otpscreen.dart';
 import 'package:projectb2b/widget/alertdialog.dart';
@@ -49,10 +49,15 @@ class _ForgotPasswordState extends State<ForgotPassword> {
           (){
             Navigator.push(
               context, 
-              PageTransition(
-                child: Otp(email: email), 
-                type: PageTransitionType.rightToLeftWithFade
+              CupertinoPageRoute(
+                builder: (context) {
+                  return Otp(email: email);
+                }
               )
+              // PageTransition(
+              //   child: Otp(email: email), 
+              //   type: PageTransitionType.rightToLeftWithFade
+              // )
             );
             controller.reset();
             emailCon.clear();

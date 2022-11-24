@@ -1,8 +1,8 @@
 import 'dart:async';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:page_transition/page_transition.dart';
 import 'package:projectb2b/endpoints.dart';
 import 'package:projectb2b/home.dart';
 import 'package:projectb2b/model/user.dart';
@@ -69,10 +69,10 @@ class _LoginState extends State<Login> {
           const Duration(seconds: 1), () {
             Navigator.pushReplacement(
               context, 
-              PageTransition(
-                child: const Home(), 
-                type: PageTransitionType.rightToLeftWithFade,
-                isIos: true
+              CupertinoPageRoute(
+                builder: (context) {
+                  return const Home();
+                }
               )
             );
           }
@@ -255,12 +255,12 @@ class _LoginState extends State<Login> {
             ),
             onPressed: () {
               Navigator.push(
-                context, 
-                PageTransition(
-                  child: const ForgotPassword(), 
-                  type: PageTransitionType.rightToLeftWithFade,
-                  isIos: true
-                )
+                context,
+                CupertinoPageRoute(
+                  builder: (context) {
+                    return const ForgotPassword();
+                  }
+                ) 
               );
               emailCon.clear();
               passCon.clear();
@@ -329,10 +329,10 @@ class _LoginState extends State<Login> {
             onPressed: () {
               Navigator.push(
                 context,
-                PageTransition(
-                  child: const Register(), 
-                  type: PageTransitionType.rightToLeftWithFade,
-                  isIos: true
+                CupertinoPageRoute(
+                  builder: (context) {
+                    return const Register();
+                  }
                 )
               );
 

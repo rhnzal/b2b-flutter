@@ -5,7 +5,11 @@ import 'package:projectb2b/widget/copy.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class PreviewScreen extends StatefulWidget {
-  const PreviewScreen({Key? key}) : super(key: key);
+  final List activity;
+  final int index;
+  final String date;
+
+  const PreviewScreen({Key? key, required this.activity, required this.index, required this.date}) : super(key: key);
 
   @override
   State<PreviewScreen> createState() => _PreviewScreenState();
@@ -13,9 +17,14 @@ class PreviewScreen extends StatefulWidget {
 
 class _PreviewScreenState extends State<PreviewScreen> {
   late WebViewController controller ;
-  String contactNumber = '205-200-0203';
-  String companyName = 'Master Pipe';
-  
+    late String titleDoc = widget.activity[widget.index]["title"];
+    late String purchaser = widget.activity[widget.index]["purchaser"];
+    late String country = widget.activity[widget.index]["country"];
+    late String contactNumber = widget.activity[widget.index]["contact"];
+    late String companyName = widget.activity[widget.index]["company"];
+    late String posted = widget.activity[widget.index]["posted"];
+    late String desc = widget.activity[widget.index]["desc"];
+
   @override
   Widget build(BuildContext context) {
     Widget title = Padding(
@@ -23,12 +32,12 @@ class _PreviewScreenState extends State<PreviewScreen> {
       child: Column(
         children: [
           Text(
-            'Looking For Smoothie Blender',
+            titleDoc,
             style: MengStyle().mengBig,
             textAlign: TextAlign.center,
           ),
           Text(
-            'Nov 20, 2022',
+            widget.date,
             style: MengStyle().mengSmall,
           ),
         ]
@@ -53,7 +62,7 @@ class _PreviewScreenState extends State<PreviewScreen> {
               ),
               const SizedBox(height: 5),
               Text(
-                'Rojas',
+                purchaser,
                 style: MengStyle().mengBig,
               ),
               const SizedBox(height: 20),
@@ -65,7 +74,7 @@ class _PreviewScreenState extends State<PreviewScreen> {
               ),
               const SizedBox(height: 5),
               Text(
-                'USA',
+                country,
                 style: MengStyle().mengBig,
               ),
               const SizedBox(height: 20),
@@ -119,7 +128,7 @@ class _PreviewScreenState extends State<PreviewScreen> {
               ),
               const SizedBox(height: 5),
               Text(
-                'Nov 19, 2022',
+                posted,
                 style: MengStyle().mengBig,
               ),
               const SizedBox(height: 20),
@@ -131,7 +140,7 @@ class _PreviewScreenState extends State<PreviewScreen> {
               ),
               const SizedBox(height: 5),
               Text(
-                'Looking for mixer portable bottle blender',
+                desc,
                 style: MengStyle().mengBig,
                 overflow: TextOverflow.clip,
               ),

@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
@@ -313,13 +314,13 @@ class _DetailTransactionState extends State<DetailTransaction> {
               var count = 0;
               Navigator.push(
                 context, 
-                MaterialPageRoute(
+                CupertinoPageRoute(
                   builder: (context) {
                     return Scaffold(
                       appBar: AppBar(
                         // back button
                         leading: BackButton(
-                          onPressed: (){
+                          onPressed: () {
                             Navigator.popUntil(
                               context, 
                               (route) {

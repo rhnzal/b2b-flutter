@@ -1,7 +1,7 @@
 import 'dart:async';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:page_transition/page_transition.dart';
 import 'package:projectb2b/endpoints.dart';
 import 'package:projectb2b/screen/changepassword.dart';
 import 'package:projectb2b/widget/alertdialog.dart';
@@ -39,13 +39,14 @@ class _OtpState extends State<Otp> {
             (){
               Navigator.push(
                 context, 
-                PageTransition(
-                  child: ChangePassword(
-                    check: 'otp',
-                    email: widget.email,
-                    otp: otp,
-                  ), 
-                  type: PageTransitionType.rightToLeftWithFade
+                CupertinoPageRoute(
+                  builder: (context) {
+                    return ChangePassword(
+                      check: 'otp',
+                      email: widget.email,
+                      otp: otp,
+                    );
+                  }
                 )
               );
               controller.reset();

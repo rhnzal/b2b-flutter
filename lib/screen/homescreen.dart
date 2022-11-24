@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:projectb2b/endpoints.dart';
 import 'package:projectb2b/screen/paymentscreen.dart';
@@ -136,7 +137,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       Navigator.pop(context);
                       Navigator.push(
                         context, 
-                        MaterialPageRoute(
+                        CupertinoPageRoute(
                           builder: (context) {
                             return const PaymentScreen();
                           }

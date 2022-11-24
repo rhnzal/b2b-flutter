@@ -1,5 +1,5 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:page_transition/page_transition.dart';
 import 'package:projectb2b/endpoints.dart';
 import 'package:projectb2b/screen/login.dart';
 import 'package:projectb2b/screen/changepassword.dart';
@@ -58,9 +58,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
     prefs.clear();
     Navigator.pushAndRemoveUntil(
       context,
-      PageTransition(
-        child: const Login(),
-        type: PageTransitionType.rightToLeftWithFade
+      CupertinoPageRoute(
+        builder: (context) {
+          return const Login();
+        }
       ),
       (Route<dynamic> route) => false
     );
@@ -468,11 +469,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       onPressed: () {
                         Navigator.push(
                           context,
-                          PageTransition(
-                            child: const ChangePassword(check: 'profile'), 
-                            type: PageTransitionType.rightToLeftWithFade,
-                            isIos: true
-                          ) 
+                          CupertinoPageRoute(
+                            builder: (context) {
+                              return const ChangePassword(check: 'profile');
+                            }
+                          )
                         );
                       },
                       child: const Text(
@@ -582,10 +583,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           onPressed: () {
                             Navigator.push(
                               context,
-                              PageTransition(
-                                child: const PaymentScreen(), 
-                                type: PageTransitionType.rightToLeftWithFade,
-                                isIos: true
+                              CupertinoPageRoute(
+                                builder: (context) {
+                                  return const PaymentScreen();
+                                }
                               )
                             );
                           },

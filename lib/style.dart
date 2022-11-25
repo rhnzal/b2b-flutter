@@ -25,10 +25,7 @@ class MengStyle {
 SystemUiOverlayStyle dark = const SystemUiOverlayStyle(
   statusBarColor: Colors.transparent,
   statusBarIconBrightness: Brightness.dark,
-  systemNavigationBarIconBrightness: Brightness.light,
-  systemNavigationBarColor: Colors.black,
-  systemNavigationBarDividerColor: Colors.black,
-  systemNavigationBarContrastEnforced: true,
+  // systemNavigationBarColor: Color.fromARGB(255, 0, 0, 0),
+  // systemNavigationBarIconBrightness: Brightness.light,
   statusBarBrightness: Brightness.dark,
-  systemStatusBarContrastEnforced: true
 );

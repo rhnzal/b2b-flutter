@@ -262,7 +262,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           context: context, 
                           builder: (context) => AlertDialog(
                             shape: const RoundedRectangleBorder(
-                              borderRadius: BorderRadius.all(Radius.circular(20))
+                              borderRadius: BorderRadius.all(Radius.circular(10))
                             ),
                             backgroundColor: const Color.fromARGB(255, 224, 232, 235),
                             
@@ -303,7 +303,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   ),
                                   border: OutlineInputBorder(
                                     borderSide: BorderSide.none,
-                                    borderRadius: BorderRadius.circular(20)
+                                    borderRadius: BorderRadius.circular(10)
                                   ),
                                 ),
                               )

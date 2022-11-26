@@ -109,9 +109,12 @@ class _PreviewScreenState extends State<PreviewScreen> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(
-                    companyName,
-                    style: MengStyle().mengBig,
+                  Flexible(
+                    child: Text(
+                      companyName,
+                      style: MengStyle().mengBig,
+                      overflow: TextOverflow.clip,
+                    ),
                   ),
                   CopyWidget(
                     text: companyName, 

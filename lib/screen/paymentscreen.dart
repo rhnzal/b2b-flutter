@@ -264,7 +264,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Padding(
-                      padding: const EdgeInsets.only(left: 5),
+                      padding: const EdgeInsets.only(left: 15),
                       child: Text(
                         grid[index]['title'].toString(),
                         style: const TextStyle(
@@ -276,7 +276,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                     ),
                     
                     Padding(
-                      padding: const EdgeInsets.only(left: 5),
+                      padding: const EdgeInsets.only(left: 15),
                       child: Text(
                         'Open ${grid[index]['quota'].toString()} URL',
                         style: const TextStyle(
@@ -290,7 +290,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                     const SizedBox(height: 50),
 
                     Padding(
-                      padding: const EdgeInsets.only(left: 10),
+                      padding: const EdgeInsets.only(left: 15),
                       child: Text(
                         NumberFormat.simpleCurrency(locale:'in', decimalDigits: 0).format(grid[index]['price']),
                         style: const TextStyle(
@@ -343,48 +343,6 @@ class _PaymentScreenState extends State<PaymentScreen> {
             )
           );
 
-          // showDialog(context: context, builder: ((context) => AlertDialog(
-          //   shape: RoundedRectangleBorder(
-          //       borderRadius: BorderRadius.circular(10)),
-          //   backgroundColor:const Color.fromARGB(255, 224, 232, 235),
-          //   title: const Text('Confirmation'),
-          //   titleTextStyle: const TextStyle(
-          //       color: Color.fromARGB(255, 23, 22, 29),
-          //       fontFamily: 'Inter',
-          //       fontWeight: FontWeight.w600),
-          //   content: const Text('Are You Sure ?'),
-          //   contentTextStyle: const TextStyle(
-          //       color: Color.fromARGB(255, 23, 22, 29)),
-          //   actions: [
-          //       TextButton(
-          //           style: ButtonStyle(
-          //               overlayColor: MaterialStateProperty.all(Colors.transparent),
-          //               minimumSize: MaterialStateProperty.all(Size.zero),
-          //               tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-          //               padding: MaterialStateProperty.all(const EdgeInsets.fromLTRB(0, 0, 10, 10))),
-          //           onPressed: () {
-          //             Navigator.pop(context);
-          //           },
-          //           child: const Text('No',
-          //               style: TextStyle(
-          //                   color: Color.fromARGB(255, 23, 22, 29)))),
-          //       TextButton(
-          //           style: ButtonStyle(
-          //               overlayColor: MaterialStateProperty.all(Colors.transparent),
-          //               minimumSize: MaterialStateProperty.all(Size.zero),
-          //               tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-          //               padding: MaterialStateProperty.all(const EdgeInsets.fromLTRB(0, 0, 10, 10))),
-          //           onPressed: () async {
-          //             Navigator.pop(context);
-          //             payment();
-          //           },
-          //           child: const Text('Yes',
-          //               style: TextStyle(color: Color.fromARGB(255, 23, 22, 29)
-          //               )
-          //             )
-          //           )
-          //     ]
-          // )));
         } : null,
         child: const SizedBox(
           width: 100,

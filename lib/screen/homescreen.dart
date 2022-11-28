@@ -298,8 +298,8 @@ class _HomeScreenState extends State<HomeScreen> {
               axisDirection: AxisDirection.down,
               color: Colors.white,
               child: ListView.builder(
-                physics: const BouncingScrollPhysics(),
-                itemCount: 3,
+                physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+                itemCount: (activity.length <= 3) ? activity.length : 3,
                 itemBuilder: (context, index) => Padding(
                   padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
                   child: ListDoc(

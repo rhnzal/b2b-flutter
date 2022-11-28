@@ -301,8 +301,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     color: Color.fromARGB(100, 0, 0, 0),
                                     fontSize: 12
                                   ),
+                                  focusedBorder: OutlineInputBorder(
+                                    borderSide: const BorderSide(),
+                                    borderRadius: BorderRadius.circular(10)
+                                  ),
                                   border: OutlineInputBorder(
-                                    borderSide: BorderSide.none,
+                                    borderSide: const BorderSide(),
                                     borderRadius: BorderRadius.circular(10)
                                   ),
                                 ),
@@ -588,6 +592,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   return const PaymentScreen();
                                 }
                               )
+                            ).then(
+                              (value) {
+                                setState(() {
+                                  getQuota();
+                                });
+                              }
                             );
                           },
                           child: const Text(

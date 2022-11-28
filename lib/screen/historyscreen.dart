@@ -109,7 +109,24 @@ class _HistoryScreenState extends State<HistoryScreen> {
     );
     
     Widget listHistory = isLoad ? const Loading()
-      : activity.isEmpty ? const Empty()
+      : activity.isEmpty ? Expanded(
+        child: RefreshIndicator(
+          displacement: 10,
+          backgroundColor: const Color.fromARGB(255, 224, 232, 235),
+          color: const Color.fromARGB(255, 23, 22, 29),
+          onRefresh: refreshList,
+          child: ScrollConfiguration(
+            behavior: const ScrollBehavior(),
+            child: GlowingOverscrollIndicator(
+              color: Colors.white,
+              axisDirection: AxisDirection.down,
+              child: ListView(
+                children: const [Empty(pad: 100)]
+              )
+            )
+          )
+        )
+      )
       : Expanded(
           child: RefreshIndicator(
             displacement: 10,
@@ -122,7 +139,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
                 axisDirection: AxisDirection.down,
                 color: Colors.white,
                 child: ListView.builder(
-                  physics: const BouncingScrollPhysics(),
+                  physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
                   itemCount: activity.length,
                   itemBuilder: (context, index) => Padding(
                     padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),

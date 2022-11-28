@@ -252,6 +252,13 @@ class _QuotaScreenState extends State<QuotaScreen> {
                           return DetailTransaction(index: index);
                         }
                       )
+                    ).then (              // then refresh the list and quota when pop to this screen
+                      (value) {
+                        setState(() {
+                          getQuota();
+                          getHistory();
+                        });
+                      }
                     );
                   },
                   child: Padding(

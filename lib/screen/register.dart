@@ -134,7 +134,7 @@ class _RegisterState extends State<Register> {
         style: const TextStyle(color: Colors.white),
         decoration: InputDecoration(
           prefixIcon: const Icon(
-            Icons.person_outline,
+            Icons.person,
             color: Colors.white,
           ),
           filled: true,

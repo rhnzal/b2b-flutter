@@ -78,7 +78,7 @@ class _HomeState extends State<Home> {
           },
           items: [
             BottomNavigationBarItem(
-              icon: const Icon(Icons.home_outlined),
+              icon: const Icon(Icons.home),
               label: 'Home',
               activeIcon: Container(
                 decoration: const BoxDecoration(
@@ -94,7 +94,7 @@ class _HomeState extends State<Home> {
               )
             ),
             BottomNavigationBarItem(
-              icon: const Icon(Icons.history_outlined),
+              icon: const Icon(Icons.history),
               label: 'History',
               activeIcon: Container(
                 decoration: const BoxDecoration(
@@ -110,7 +110,7 @@ class _HomeState extends State<Home> {
               )
             ),
             BottomNavigationBarItem(
-              icon: const Icon(Icons.payments_outlined),
+              icon: const Icon(Icons.payments),
               label: 'Payment',
               activeIcon: Container(
                 decoration: const BoxDecoration(
@@ -119,14 +119,14 @@ class _HomeState extends State<Home> {
                 child: const Padding(
                   padding: EdgeInsets.all(8),
                   child: Icon(
-                    Icons.payments_outlined,
+                    Icons.payments,
                     color: Color.fromARGB(255, 26, 25, 32),
                   ),
                 ),
               )
             ),
             BottomNavigationBarItem(
-              icon: const Icon(Icons.person_outline),
+              icon: const Icon(Icons.person),
               label: 'Profile',
               activeIcon: Container(
                 decoration: const BoxDecoration(

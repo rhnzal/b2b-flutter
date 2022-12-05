@@ -118,6 +118,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
     Widget emailInput = Container(
       padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
       child: TextFormField(
+        keyboardType: TextInputType.emailAddress,
         controller: emailCon,
         cursorColor: Colors.white,
         style: const TextStyle(color: Colors.white),

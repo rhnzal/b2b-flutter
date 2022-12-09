@@ -23,7 +23,7 @@ class _PreviewScreenState extends State<PreviewScreen> {
     late String contactNumber = widget.activity[widget.index]["contact"];
     late String companyName = widget.activity[widget.index]["company"];
     late String posted = widget.activity[widget.index]["posted"];
-    late String desc = widget.activity[widget.index]["desc"];
+    late String? desc = widget.activity[widget.index]["desc"];
 
   @override
   Widget build(BuildContext context) {
@@ -102,8 +102,8 @@ class _PreviewScreenState extends State<PreviewScreen> {
 
               //Company Name
               Text(
-              'Company Name',
-              style: MengStyle().mengSmall,
+                'Company Name',
+                style: MengStyle().mengSmall,
               ),
               const SizedBox(height: 5),
               Row(
@@ -143,7 +143,7 @@ class _PreviewScreenState extends State<PreviewScreen> {
               ),
               const SizedBox(height: 5),
               Text(
-                desc,
+                desc ?? '-',
                 style: MengStyle().mengBig,
                 overflow: TextOverflow.clip,
               ),

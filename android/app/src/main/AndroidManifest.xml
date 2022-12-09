@@ -2,7 +2,7 @@
     package="com.example.projectb2b">
    <uses-permission android:name="android.permission.INTERNET"/> 
    <application
-        android:label="B2B"
+        android:label="Trill"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
